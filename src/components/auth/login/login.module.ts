@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { LoginComponent } from './login.component';
 import { LoginService } from './login.service';
 import { FormsModule } from '@angular/forms';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 
 
@@ -12,7 +13,8 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule
   ],
   providers: [LoginService],
   exports: [LoginComponent]

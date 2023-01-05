@@ -1,0 +1,25 @@
+.login-container {
+    position: relative;
+
+}
+
+.fa-eye,
+.fa-eye-slash {
+    position: absolute;
+    top: 30%;
+    right: 1%;
+    cursor: pointer;
+}
+
+.fa-envelope,
+.fa-lock {
+    position: absolute;
+    top: 30%;
+    left: 2%;
+    cursor: pointer;
+    color: lightgray;
+}
+.input{
+    padding-left: 2rem !important;
+
+}

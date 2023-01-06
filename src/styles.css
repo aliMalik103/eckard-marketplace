@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    min-height: 100vh;
+    min-width: 320px;
+    font-family: Raleway, sans-serif !important;
+    font-feature-settings: "lnum" !important;
+    overflow-x: hidden;
+    max-width: 100%;
+    color: #212529;
+    background-color: #f5f6f8 !important ;
+
+}

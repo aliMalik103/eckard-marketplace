@@ -1,0 +1,17 @@
+.header-container {
+    height: 80px;
+    display: block;
+    position: relative;
+    z-index: 1003;
+}
+
+nav {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    background: white;
+    border-bottom: 1px solid #d0ced4;
+    box-shadow: 0 6px 6px #3d3d3d0a;
+}

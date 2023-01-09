@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http"
 import { loginModule } from 'src/components/auth/login/login.module';
+import { MarketPlaceModule } from 'src/components/market-place/market-place.module';
 
 
 
@@ -20,7 +21,8 @@ import { loginModule } from 'src/components/auth/login/login.module';
     NavbarModule,
     FormsModule,
     HttpClientModule,
-    loginModule
+    loginModule,
+    MarketPlaceModule
   ],
   providers: [],
   bootstrap: [AppComponent]

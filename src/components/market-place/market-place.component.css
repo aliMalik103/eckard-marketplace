@@ -1,0 +1,31 @@
+.market-tabs {
+    margin-left: 20px;
+    min-width: 200px;
+}
+
+.market-tabs>h4 {
+    padding-left: 10px;
+}
+
+.breadcrumb {
+    border-bottom: 2px solid #0a2b3c;
+
+}
+
+.marketplace-item {
+    display: flex;
+    justify-content: start;
+
+}
+
+.marketplace-menue {
+    text-decoration: none;
+    color: black;
+}
+
+.marketplace-items {
+    text-decoration: none;
+    color: #0a2b3c;
+    border-bottom: 2px solid #0a2b3c;
+
+}

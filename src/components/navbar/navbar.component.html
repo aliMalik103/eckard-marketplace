@@ -1,14 +1,52 @@
 <div class="header-container">
 
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-                <img src="assets/logo.svg" class=" m-1" alt="Avatar" />
-            <button class="navbar-toggler" type="button" data-bs-toggle="collap se" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container-fluid header">
+            <img [src]="logo" class=" m-1" alt="Avatar" />
+            <button class=" navbar-toggler" type="button" data-bs-toggle="collap se"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ng-container *ngIf="!isAuthanticated()">
+
+                    <div class="header-menue">
+                        <div
+                            class="header-menue-itmes h-100 item-center d-flex justify-content-center m-auto align-items-center bg-dark p-4">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item ">
+                                    <a class="nav-link text-warning" [routerLink]="['']">Marketplace </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="header-user">
+
+                        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Profile
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark"
+                                        aria-labelledby="navbarDarkDropdownMenuLink">
+                                        <li><a class="dropdown-item" [routerLink]="['']">Profile</a></li>
+                                        <li><a class="dropdown-item" (click)="handleLogOut()">Log Out</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </ng-container>
             </div>
         </div>
+
     </nav>
 </div>

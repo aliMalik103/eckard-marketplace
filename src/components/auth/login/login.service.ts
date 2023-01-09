@@ -13,7 +13,7 @@ export class LoginService {
 
 
   login(user: LoginForm): Observable<any> {
-    return this.http.post(`https://jsonplaceholder.typicode.com/users`, user)
+    return this.http.post(`http://52.24.239.223/:8000/auth/login/`, user)
   }
 
 }

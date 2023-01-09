@@ -25,7 +25,7 @@ export class LoginComponent {
 
   handleSubmit() {
     this.loginService.login(this.loginForm).subscribe(
-      (response) => console.log(response),
+      (response) => alert(JSON.stringify(response)),
       (error: any) => console.log(error),
       () => console.log("Done getting user"));
   }

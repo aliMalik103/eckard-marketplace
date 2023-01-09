@@ -29,3 +29,13 @@
     border-bottom: 2px solid #0a2b3c;
 
 }
+
+.breadcrumb-link {
+    border-bottom: 2px solid #0a2b3c;
+    display: inline-flex;
+}
+
+.breadcrumb-container a {
+    text-decoration: none;
+    color: #0a2b3c;
+}

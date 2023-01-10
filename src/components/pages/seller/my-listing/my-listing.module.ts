@@ -16,7 +16,6 @@ import { MyListingComponent } from './my-listing.component';
         AddNewListingModule,
         CommonModule,
 
-
     ],
     providers: [],
     exports: [MyListingComponent]

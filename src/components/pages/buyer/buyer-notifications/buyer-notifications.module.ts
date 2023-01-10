@@ -1,19 +1,17 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
-import { AddNewListingComponent } from './add-new-listing.component';
+import { BuyerNotificationsComponent } from './buyer-notifications.component';
 
 @NgModule({
     declarations: [
-        AddNewListingComponent
+        BuyerNotificationsComponent
     ],
     imports: [
         AppRoutingModule,
-        FormsModule
+        FormsModule,
     ],
     providers: [],
-    exports: [AddNewListingComponent]
+    exports: [BuyerNotificationsComponent]
 })
-export class AddNewListingModule {
-
-}
+export class BuyerNotificationsModule { }

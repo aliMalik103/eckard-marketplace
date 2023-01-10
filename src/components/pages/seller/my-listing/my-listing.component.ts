@@ -9,7 +9,9 @@ export class MyListingComponent implements OnInit {
 
   showAllListing: boolean = false
 
-  constructor() { }
+  constructor() {
+
+  }
   ngOnInit(): void {
     this.showAllListing = false
     console.log('Method not implemented.');

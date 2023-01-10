@@ -9,8 +9,7 @@ const routes: Routes = [
   { path: "market-place", component: MarketPlaceComponent },
   { path: "my-listing", component: MyListingComponent },
   { path: "**", redirectTo: "", pathMatch: "full" }
-
-
+  
 ];
 
 @NgModule({

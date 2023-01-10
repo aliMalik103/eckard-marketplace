@@ -22,5 +22,8 @@ export class LoginService {
     return res;
   }
 
+  logout(){
+    
+  }
 
 }

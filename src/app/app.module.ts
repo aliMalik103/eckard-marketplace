@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http"
 import { loginModule } from 'src/components/auth/login/login.module';
 import { MarketPlaceModule } from 'src/components/market-place/market-place.module';
+import { MyListingModule } from 'src/components/pages/my-listing/my-listing.module';
+import { AddNewListingModule } from 'src/components/pages/my-listing/add-new-listing/add-new-listing.module';
 
 
 
@@ -22,7 +24,9 @@ import { MarketPlaceModule } from 'src/components/market-place/market-place.modu
     FormsModule,
     HttpClientModule,
     loginModule,
-    MarketPlaceModule
+    MarketPlaceModule,
+    MyListingModule,
+    AddNewListingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

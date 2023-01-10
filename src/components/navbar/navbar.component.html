@@ -11,14 +11,14 @@
 
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ng-container *ngIf="!isAuthanticated()">
+                <ng-container *ngIf="isAuthanticated()">
 
                     <div class="header-menue">
                         <div
                             class="header-menue-itmes h-100 item-center d-flex justify-content-center m-auto align-items-center bg-dark p-4">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item ">
-                                    <a class="nav-link text-warning" [routerLink]="['']">Marketplace </a>
+                                    <a class="nav-link text-warning" [routerLink]="['/market-place']">Marketplace </a>
                                 </li>
 
                             </ul>

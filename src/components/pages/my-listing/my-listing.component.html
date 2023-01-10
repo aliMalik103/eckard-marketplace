@@ -1,0 +1,93 @@
+<div class="container card mt-2 pt-4 h-100">
+
+    <div class="breadcrumb-container">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-link">
+                <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/my-listing']">My
+                        Listings</a> </li>
+            </ol>
+        </nav>
+
+    </div>
+
+    <ng-container *ngIf="showAllListing != false; else elseBlock">
+
+
+        <div class="d-flex justify-content-between mt-4 mb-3">
+            <div>
+                <select class="form-select form-select-lg" aria-label="--- please selecet option --- ">
+                    <option value="My Active Listings"> My Active Listings</option>
+                    <option value="My Inactive Listings"> My Inactive Listings</option>
+                </select>
+            </div>
+
+            <button class="btn btn-warning text-white" (click)="handleToggel()"> NEW LISTING</button>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Listing Name</th>
+                    <th scope="col">Auction Deadline</th>
+                    <th scope="col">Account/Project</th>
+                    <th scope="col">Total NMA</th>
+                    <th scope="col">Minimam Ask</th>
+                    <th scope="col">Highest Bid</th>
+                    <th scope="col"># Bids</th>
+                </tr>
+            </thead>
+            <tbody class="my-listing-table-body">
+                <tr>
+                    <td> <span class="test">Rebalancing Portfolio 2022-1</span></td>
+                    <td>Dec 23, 2022 (7 days)</td>
+                    <td><span class="test">DOEIOH / ELA Gateway</span></td>
+                    <td>6,00000</td>
+                    <td>85,000.00</td>
+                    <td>92,750.00</td>
+                    <td> <span class="test">2</span></td>
+                </tr>
+                <tr>
+                    <td> <span class="test">Rebalancing Portfolio 2022-2</span></td>
+                    <td>Dec 23, 2022 (7 days)</td>
+                    <td><span class="test">DOEIOH / ELA Gill</span></td>
+                    <td>6,00000</td>
+                    <td>85,000.00</td>
+                    <td>92,750.00</td>
+                    <td> <span class="test">2</span></td>
+                </tr>
+                <tr>
+                    <td> <span class="test">Rebalancing Portfolio 2022-3</span></td>
+                    <td>Fix Bid</td>
+                    <td><span class="test">DOEIOH / ELA Peters</span></td>
+                    <td>2,5700</td>
+                    <td>37,000.00</td>
+                    <td></td>
+                    <td> <span class="test">0</span></td>
+                </tr>
+                <tr>
+                    <td> <span class="test">Rebalancing Portfolio 2022-4</span></td>
+                    <td>Dec 31, 2022 (15 days)</td>
+                    <td><span class="test">MAHINA / ELA Gateway</span></td>
+                    <td>20,0000</td>
+                    <td>310,000.00</td>
+                    <td>311,000.00</td>
+                    <td> <span class="test">2</span></td>
+                </tr>
+
+
+
+            </tbody>
+        </table>
+    </ng-container>
+
+    <ng-template #elseBlock>
+        <app-add-new-listing (onGoBack)="handleToggel()"></app-add-new-listing>
+    </ng-template>
+
+
+
+
+</div>

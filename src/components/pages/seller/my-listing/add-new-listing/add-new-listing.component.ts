@@ -17,4 +17,6 @@ export class AddNewListingComponent implements OnInit {
     this.onGoBack.emit()
 
   }
+
+
 }

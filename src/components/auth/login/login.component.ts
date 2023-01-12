@@ -1,6 +1,7 @@
 import { LoginService } from './login.service';
 import { Component } from '@angular/core';
 import { LoginForm } from 'src/components/model/login';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class LoginComponent {
     password: ""
   }
 
-  constructor(private loginService: LoginService) { }
+  constructor(private loginService: LoginService,private router: Router) { }
 
   togglePassword() {
     this.isPassword = !this.isPassword;
@@ -25,9 +26,15 @@ export class LoginComponent {
 
   handleSubmit() {
     this.loginService.login(this.loginForm).subscribe(
-      (response) => alert(JSON.stringify(response)),
-      (error: any) => console.log(error),
-      () => console.log("Done getting user"));
+      (response) => {
+      if(response.data.valid==true){
+      this.router.navigate(['/market-place']);
+      }
+      else{
+        alert("Invalid email or password")
+      }
+   
+      () => console.log("Done getting user")});
   }
 
 }

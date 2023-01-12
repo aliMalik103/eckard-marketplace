@@ -9,6 +9,10 @@ export interface LoginForm {
   }
   
   export interface Data {
-    message: string
-    email_address: string
+   
+      "message": string,
+      "email": string,
+      "status":string,
+      "valid":boolean
+  
   }

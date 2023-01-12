@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Login, LoginForm } from 'src/components/model/login';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,9 @@ export class LoginService {
   isAuthanticated: boolean = false;
 
   login(user: LoginForm): Observable<Login> {
-    const res = this.http.post<Login>(`http://52.24.239.223/:8000/auth/login/`, user)
-    this.isAuthanticated = true;
-    this.router.navigate(['/market-place'])
+    const res = this.http.post<Login>(`http://localhost:8000/eckardapi/auth/login/`, user);
+    
+   
     return res;
   }
 

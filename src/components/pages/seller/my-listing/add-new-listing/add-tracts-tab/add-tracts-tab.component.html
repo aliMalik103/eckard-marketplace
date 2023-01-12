@@ -1,0 +1,359 @@
+<div class="row mt-4">
+
+    <div class="col-md-6">
+        <label for="auctionType" class="form-label">Auction Type <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" value="6.0000" id="NMAListed" required>
+
+    </div>
+
+</div>
+
+<div class="d-flex gap-3 mt-4">
+    <div class="col">
+        <label for="auctionType" class="form-label">Gas/Oil Ration </label>
+        <select id="auctionType" class="form-select">
+            <option *ngFor="let option of options">{{option}}</option>
+        </select>
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">MCF/BBL </label>
+        <input type="text" class="form-control" value="8" id="NMAListed" required>
+
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">ROI</label>
+        <select id="auctionType" class="form-select">
+            <option *ngFor="let option of options">{{option}}</option>
+
+        </select>
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">%</label>
+        <input type="text" class="form-control" value="60" id="NMAListed" required>
+
+    </div>
+
+</div>
+
+<div class="d-flex gap-3 mt-4">
+    <div class="col">
+        <label for="auctionType" class="form-label">Age of Wells </label>
+        <select id="auctionType" class="form-select">
+            <option *ngFor="let option of ageofWells">{{option}}</option>
+
+        </select>
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">Years </label>
+        <input type="text" class="form-control" value="5" id="NMAListed" required>
+
+    </div>
+
+
+
+</div>
+
+<div class="d-flex gap-3 mt-4">
+    <div class="col">
+        <label for="auctionType" class="form-label">Permits </label>
+        <select id="auctionType" class="form-select">
+            <option *ngFor="let option of options">{{option}}</option>
+
+        </select>
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">Count </label>
+        <input type="text" class="form-control" value="8" id="NMAListed" required>
+
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">DUCs</label>
+        <select id="auctionType" class="form-select">
+            <option *ngFor="let option of options">{{option}}</option>
+
+        </select>
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">Count</label>
+        <input type="text" class="form-control" value="0" id="NMAListed" required>
+
+    </div>
+
+</div>
+
+<div class="d-flex gap-3 mt-4 col-6">
+    <div class="col">
+        <label for="auctionType" class="form-label">Active Wells </label>
+        <select id="auctionType" class="form-select">
+            <option *ngFor="let option of options">{{option}}</option>
+
+        </select>
+    </div>
+
+    <div class="col">
+        <label for="auctionType" class="form-label">Count </label>
+        <input type="text" class="form-control" value="5" id="NMAListed" required>
+
+    </div>
+
+
+
+</div>
+<div class="row mt-4">
+
+    <div class="col-md-6">
+
+        <div class="d-flex gap-3 ">
+            <p>Project</p>
+            <p class="nav-link border-bottom" (click)="toggleSelection(true,'selectAllProject')">
+                select all </p>
+
+            <p class="nav-link border-bottom" (click)="toggleSelection(false,'selectAllProject')">
+                unselect all </p>
+
+        </div>
+        <div>
+
+            <select class="form-select" multiple (change)="getSelectedValues()" id="projectSelect">
+                <option *ngFor="let option of projectsOptions" [value]="option" [selected]="selectAllProject">
+                    {{option}}</option>
+
+            </select>
+
+
+
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <div class="d-flex gap-3 ">
+            <p>Countries</p>
+            <p class="nav-link border-bottom" (click)="toggleSelection(true,'selectAllCountries')">
+                select all </p>
+
+            <p class="nav-link border-bottom" (click)="toggleSelection(false,'selectAllCountries')">
+                unselect all </p>
+
+        </div>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <select class="form-select" multiple (change)="getSelectedValues()" id="countriesSelect">
+                    <option *ngFor="let option of countriesOptions" [value]="option" [selected]="selectAllCountries">
+                        {{option}}</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+<div class="row mt-4">
+
+    <div class="col-md-6">
+
+        <div class="d-flex gap-3 ">
+            <p>Operators</p>
+            <p class="nav-link border-bottom" (click)="toggleSelection(true,'selectAllOperators')">
+                select all </p>
+
+            <p class="nav-link border-bottom" (click)="toggleSelection(false,'selectAllOperators')">
+                unselect all </p>
+
+        </div>
+        <div>
+
+            <select class="form-select" multiple (change)="getSelectedValues()" id="operatorsSelect">
+                <option *ngFor="let option of operatorsOptions" [value]="option" [selected]="selectAllOperators">
+                    {{option}}</option>
+
+            </select>
+
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<div class="row mt-4">
+
+    <a [routerLink]="['']">Search </a>
+
+
+</div>
+<div class="row mt-4">
+    <h5 class="mt-4 "><strong>Adding Tracts</strong> </h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" class="text-secondary">&#9634;
+                </th>
+
+                <th class="text-secondary" scope="col" *ngFor="let item of tractsColumns;">{{item}}
+                </th>
+                <th scope="col" class="text-secondary"><button class="btn btn-warning text-white btn-sm">Sell</button>
+                </th>
+                <th scope="col" class="text-secondary"><input type="text" class="w-50 text-center" value="5" /> %
+                </th>
+                <th scope="col" class="text-secondary">Listed Inc.</th>
+
+            </tr>
+        </thead>
+        <tbody class="my-listing-table-body">
+            <tr>
+                <td scope="col">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                </td>
+
+                <td scope="col"> <span class="tract-td">T6N RAW S14</span></td>
+                <td scope="col">ELA Cooley</td>
+                <td scope="col">Grady, OK</td>
+                <td scope="col">1|0|2</td>
+                <td scope="col">28.75%</td>
+                <td scope="col">92,750.00</td>
+                <td scope="col">0.7434%</td>
+                <td scope="col">1.2323</td>
+                <td scope="col"><span class="tract-td ">sell off</span></td>
+
+                <td scope="col"><input type="text" class="w-50 text-center" value="0.9087" /> </td>
+                <td scope="col"> 1,232.09</td>
+            </tr>
+
+            <tr>
+                <th colspan="6"> Cost of Allocated Tracts : $ 1212,2323 </th>
+                <td>$ 1212,2323 </td>
+                <td></td>
+                <td>0.2323</td>
+                <td></td>
+                <td>0.0912</td>
+                <td> 232,323.23</td>
+                <td> 23.34%</td>
+                <td> ROI</td>
+
+            </tr>
+
+
+
+        </tbody>
+    </table>
+</div>
+
+<div class=" my-4 row p-0">
+
+    <div class="accordion accordion-flush " id="accordionFlushExample">
+        <div class="accordion-item ">
+            <h5 class="accordion-header collapsed p-0 col-8 " id="flush-headingOne" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                Search - Basic Cash Flow Calculator
+
+                <span class="small float-end">
+                    Est. Cash Flow: <span class="text-primary">100,108.27</span>
+                </span>
+
+            </h5>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body  d-flex gap-3 w-100">
+                    <div class="d-flex flex-column col-2">
+                        <div>
+                            <label for="monts" class="form-label"># of
+                                Months</label>
+
+                            <input type="text" class="form-control" placeholder="" aria-label="# of Months">
+                        </div>
+                        <div class="d-flex justify-content-between mt-1 align-items-center">
+                            <div>
+                                <a [routerLink]="['']" class="text-secondary">
+                                    <i class="fa fa-refresh" aria-hidden="true"></i></a>
+
+
+                            </div>
+                            <div class="text-end">
+                                <div>2</div>
+                                <div>12,038.01</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column col-4">
+                        <div>
+
+                            <label for="expectedOutputDecline" class="form-label">Expected
+                                Output
+                                Decline(%)
+                            </label>
+
+                            <input type="text" class="form-control" aria-label="Expected Output Decline(%)">
+                        </div>
+                        <div class="d-flex justify-content-between mt-1 align-items-center">
+
+                            <div class="">
+                                <div>Tracts Selected</div>
+                                <div>Estimated Cash Flow</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column col">
+                        <div>
+
+                            <label for="gasPrice" class="form-label">Gas Price
+                            </label>
+
+                            <select id="auctionType" class="form-select">
+                                <option selected>5.6 </option>
+                                <option>...</option>
+                            </select>
+                        </div>
+
+                        <div class="text-end mt-1 align-items-center">
+
+                            <div class="text-end float-end">
+                                <div>0.7675</div>
+                                <div>15,684.00</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column col">
+                        <div>
+                            <label for="oilPrice" class="form-label">Oil Price
+                            </label>
+
+                            <input type="text" class="form-control" aria-label="Oil Price">
+                        </div>
+                        <div class="d-flex justify-content-between mt-1 align-items-center">
+
+                            <div class="">
+                                <div>NMA</div>
+                                <div>Cash Flow / NMA</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class=" m-auto col">
+                        <label for="default" class="form-label"><a [routerLink]="['']">
+                                Save as Default</a>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

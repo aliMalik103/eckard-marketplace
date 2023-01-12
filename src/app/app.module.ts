@@ -11,6 +11,7 @@ import { MarketPlaceModule } from 'src/components/market-place/market-place.modu
 import { BuyerModule } from 'src/components/pages/buyer/buyer.module';
 import { InformationsModule } from 'src/components/pages/informations/informations.module';
 import { SellerModule } from 'src/components/pages/seller/seller.module';
+import { AddNewListingService } from 'src/components/pages/seller/my-listing/add-new-listing/add-new-listing.service';
 
 
 
@@ -31,7 +32,7 @@ import { SellerModule } from 'src/components/pages/seller/seller.module';
     InformationsModule
 
   ],
-  providers: [],
+  providers: [AddNewListingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

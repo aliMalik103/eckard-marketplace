@@ -1,9 +1,12 @@
 .nav-link {
-
     color: black;
 }
 
 .my-listing-item .active {
     border-top: 2px solid orange !important;
     background: #f8bc076b !important;
+}
+
+.pe-auto {
+    cursor: pointer;
 }

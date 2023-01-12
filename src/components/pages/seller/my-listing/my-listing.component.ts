@@ -8,6 +8,15 @@ import { Component, OnInit } from '@angular/core';
 export class MyListingComponent implements OnInit {
 
   showAllListing: boolean = false
+  listingsColumns : Array<String> = [
+    "Listing Name",
+    "Auction Deadline",
+    "Account/Project",
+    "Total NMA",
+    "Minimam Ask",
+    "Highest Bid",
+    "# Bids"
+  ]
 
   constructor() {
 

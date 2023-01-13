@@ -7,6 +7,10 @@ body {
     overflow-x: hidden;
     max-width: 100%;
     color: #212529;
-    background-color: #f5f6f8 !important ;
+    background-color: #f5f6f8 !important;
 
+}
+
+.pe-auto {
+    cursor: pointer;
 }

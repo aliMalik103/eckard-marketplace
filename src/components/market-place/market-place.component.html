@@ -1,11 +1,12 @@
 <div class="container p-4">
 
+
     <ul class="nav nav-tabs w-25 border-0 bg-white market-tabs" id="myTab" role="tablist">
 
         <div class="breadcrumb-container mx-auto pt-1">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-link">
-                    <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="['/market-place']">Home</a></li>
                     <li class="breadcrumb-item active"><a [routerLink]="['/market-place']">MarketPlace</a></li>
 
                 </ol>
@@ -17,7 +18,10 @@
             <div class="m-0">
                 <h4>MAXT123</h4>
             </div>
-            <div class="text-danger">inactive</div>
+
+            <div class="text-danger" *ngIf="!isActiveUser">
+                inactive
+            </div>
         </div>
 
     </ul>
@@ -53,7 +57,8 @@
                 </div>
                 <div class="p-4">
                     <div class="mb-3">
-                        <a class="marketplace-items" [routerLink]="['/my-listing']">My Listings </a>(1)
+                        <a class="marketplace-items" [routerLink]="['/my-listing']">My Listings
+                        </a>({{totalMyListings}})
                     </div>
                     <div class="mb-3">
                         <a class="marketplace-items" [routerLink]="['/seller-transactions']">Pending/Closed Transactions

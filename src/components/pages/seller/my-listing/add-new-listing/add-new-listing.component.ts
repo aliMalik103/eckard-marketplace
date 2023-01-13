@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AddNewListingService } from './add-new-listing.service';
 
 @Component({
   selector: 'app-add-new-listing',
@@ -7,14 +8,24 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class AddNewListingComponent implements OnInit {
   @Output() onGoBack = new EventEmitter()
-  constructor() {
+
+  pType: any;
+
+  constructor(private addNewListingService: AddNewListingService) {
+  }
+
+  ngOnInit(): void {
+    this.pType = this.addNewListingService.projectType
 
   }
-  ngOnInit(): void {
-    console.log('Method not implemented.');
-  }
+
   handleGoBack() {
     this.onGoBack.emit()
+  }
+
+  handleProjectType(value: string) {
+    this.addNewListingService.handleProjectType(value)
+    this.pType = this.addNewListingService.projectType
 
   }
 

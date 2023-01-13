@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './login.component';
-import { LoginService } from './login.service';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { LoginService } from 'src/components/services/login.service';
 
 
 

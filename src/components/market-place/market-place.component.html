@@ -14,7 +14,7 @@
 
         </div>
 
-        <div class="d-flex justify-content-between w-100 p-1">
+        <div class="d-flex justify-content-between w-100 px-2">
             <div class="m-0">
                 <h4>MAXT123</h4>
             </div>
@@ -34,8 +34,8 @@
 
                 </div>
                 <div class="p-4">
-                    <div class="mb-3">
-                        <a class="marketplace-items disabled" [routerLink]="['/my-bids']">My Bids
+                    <div class="mb-3" [ngClass]="{'isDisabled':!isActiveUser}">
+                        <a class="marketplace-items " [routerLink]="['/my-bids']">My Bids
                         </a>(2)
                     </div>
                     <div class="mb-3">
@@ -56,8 +56,8 @@
 
                 </div>
                 <div class="p-4">
-                    <div class="mb-3">
-                        <a class="marketplace-items" [routerLink]="['/my-listing']">My Listings
+                    <div class="mb-3 " [ngClass]="{'isDisabled':!isActiveUser}">
+                        <a class="marketplace-items " [routerLink]="['/my-listing']">My Listings
                         </a>({{totalMyListings}})
                     </div>
                     <div class="mb-3">

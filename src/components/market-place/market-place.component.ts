@@ -16,7 +16,7 @@ export class MarketPlaceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isActiveUser = this.loginService?.user?.valid
+    this.isActiveUser = this.loginService?.user?.status == 'active' ? true : false;
   }
 
   getAllMyListings() {

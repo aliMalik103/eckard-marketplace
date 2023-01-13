@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: "seller-notifications", component: SellerNotificationsComponent, canActivate: [AuthGuard] },
   { path: "sec-disclosure", component: SECDisclosureComponent, canActivate: [AuthGuard] },
   { path: "user-agreement", component: UserAgreementComponent, canActivate: [AuthGuard] },
-  { path: "**", redirectTo: "", pathMatch: "full" }
+  { path: "**", redirectTo: "market-place", pathMatch: "full" }
 
 ];
 

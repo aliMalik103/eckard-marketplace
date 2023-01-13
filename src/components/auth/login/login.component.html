@@ -1,3 +1,12 @@
+<ng-container *ngIf="isError">
+
+    <div class="alert alert-danger alert-dismissible fade show  mt-2 w-50 mx-auto" role="alert">
+        <strong>{{errorMessage}} </strong>
+        <button (click)="isError = !isError" type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button>
+    </div>
+</ng-container>
+
 <div class="d-flex m-auto  mt-5 card w-50 border-0 login-container">
 
     <form (ngSubmit)="handleSubmit()" #login="ngForm" class="login-form">
@@ -34,8 +43,8 @@
             <span for="forgot_password" class="forgot-password" [routerLink]="['']"> Forgot Password?</span>
         </div>
         <div class="px-4 mt-3">
-            <input type="submit" class="btn btn-warning btn-lg form-control login-button" value="Log In"
-                [disabled]="login.form.invalid" />
+            <input type="submit" class="btn btn-warning btn-lg form-control login-button"
+                [value]="!isloading ? 'Log In' : 'Loading ...'" [disabled]="login.form.invalid" />
         </div>
     </form>
 </div>

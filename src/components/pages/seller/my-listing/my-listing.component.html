@@ -34,42 +34,23 @@
                 </tr>
             </thead>
             <tbody class="my-listing-table-body">
-                <tr>
-                    <td> <span class="listing-td">Rebalancing Portfolio 2022-1</span></td>
-                    <td>Dec 23, 2022 (7 days)</td>
-                    <td><span class="listing-td">DOEIOH / ELA Gateway</span></td>
-                    <td>6,00000</td>
-                    <td>85,000.00</td>
-                    <td>92,750.00</td>
-                    <td> <span class="listing-td">2</span></td>
-                </tr>
-                <tr>
-                    <td> <span class="listing-td">Rebalancing Portfolio 2022-2</span></td>
-                    <td>Dec 23, 2022 (7 days)</td>
-                    <td><span class="listing-td">DOEIOH / ELA Gill</span></td>
-                    <td>6,00000</td>
-                    <td>85,000.00</td>
-                    <td>92,750.00</td>
-                    <td> <span class="listing-td">2</span></td>
-                </tr>
-                <tr>
-                    <td> <span class="listing-td">Rebalancing Portfolio 2022-3</span></td>
-                    <td>Fix Bid</td>
-                    <td><span class="listing-td">DOEIOH / ELA Peters</span></td>
-                    <td>2,5700</td>
-                    <td>37,000.00</td>
-                    <td></td>
-                    <td> <span class="listing-td">0</span></td>
-                </tr>
-                <tr>
-                    <td> <span class="listing-td">Rebalancing Portfolio 2022-4</span></td>
-                    <td>Dec 31, 2022 (15 days)</td>
-                    <td><span class="listing-td">MAHINA / ELA Gateway</span></td>
-                    <td>20,0000</td>
-                    <td>310,000.00</td>
-                    <td>311,000.00</td>
-                    <td> <span class="listing-td">2</span></td>
-                </tr>
+                <ng-container *ngIf="myListings">
+
+                    <tr *ngFor="let list of myListings">
+                        <td> <span class="listing-td pe-auto">{{list.listingName}}</span>
+                        </td>
+                        <td>{{ list.auctionEnd | date:'MMM d, y'}}</td>
+                        <td>
+                            <span class="listing-td pe-auto">{{list.account.accountName}} /
+                                {{list.project.projectId}}</span>
+                        </td>
+                        <td>{{list.nma}}</td>
+                        <td>{{list.minimumAsk}}</td>
+                        <td></td>
+                        <td> <span class="listing-td pe-auto float-end">2</span></td>
+                    </tr>
+
+                </ng-container>
 
 
 

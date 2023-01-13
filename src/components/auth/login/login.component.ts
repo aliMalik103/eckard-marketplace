@@ -1,6 +1,6 @@
-import { LoginService } from './login.service';
 import { Component } from '@angular/core';
 import { LoginForm } from 'src/components/model/login';
+import { LoginService } from 'src/components/services/login.service';
 
 
 @Component({
@@ -16,17 +16,31 @@ export class LoginComponent {
     email: "",
     password: ""
   }
+  errorMessage: string = "User Not Found";
+  isError: boolean = false;
+  isloading: boolean = false;
 
-  constructor(private loginService: LoginService) { }
+  constructor(private loginService: LoginService) {
+
+  }
 
   togglePassword() {
     this.isPassword = !this.isPassword;
   }
 
   handleSubmit() {
+    this.isloading = true
     this.loginService.login(this.loginForm).subscribe(
-      (response) => alert(JSON.stringify(response)),
-      (error: any) => console.log(error),
+      (response) => {
+        console.log('success', response)
+        this.isloading = false
+        this.isError = false
+      },
+      (error: any) => {
+        this.isloading = false
+        this.isError = true
+        console.log("error", error)
+      },
       () => console.log("Done getting user"));
   }
 

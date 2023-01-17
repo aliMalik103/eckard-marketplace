@@ -1,9 +1,12 @@
 <div class="row mt-4">
 
     <div class="col-md-6">
-        <label for="auctionType" class="form-label">Auction Type <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" value="6.0000" id="NMAListed" required>
 
+        <label for="auctionType" class="form-label">Account <span class="text-danger">*</span></label>
+        <select id="auctionType" class="form-select" [(ngModel)]="createNewListing.account" [disabled]="isDisabled">
+            <option *ngFor="let item of projectsOptions " [value]="item.id" disabled selected>{{item.projectId}}
+            </option>
+        </select>
     </div>
 
 </div>
@@ -122,7 +125,7 @@
         <div>
 
             <select class="form-select" multiple (change)="getSelectedValues()" id="projectSelect">
-                <option *ngFor="let option of projectsOptions" [value]="option" [selected]="selectAllProject">
+                <option *ngFor="let option of operatorsOptions" [value]="option" [selected]="selectAllProject">
                     {{option}}</option>
 
             </select>
@@ -254,7 +257,7 @@
 
 <div class=" my-4 row p-0">
 
-    <div class="accordion accordion-flush " id="accordionFlushExample">
+    <div class="accordion accordion-flush " id="tractsCashFlow">
         <div class="accordion-item ">
             <h5 class="accordion-header collapsed p-0 col-8 " id="flush-headingOne" data-bs-toggle="collapse"
                 data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -266,7 +269,7 @@
 
             </h5>
             <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                data-bs-parent="#accordionFlushExample">
+                data-bs-parent="#tractsCashFlow">
                 <div class="accordion-body  d-flex gap-3 w-100">
                     <div class="d-flex flex-column col-2">
                         <div>

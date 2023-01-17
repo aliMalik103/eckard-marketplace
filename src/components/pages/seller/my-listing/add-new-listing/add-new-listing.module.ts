@@ -7,6 +7,7 @@ import { GeneralDataTabComponent } from './general-data-tab/general-data-tab.com
 import { ListingDetailsTabComponent } from './listing-details-tab/listing-details-tab.component';
 import { AddTractsTabComponent } from './add-tracts-tab/add-tracts-tab.component';
 import { AddNewListingService } from './add-new-listing.service';
+import { MyListingsService } from 'src/components/services/my-listings.service';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,7 @@ import { AddNewListingService } from './add-new-listing.service';
         CommonModule,
 
     ],
-    providers: [AddNewListingService],
+    providers: [AddNewListingService,MyListingsService],
     exports: [AddNewListingComponent]
 })
 export class AddNewListingModule {

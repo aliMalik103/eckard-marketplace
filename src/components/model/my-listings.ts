@@ -53,3 +53,43 @@ export interface Project {
     totalNma: string
     totalRevenue: string
 }
+
+export interface AuctionType {
+    id: number
+    auctionType: string
+}
+
+export interface Constraint {
+    id: number
+    constraint: string
+}
+
+export interface Tract {
+    id: number
+    tractId: string
+    township: string
+    range: string
+    section: string
+    country: string
+    state: string
+    royalityInterest: string
+    costPerNma: string
+    totalNma: string
+  }
+
+export interface MyListing {
+    listing_type: any
+    status: any
+    listingName: string
+    listingStart: any
+    auction_type: any
+    auctionEnd: any
+    comments: string
+    account: any
+    project: any
+    nma: any
+    minimumAsk: any
+    buyNowPrice: any
+    constraints: any[]
+    offer: any[]
+}

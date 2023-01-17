@@ -2,33 +2,46 @@
 
     <div class="col-md-6">
         <label for="auctionType" class="form-label">Auction Type <span class="text-danger">*</span></label>
-        <select id="auctionType" class="form-select">
-            <option *ngFor="let option of generalDataAuctionType">{{option}}</option>
+        <select id="auctionType" class="form-select" [(ngModel)]="createNewListing.auction_type"
+            (ngModelChange)="handleChange()" #auctionType="ngModel"
+            [ngClass]="{'border border-danger':auctionType.invalid && (auctionType.dirty || auctionType.touched)}"
+            required>
+            <option *ngFor="let item of auctionTypeOptions" [value]="item.id">{{item.auctionType}}
+            </option>
         </select>
+        <span *ngIf="auctionType.invalid && (auctionType.dirty || auctionType.touched ) &&  auctionType.errors"
+            class="text-danger rounded px-4 error-message">
+            Please select valid Auction Type
+        </span>
+
+
     </div>
     <div class="col-md-6">
-        <label for="auctionEndsAt" class="form-label">Auction Ends At <span class="text-danger">*</span></label>
-        <input type="datetime-local" class="form-control" id="auctionEndsAt" required>
+        <label for="auctionEnd" class="form-label">Auction Ends At <span class="text-danger">*</span></label>
+        <input type="datetime-local" class="form-control" name="auctionEnd" id="auctionEnd"
+            [(ngModel)]="createNewListing.auctionEnd" required #auctionEnd="ngModel"
+            [ngClass]="{'border border-danger':auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched)}">
+        <span *ngIf="auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched ) &&  auctionEnd.errors"
+            class="text-danger rounded px-4 error-message">
+            Please enter valid auction End date
+        </span>
     </div>
 </div>
 <div class="mt-3">
     <label for="exampleFormControlInput1" class="form-label">Constraints / Contingencies</label>
     <div class="col-sm-10">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-                No 1031 Exchange
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-            <label class="form-check-label" for="flexCheckChecked">
-                No Self-Directed Accounts with 3rd Party Custodian
+
+        <div class="form-check" *ngFor="let item of constraintOptions">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
+                [name]="item.constraint" [id]="'constraint'+item.id">
+            <label class="form-check-label" [for]="'constraint'+item.id">
+                {{item.constraint}}
             </label>
         </div>
     </div>
 </div>
 <div class="mt-3">
-    <label for="exampleFormControlTextarea1" class="form-label">Additional Comments</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+    <label for="comments" class="form-label">Additional Comments</label>
+    <textarea class="form-control" [(ngModel)]="createNewListing.comments" id="comments" name="comments"
+        rows="5"></textarea>
 </div>

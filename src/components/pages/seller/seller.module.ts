@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { MyListingsService } from 'src/components/services/my-listings.service';
 import { MyListingModule } from './my-listing/my-listing.module';
 import { SellerNotificationsModule } from './seller-notifications/seller-notifications.module';
 import { SellerTransactionsModule } from './seller-transactions/seller-transactions.module';
@@ -16,7 +17,7 @@ import { SellerTransactionsModule } from './seller-transactions/seller-transacti
         SellerTransactionsModule
         
     ],
-    providers: [],
+    providers: [MyListingsService],
     exports: []
 })
 export class SellerModule { }

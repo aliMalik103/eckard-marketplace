@@ -1,372 +1,259 @@
-<ng-container *ngIf="pType == 'Entire Project'">
-    <div class="row mt-4">
+<ng-container *ngIf="createNewListing.listing_type">
 
-        <div class="col-md-5">
-            <label for="auctionType" class="form-label">Account <span class="text-danger">*</span></label>
-            <select id="auctionType" class="form-select">
-                <option selected>XYZ - Self-Directed IRA </option>
-                <option>...</option>
-            </select>
-        </div>
-        <div class="col-md-5">
-            <label for="auctionType" class="form-label">Project <span class="text-danger">*</span></label>
-            <select id="auctionType" class="form-select">
-                <option *ngFor="let option of projectsOptions ">{{option}} </option>
-            </select>
-        </div>
-        <div class="col-md-2 d-flex m-auto pt-4">
-            <button type="button" class="btn  btn-light"><a [routerLink]="['']"> Map <i
-                        class="fa fa-user"></i></a></button>
+    <ng-container *ngIf="createNewListing.listing_type == 1">
+        <div class="row mt-4">
 
-        </div>
-    </div>
-    <div class="mt-3 row">
+            <div class="col-md-5">
+                <label for="account" class="form-label">Account <span class="text-danger">*</span></label>
+                <select id="account" class="form-select" [(ngModel)]="createNewListing.account"
+                    (ngModelChange)="handleChange('account')" #account="ngModel"
+                    [ngClass]="{'border border-danger':account.invalid && (account.dirty || account.touched)}" required>
+                    <option *ngFor="let item of accountsOptions " [value]="item.id">{{item.accountName}} </option>
+                </select>
 
-        <div class=" col-md-6">
-            <label for="NMAListed" class="form-label">NMA Listed <small class="text-muted">(max:
-                    7.1800
-                    NMA)
-                </small> <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" value="6.0000" id="NMAListed" required>
-
-        </div>
-        <div class="col-6 d-flex flex-column pt-3">
-            <div class="d-flex justify-content-between">
-                <label for="inputAddress" class="form-label">Listing Cost : </label>
-                <p class="text-secondary"> 75,000.00 (12,500,00 / NMA)</p>
-
+                <span *ngIf="account.invalid && (account.dirty || account.touched ) &&  account.errors"
+                    class="text-danger rounded px-4 error-message">
+                    Please select valid account
+                </span>
+            </div>
+            <div class="col-md-5">
+                <label for="project" class="form-label">Project <span class="text-danger">*</span></label>
+                <select id="project" class="form-select" [(ngModel)]="createNewListing.project"
+                    (ngModelChange)="handleChange('project')" #project="ngModel"
+                    [ngClass]="{'border border-danger':project.invalid && (project.dirty || project.touched)}" required>
+                    <option *ngFor="let item of projectsOptions " [value]="item.id">{{item.projectId}} </option>
+                </select>
+                <span *ngIf="project.invalid && (project.dirty || project.touched ) &&  project.errors"
+                    class="text-danger rounded px-4 error-message">
+                    Please select valid project
+                </span>
+            </div>
+            <div class="col-md-2 d-flex m-auto pt-4">
+                <button type="button" class="btn  btn-light"><a [routerLink]="['']"> Map <i
+                            class="fa fa-user"></i></a></button>
 
             </div>
-            <div class="d-flex justify-content-between">
-                <label for="inputAddress" class="form-label">Listing Income To Date : </label>
-                <p class="text-secondary"> 31,235.11 (41% ROI)</p>
+        </div>
+        <div class="mt-3 row">
 
+            <div class=" col-md-6">
+                <label for="nma" class="form-label">NMA Listed <small class="text-muted">(max:
+                        7.1800
+                        NMA)
+                    </small> <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="createNewListing.nma"
+                    (change)="handleChange('nma')" id="nma" name="nma" #nma="ngModel"
+                    [ngClass]="{'border border-danger':nma.invalid && (nma.dirty || nma.touched)}" required>
+                <span *ngIf="nma.invalid && (nma.dirty || nma.touched ) &&  nma.errors"
+                    class="text-danger rounded px-4 error-message">
+                    Please select valid nma
+                </span>
             </div>
+            <div class="col-6 d-flex flex-column pt-3">
+                <div class="d-flex justify-content-between">
+                    <label for="inputAddress" class="form-label">Listing Cost : </label>
+                    <p class="text-secondary"> 75,000.00 (12,500,00 / NMA)</p>
 
-
-        </div>
-
-
-    </div>
-    <div class="mt-3 row">
-
-        <div class=" col-md-6">
-            <label for="minimaumAskingPrice" class="form-label">Minimaum Asking Price <span
-                    class="text-danger">*</span></label>
-            <input type="text" class="form-control" value="99,600.00" id="minimaumAskingPrice" required>
-
-        </div>
-        <div class=" pt-4 col-6">
-            <p class="text-secondary"> 16,600.00 per NMA : Profit on Exit : 24,600.00; Total Profit:
-                55,835.11 (74.45%)</p>
-
-        </div>
-
-
-    </div>
-    <div class="mt-3 row">
-        <div class="col-12 p-0">
-
-
-            <div class="accordion accordion-flush" id="accordionFlushExample">
-                <div class="accordion-item ">
-                    <h5 class="accordion-header collapsed p-0 col-8" id="flush-headingOne" data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                        Listing - Basic Cash Flow Calculator
-
-                        <span class="small float-end">
-                            Est. Cash Flow: <span class="text-primary">100,108.27</span>
-                        </span>
-
-                    </h5>
-                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                        data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body  d-flex gap-3 w-100">
-                            <div class="d-flex flex-column col-2">
-                                <div>
-                                    <label for="monts" class="form-label"># of
-                                        Months</label>
-
-                                    <input type="text" class="form-control" placeholder="" aria-label="# of Months">
-                                </div>
-                                <div class="d-flex justify-content-between mt-1 align-items-center">
-                                    <div>
-                                        <a [routerLink]="['']" class="text-secondary">
-                                            <i class="fa fa-refresh" aria-hidden="true"></i></a>
-
-
-                                    </div>
-                                    <div class="text-end">
-                                        <div>2</div>
-                                        <div>12,038.01</div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="d-flex flex-column col-4">
-                                <div>
-
-                                    <label for="expectedOutputDecline" class="form-label">Expected
-                                        Output
-                                        Decline(%)
-                                    </label>
-
-                                    <input type="text" class="form-control" aria-label="Expected Output Decline(%)">
-                                </div>
-                                <div class="d-flex justify-content-between mt-1 align-items-center">
-
-                                    <div class="">
-                                        <div>Tracts Selected</div>
-                                        <div>Estimated Cash Flow</div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="d-flex flex-column col">
-                                <div>
-
-                                    <label for="gasPrice" class="form-label">Gas Price
-                                    </label>
-
-                                    <select id="auctionType" class="form-select">
-                                        <option selected>5.6 </option>
-                                        <option>...</option>
-                                    </select>
-                                </div>
-
-                                <div class="text-end mt-1 align-items-center">
-
-                                    <div class="text-end float-end">
-                                        <div>0.7675</div>
-                                        <div>15,684.00</div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="d-flex flex-column col">
-                                <div>
-                                    <label for="oilPrice" class="form-label">Oil Price
-                                    </label>
-
-                                    <input type="text" class="form-control" aria-label="Oil Price">
-                                </div>
-                                <div class="d-flex justify-content-between mt-1 align-items-center">
-
-                                    <div class="">
-                                        <div>NMA</div>
-                                        <div>Cash Flow / NMA</div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class=" m-auto col">
-                                <label for="drafts" class="form-label"><a [routerLink]="['']">
-                                        Save as Drafts</a>
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</ng-container>
-<ng-container *ngIf="pType == 'Individual Tracts'">
-    <p class="mt-4 "><strong>Tracts in Listing (2)</strong> </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="text-secondary" scope="col" *ngFor="let item of listingColumns;">{{item}}
-                </th>
-            </tr>
-        </thead>
-        <tbody class="my-listing-table-body">
-            <tr>
-                <td> <span class="tract-td">T6N RAW S14</span></td>
-                <td>ELA Cooley</td>
-                <td>Grady, OK</td>
-                <td>1|0|2</td>
-                <td>28.75%</td>
-                <td>92,750.00</td>
-                <td>0.7434</td>
-                <td><span class="tract-td float-end">All</span></td>
-                <td class="text-muted">100%</td>
-                <td> 1,232.09</td>
-            </tr>
-            <tr>
-                <td> <span class="tract-td">T6N RAW S14</span></td>
-                <td>ELA Cooley</td>
-                <td>Grady, OK</td>
-                <td>1|0|2</td>
-                <td>28.75%</td>
-                <td>92,750.00</td>
-                <td>0.7434</td>
-                <td><span class="tract-td float-end">0.3434</span></td>
-                <td class="text-muted">100%</td>
-                <td> 1,232.09</td>
-            </tr>
-            <tr>
-                <td> <span class="tract-td">T6N RAW S14</span></td>
-                <td>ELA Cooley</td>
-                <td>Grady, OK</td>
-                <td>1|0|2</td>
-                <td>28.75%</td>
-                <td>92,750.00</td>
-                <td>0.7434</td>
-                <td><span class="tract-td float-end">0.8377</span></td>
-                <td class="text-muted">100%</td>
-                <td> 1,232.09</td>
-            </tr>
-            <tr>
-                <th colspan="5"> Cost of Listed Tracts : $10,534.98 </th>
-                <td>0.7434</td>
-                <td>0.8377</td>
-                <td class="text-end">0.2323</td>
-                <td>test</td>
-                <td> 1,232.09</td>
-                <td> 29%</td>
-                <td> ROI</td>
-
-            </tr>
-
-        </tbody>
-    </table>
-
-    <div class="mt-3 row ">
-
-        <div class=" col-md-6">
-            <label for="minimaumAskingPrice" class="form-label">Minimaum Asking Price <span
-                    class="text-danger">*</span></label>
-            <input type="text" class="form-control" value="99,600.00" id="minimaumAskingPrice" required>
-
-        </div>
-        <div class="text-muted small d-flex align-items-end col-6">
-            16,600.00 per NMA : Profit : 24,600.00; 74.45% ROI
-
-        </div>
-
-
-    </div>
-
-    <div class=" my-4 row p-0">
-
-        <div class="accordion accordion-flush " id="accordionFlushExample">
-            <div class="accordion-item ">
-                <h5 class="accordion-header collapsed p-0 col-8 " id="flush-headingOne" data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                    Listing - Basic Cash Flow Calculator
-
-                    <span class="small float-end">
-                        Est. Cash Flow: <span class="text-primary">100,108.27</span>
-                    </span>
-
-                </h5>
-                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                    data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body  d-flex gap-3 w-100">
-                        <div class="d-flex flex-column col-2">
-                            <div>
-                                <label for="monts" class="form-label"># of
-                                    Months</label>
-
-                                <input type="text" class="form-control" placeholder="" aria-label="# of Months">
-                            </div>
-                            <div class="d-flex justify-content-between mt-1 align-items-center">
-                                <div>
-                                    <a [routerLink]="['']" class="text-secondary">
-                                        <i class="fa fa-refresh" aria-hidden="true"></i></a>
-
-
-                                </div>
-                                <div class="text-end">
-                                    <div>2</div>
-                                    <div>12,038.01</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column col-4">
-                            <div>
-
-                                <label for="expectedOutputDecline" class="form-label">Expected
-                                    Output
-                                    Decline(%)
-                                </label>
-
-                                <input type="text" class="form-control" aria-label="Expected Output Decline(%)">
-                            </div>
-                            <div class="d-flex justify-content-between mt-1 align-items-center">
-
-                                <div class="">
-                                    <div>Tracts Selected</div>
-                                    <div>Estimated Cash Flow</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column col">
-                            <div>
-
-                                <label for="gasPrice" class="form-label">Gas Price
-                                </label>
-
-                                <select id="auctionType" class="form-select">
-                                    <option selected>5.6 </option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-
-                            <div class="text-end mt-1 align-items-center">
-
-                                <div class="text-end float-end">
-                                    <div>0.7675</div>
-                                    <div>15,684.00</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column col">
-                            <div>
-                                <label for="oilPrice" class="form-label">Oil Price
-                                </label>
-
-                                <input type="text" class="form-control" aria-label="Oil Price">
-                            </div>
-                            <div class="d-flex justify-content-between mt-1 align-items-center">
-
-                                <div class="">
-                                    <div>NMA</div>
-                                    <div>Cash Flow / NMA</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class=" m-auto col">
-                            <label for="default" class="form-label"><a [routerLink]="['']">
-                                    Save as Default</a>
-                            </label>
-                        </div>
-                    </div>
 
                 </div>
+                <div class="d-flex justify-content-between">
+                    <label for="inputAddress" class="form-label">Listing Income To Date : </label>
+                    <p class="text-secondary"> 31,235.11 (41% ROI)</p>
+
+                </div>
+
+
             </div>
 
+
         </div>
-    </div>
+    </ng-container>
+    <ng-container *ngIf="createNewListing.listing_type == 2 ">
 
-    <ng-container>
-        <p class="text-warning"><strong>Please go to
-                <span class=" pe-auto border-bottom border-warning" (click)="handleRemoveAndAddClass()"
-                    title="Add New Tracts">
-                    Add Tracts</span> to identify specific
-                Tracts to be added to
-                this Listing</strong>
+        <ng-container *ngIf="tracts.length > 0">
+            <p class="mt-4 "><strong>Tracts in Listing ({{tracts.length}})</strong> </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-secondary" scope="col" *ngFor="let item of listingColumns;">{{item}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="my-listing-table-body">
+                    <tr *ngFor="let tract of tracts">
+                        <td> <span class="tract-td">{{tract.tractId}}</span></td>
+                        <td></td>
+                        <td>{{tract.country}}, {{tract.state}}</td>
+                        <td></td>
+                        <td>{{tract.royalityInterest}}%</td>
+                        <td>{{tract.costPerNma}}</td>
+                        <td>0.7434</td>
+                        <td><span class="tract-td float-end">All</span></td>
+                        <td class="text-muted">100%</td>
+                        <td> 1,232.09</td>
+                    </tr>
+                    <tr>
+                        <th colspan="5"> Cost of Listed Tracts : $10,534.98 </th>
+                        <td>0.7434</td>
+                        <td>0.8377</td>
+                        <td class="text-end">0.2323</td>
+                        <td>test</td>
+                        <td> 1,232.09</td>
+                        <td> 29%</td>
+                        <td> ROI</td>
 
-        </p>
+                    </tr>
+
+                </tbody>
+            </table>
+        </ng-container>
+
+        <ng-container *ngIf="tracts.length == 0">
+            <p class="text-warning"><strong>Please go to
+                    <span class=" pe-auto border-bottom border-warning" (click)="handleRemoveAndAddClass()"
+                        title="Add New Tracts">
+                        Add Tracts</span> to identify specific
+                    Tracts to be added to
+                    this Listing</strong>
+
+            </p>
+        </ng-container>
 
     </ng-container>
+    <ng-container *ngIf="!(tracts.length == 0 && createNewListing.listing_type == 2)">
+
+        <div class="mt-3 row">
+
+            <div class=" col-md-6">
+                <label for="minimumAsk" class="form-label">Minimum Asking Price <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="createNewListing.minimumAsk"
+                    (change)="handleChange('minimumAsk')" name="minimumAsk" id="minimumAsk" #minimumAsk="ngModel"
+                    [ngClass]="{'border border-danger':minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched)}"
+                    required>
+                <span *ngIf="minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched ) &&  minimumAsk.errors"
+                    class="text-danger rounded px-4 error-message">
+                    Please select valid minimumAsk price
+                </span>
+            </div>
+            <div class="text-muted small d-flex align-items-end col-6">
+                16,600.00 per NMA : Profit : 24,600.00; 74.45% ROI
+
+            </div>
+
+
+        </div>
+
+        <div class="mt-3 row">
+            <div class="col-12 p-0">
+
+                <div class="accordion accordion-flush" id="listingAccordion">
+                    <div class="accordion-item ">
+                        <h5 class="accordion-header collapsed p-0 col-8" id="listing-headingOne"
+                            data-bs-toggle="collapse" data-bs-target="#listing-collapseOne" aria-expanded="false"
+                            aria-controls="listing-collapseOne">
+                            Listing - Basic Cash Flow Calculator
+
+                            <span class="small float-end">
+                                Est. Cash Flow: <span class="text-primary">100,108.27</span>
+                            </span>
+
+                        </h5>
+                        <div id="listing-collapseOne" class="accordion-collapse collapse"
+                            aria-labelledby="listing-headingOne" data-bs-parent="#listingAccordion">
+                            <div class="accordion-body  d-flex gap-3 w-100">
+                                <div class="d-flex flex-column col-2">
+                                    <div>
+                                        <label for="monts" class="form-label"># of
+                                            Months</label>
+
+                                        <input type="text" class="form-control" placeholder="" aria-label="# of Months">
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1 align-items-center">
+                                        <div>
+                                            <a [routerLink]="['']" class="text-secondary">
+                                                <i class="fa fa-refresh" aria-hidden="true"></i></a>
+
+
+                                        </div>
+                                        <div class="text-end">
+                                            <div>2</div>
+                                            <div>12,038.01</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column col-4">
+                                    <div>
+
+                                        <label for="expectedOutputDecline" class="form-label">Expected
+                                            Output
+                                            Decline(%)
+                                        </label>
+
+                                        <input type="text" class="form-control" aria-label="Expected Output Decline(%)">
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1 align-items-center">
+
+                                        <div class="">
+                                            <div>Tracts Selected</div>
+                                            <div>Estimated Cash Flow</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column col">
+                                    <div>
+
+                                        <label for="gasPrice" class="form-label">Gas Price
+                                        </label>
+
+                                        <select id="auctionType" class="form-select">
+                                            <option selected>5.6 </option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="text-end mt-1 align-items-center">
+
+                                        <div class="text-end float-end">
+                                            <div>0.7675</div>
+                                            <div>15,684.00</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column col">
+                                    <div>
+                                        <label for="oilPrice" class="form-label">Oil Price
+                                        </label>
+
+                                        <input type="text" class="form-control" aria-label="Oil Price">
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1 align-items-center">
+
+                                        <div class="">
+                                            <div>NMA</div>
+                                            <div>Cash Flow / NMA</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class=" m-auto col">
+                                    <label for="drafts" class="form-label"><a [routerLink]="['']">
+                                            Save as Drafts</a>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </ng-container>
+
 
 </ng-container>

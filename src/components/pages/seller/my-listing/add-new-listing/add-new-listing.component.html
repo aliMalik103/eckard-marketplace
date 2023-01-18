@@ -1,3 +1,16 @@
+<ng-container *ngIf="isError">
+
+    <div class="alert alert-danger alert-dismissible fade show w-75 mx-auto" role="alert">
+        <ul>
+            <ol *ngFor="let message of errorMessages"> <strong>{{message.key}} :
+                    {{message.value}}</strong></ol>
+        </ul>
+
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+            (click)="isError = false"></button>
+    </div>
+</ng-container>
+
 <div class="mt-3">
     <form class="mb-3">
 
@@ -5,33 +18,42 @@
 
             <h4>New Listing</h4>
             <div class="d-flex text-center  align-items-center">
-                <div class="form-check mx-4">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
-                        (click)="handleProjectType('Entire Project')" >
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        Entire Project
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" (click)="handleProjectType('Individual Tracts')" type="radio"
-                        name="flexRadioDefault" id="flexRadioDefault2">
-                    <label class="form-check-label" for="flexRadioDefault2">
-                        Individual Tracts
-                    </label>
-                </div>
+                <ng-container *ngIf="listingTypeOptions">
 
+                    <div class="form-check mx-4" *ngFor="let item of listingTypeOptions;">
+                        <input class="form-check-input" (click)="handleProjectType(item.id)" type="radio"
+                            name="listing_type" [id]="item.id">
+                        <label class="form-check-label" [for]="item.id">
+                            {{item.listingType}}
+                        </label>
+                    </div>
+                </ng-container>
             </div>
 
         </div>
 
         <div class="row p-4">
             <div class="col-md-6 ">
-                <label for="name" class="form-label">Listing Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="name" placeholder="Listing name" required>
+                <label for="listingName" class="form-label">Listing Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="createNewListing.listingName" id="listingName"
+                    name="listingName" placeholder="Listing name" required #listingName="ngModel"
+                    [ngClass]="{'border border-danger':listingName.invalid && (listingName.dirty || listingName.touched)}">
+                <span *ngIf="listingName.invalid && (listingName.dirty || listingName.touched ) &&  listingName.errors"
+                    class="text-danger rounded px-4 error-message">
+                    Please enter valid listing name
+                </span>
             </div>
+
             <div class="col-md-6">
                 <label for="listingStart" class="form-label">Listing Start <span class="text-danger">*</span></label>
-                <input type="datetime-local" class="form-control" id="listingStart" name="listingStart" required />
+                <input type="datetime-local" class="form-control" [(ngModel)]="createNewListing.listingStart "
+                    name="listingStart" id="listingStart" required #listingStart="ngModel"
+                    [ngClass]="{'border border-danger':listingStart.invalid && (listingStart.dirty || listingStart.touched)}">
+                <span
+                    *ngIf="listingStart.invalid && (listingStart.dirty || listingStart.touched ) &&  listingStart.errors"
+                    class="text-danger rounded px-4 error-message">
+                    Please enter valid listing Start date
+                </span>
             </div>
         </div>
 
@@ -48,7 +70,8 @@
                         aria-selected="false">Listing
                         Details</button>
                 </li>
-                <li class="nav-item my-listing-item" role="presentation">
+
+                <li class="nav-item my-listing-item" role="presentation" *ngIf="createNewListing.listing_type == 2">
                     <button class="nav-link " id="addTracts-tab" data-bs-toggle="tab" data-bs-target="#addTracts"
                         type="button" role="tab" aria-controls="addTracts" aria-selected="false">Add Tracts
                     </button>
@@ -60,15 +83,19 @@
                 <div class="tab-pane fade show active " id="GeneralData" role="tabpanel"
                     aria-labelledby="GeneralData-tab">
 
-                    <app-general-data-tab></app-general-data-tab>
+                    <app-general-data-tab [auctionTypeOptions]="auctionTypeOptions"
+                        [constraintOptions]="constraintOptions" [createNewListing]="createNewListing">
+                    </app-general-data-tab>
                 </div>
                 <div class="tab-pane fade" id="listingDetails" role="tabpanel" aria-labelledby="listingDetails-tab">
-                    <app-listing-details-tab [pType]="pType">
+                    <app-listing-details-tab [createNewListing]="createNewListing" [projectsOptions]="projectsOptions"
+                        [accountsOptions]="accountsOptions" [tracts]="tracts">
                     </app-listing-details-tab>
                 </div>
                 <div class="tab-pane fade " id="addTracts" role="tabpanel" aria-labelledby="addTracts-tab">
 
-                    <app-add-tracts-tab></app-add-tracts-tab>
+                    <app-add-tracts-tab [projectsOptions]="projectsOptions" [createNewListing]="createNewListing">
+                    </app-add-tracts-tab>
                 </div>
 
             </div>
@@ -77,21 +104,21 @@
 
         <div class="d-flex justify-content-between p-4 col-8 col-sm-10">
             <div class="d-flex ">
-                <div>
-                    <input type="submit" class="btn btn-warning text-white mr-2" value="ACTIVATE LISTING " />
+                <div *ngFor="let item of statusOptions; index as i">
+                    <ng-container *ngIf="item.status == 'Draft' || item.status == 'Active'">
+                        <input type="submit" class="btn text-white"
+                            [value]="item.status == 'Draft' ? 'SAVE DRAFT': 'ACTIVATE LISTING' "
+                            [ngClass]="{'mx-2':i>1,'btn-success': item.status == 'Draft' , 'btn-warning': item.status != 'Draft'}"
+                            (click)="handleStatus(item.id)" />
+                    </ng-container>
                 </div>
-                <div class="mx-2">
 
-                    <input type="submit" class="btn btn-success text-white" value="SAVE DRAFT" />
-                </div>
             </div>
             <button type="button" class="btn btn-secondary" (click)="handleGoBack()">Go Back</button>
 
         </div>
 
     </form>
-
-
 
 
 </div>

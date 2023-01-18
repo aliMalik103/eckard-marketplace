@@ -1,44 +1,36 @@
 <div class="header-container">
-
-    <nav class="navbar navbar-expand-lg ">
-        <div class="container-fluid header">
+    <nav class="navbar navbar-expand-lg navbar-light p-0 px-1">
+        <a class="navbar-brand pl-2">
             <img [src]="logo" class=" m-1" alt="Avatar" />
-            <button class=" navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ng-container *ngIf="isAuthanticated()">
+            <div class="collapse navbar-collapse" id="navbarNav">
 
+                <div
+                    class="navbar-nav mx-auto bg-dark h-100 text-center d-flex justify-content-center m-auto align-items-center p-4">
+                    <a class="nav-link text-warning" [routerLink]="['/market-place']">Marketplace </a>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ng-container *ngIf="isAuthanticated()">
+                </div>
+                <div class="navbar-nav">
+                    <div class="dropdown">
+                        <a class="nav-item nav-link dropdown-toggle text-black" href="#" id="user-dropdown"
+                            data-toggle="dropdown">
+                            User Profile
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="nav-link text-black pe-auto text-center" (click)="handleLogOut()"><i
+                                    class="fa fa-sign-out" aria-hidden="true"></i>
+                                Log Out</a>
 
-                    <div class="header-menue">
-                        <div
-                            class="header-menue-itmes h-100 item-center d-flex justify-content-center m-auto align-items-center bg-dark p-4">
-                            <ul class="navbar-nav mr-auto">
-                                <li class="nav-item ">
-                                    <a class="nav-link text-warning" [routerLink]="['/market-place']">Marketplace </a>
-                                </li>
-
-                            </ul>
                         </div>
                     </div>
-                    <div class="header-user">
-
-                        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link text-black pe-auto" (click)="handleLogOut()">Log Out</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-
-                </ng-container>
+                </div>
             </div>
-        </div>
+        </ng-container>
 
     </nav>
 </div>

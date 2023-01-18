@@ -1,23 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { AuctionType, Constraint, MyListing } from 'src/components/model/my-listings';
 
 @Component({
   selector: 'app-general-data-tab',
   templateUrl: './general-data-tab.component.html',
   styleUrls: ['./general-data-tab.component.css']
 })
-export class GeneralDataTabComponent {
 
-  generalDataAuctionType: Array<string> = [
-    'Silent Minimum Ask',
-    'Public Minimum Ask',
-    'Silent Buy Now or Make an Offer',
-    'Public Buy Now or Make an Offer',
-    'Fix Price',
-    'Direct Sale'
-  ]
+export class GeneralDataTabComponent implements OnInit {
+  @Input() auctionTypeOptions!: AuctionType[]
+  @Input() constraintOptions!: any[]
+  @Input() createNewListing!: MyListing
 
-  constructor() {
+  constructor() {}
 
+  ngOnInit(): void {
+    console.log("constraints constructer", this.constraintOptions)
+  }
+
+  handleChange() {
+    this.createNewListing.auction_type = parseInt(this.createNewListing.auction_type);
+    console.log(this.createNewListing)
+
+  }
+
+  changeSelection() {
+    this.fetchSelectedItems()
+  }
+
+  fetchSelectedItems() {
+    this.createNewListing.constraints = this.constraintOptions
+      .filter(value => value.isChecked)
+      .map(value => value.id);
+    console.log(this.createNewListing)
   }
 
 }

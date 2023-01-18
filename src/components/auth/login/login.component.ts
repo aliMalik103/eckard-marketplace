@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoginForm } from 'src/components/model/login';
 import { LoginService } from 'src/components/services/login.service';
 
@@ -9,7 +10,7 @@ import { LoginService } from 'src/components/services/login.service';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   isPassword: boolean = false
   loginForm: LoginForm = {
@@ -20,8 +21,14 @@ export class LoginComponent {
   isError: boolean = false;
   isloading: boolean = false;
 
-  constructor(private loginService: LoginService) {
+  constructor(private router: Router, private loginService: LoginService) {
 
+  }
+  ngOnInit(): void {
+    if (this.loginService.user) {
+      this.router.navigate(['/market-place']);
+      return
+    }
   }
 
   togglePassword() {

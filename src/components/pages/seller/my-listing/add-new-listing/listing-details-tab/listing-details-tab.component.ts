@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
+import { Project, Account, MyListing, Tract } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
 
 @Component({
@@ -8,7 +9,10 @@ import { AddNewListingService } from '../add-new-listing.service';
 })
 export class ListingDetailsTabComponent implements OnInit {
 
-  projectsOptions!: Array<string>
+  @Input() projectsOptions!: Project[]
+  @Input() accountsOptions!: Account[]
+  @Input() createNewListing!: MyListing
+  @Input() tracts!: Tract[]
 
   listingColumns: Array<string> = [
     'Location',
@@ -22,17 +26,33 @@ export class ListingDetailsTabComponent implements OnInit {
     '',
     'Listed Inc.'
   ]
-  @Input() pType: any;
-
   constructor(private addNewListingService: AddNewListingService) {
 
   }
-  ngOnInit(): void {
-    this.projectsOptions = this.addNewListingService.projectsOptions;
-    console.log("listing tab", this.addNewListingService)
 
+  ngOnInit(): void {
+    console.log("listing tab", this.addNewListingService)
   }
 
+  handleChange(value: string) {
+    switch (value) {
+      case 'account':
+        this.createNewListing.account = parseInt(this.createNewListing.account);
+        break;
+      case 'project':
+        this.createNewListing.project = parseInt(this.createNewListing.project);
+        break;
+      case 'nma':
+        this.createNewListing.nma = parseFloat(this.createNewListing.nma);
+        break;
+      case 'minimumAsk':
+        this.createNewListing.minimumAsk = parseFloat(this.createNewListing.minimumAsk);
+        break;
+      default:
+        return
+    }
+    console.log(this.createNewListing)
+  }
 
   handleRemoveAndAddClass() {
     this.addNewListingService.handleRemoveAndAddClass()

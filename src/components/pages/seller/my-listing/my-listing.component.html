@@ -18,9 +18,8 @@
 
         <div class="d-flex justify-content-between mt-4 mb-3">
             <div>
-                <select class="form-select form-select-lg" aria-label="--- please selecet option --- ">
-                    <option value="My Active Listings"> My Active Listings</option>
-                    <option value="My Inactive Listings"> My Inactive Listings</option>
+                <select class="form-select form-select-lg" [(ngModel)]="listStatus" (ngModelChange)="handleChange()">
+                    <option *ngFor="let list of listingFilterOptions" [value]="list.value"> {{list.label}}</option>
                 </select>
             </div>
 

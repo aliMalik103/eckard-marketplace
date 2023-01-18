@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { MyListing, Project } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
 
 @Component({
@@ -6,10 +7,10 @@ import { AddNewListingService } from '../add-new-listing.service';
   templateUrl: './add-tracts-tab.component.html',
   styleUrls: ['./add-tracts-tab.component.css']
 })
-export class AddTractsTabComponent {
+export class AddTractsTabComponent implements OnInit {
+  @Input() projectsOptions!: Project[]
+  @Input() createNewListing!: MyListing
 
-
-  projectsOptions!: Array<string>;
   countriesOptions: Array<string> = [
     'ANY County',
     'OK-Grady',
@@ -62,18 +63,20 @@ export class AddTractsTabComponent {
   selectAllOperators!: boolean;
   selectAllCountries!: boolean;
   selectAllProject!: boolean;
+  isDisabled: boolean = true
 
 
 
   constructor(private addNewListingService: AddNewListingService) {
-    this.projectsOptions = this.addNewListingService.projectsOptions
+  }
+  ngOnInit(): void {
+    console.log('Method not implemented.');
   }
 
 
   toggleSelection(flag: boolean, value: any) {
 
     this.addNewListingService.toggleSelection(flag, value)
-
     this.selectAllOperators = this.addNewListingService.selectAllOperators
     this.selectAllCountries = this.addNewListingService.selectAllCountries
     this.selectAllProject = this.addNewListingService.selectAllProject

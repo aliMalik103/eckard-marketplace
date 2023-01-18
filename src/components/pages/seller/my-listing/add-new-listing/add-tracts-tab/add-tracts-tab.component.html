@@ -125,8 +125,8 @@
         <div>
 
             <select class="form-select" multiple (change)="getSelectedValues()" id="projectSelect">
-                <option *ngFor="let option of operatorsOptions" [value]="option" [selected]="selectAllProject">
-                    {{option}}</option>
+                <option *ngFor="let option of projectsOptions" [value]="option.id" [selected]="selectAllProject">
+                    {{option.projectId}}</option>
 
             </select>
 
@@ -259,8 +259,8 @@
 
     <div class="accordion accordion-flush " id="tractsCashFlow">
         <div class="accordion-item ">
-            <h5 class="accordion-header collapsed p-0 col-8 " id="flush-headingOne" data-bs-toggle="collapse"
-                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            <h5 class="accordion-header collapsed p-0 col-8 " id="flush-headingOne" data-toggle="collapse"
+                data-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                 Search - Basic Cash Flow Calculator
 
                 <span class="small float-end">
@@ -269,7 +269,7 @@
 
             </h5>
             <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                data-bs-parent="#tractsCashFlow">
+                data-parent="#tractsCashFlow">
                 <div class="accordion-body  d-flex gap-3 w-100">
                     <div class="d-flex flex-column col-2">
                         <div>

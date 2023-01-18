@@ -11,7 +11,9 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 })
 export class MyListingComponent implements OnInit {
   listStatus: string = 'Active';
+
   showAllListing: boolean = false
+
   listingsColumns: Array<String> = [
     "Listing Name",
     "Auction Deadline",
@@ -46,6 +48,7 @@ export class MyListingComponent implements OnInit {
 
 
   constructor(private myListingsService: MyListingsService, private router: Router, private loginService: LoginService) {
+    this.handleResetNewList()
 
   }
   ngOnInit(): void {
@@ -55,16 +58,47 @@ export class MyListingComponent implements OnInit {
       return
 
     }
-    this.showAllListing = false
     this.getAllMyListings()
   }
 
-  handleChange() {
+  handleFilterList() {
     this.myListings = this.copyListings?.filter((item) => item.status.status === this.listStatus)
   }
 
   handleToggel() {
     this.showAllListing = !this.showAllListing;
+    this.getAllMyListings()
+
+  }
+
+  handleResetNewList() {
+    this.myListingsService.handleResetSetNewList()
+    this.showAllListing = false
+  }
+
+  handleEdit(value: any) {
+    this.myListingsService.isListEdit = true;
+    let editList = {
+      listing_type: value.listing_type.id,
+      status: value.status.id,
+      listingName: value.listingName,
+      listingStart: new Date(value.listingStart).toISOString().slice(0, 16),
+      auction_type: value.auction_type,
+      auctionEnd: new Date(value.auctionEnd).toISOString().slice(0, 16),
+      comments: value.comments,
+      account: value.account.id,
+      project: value.project.id,
+      nma: value.nma,
+      minimumAsk: value.minimumAsk,
+      buyNowPrice: value.buyNowPrice,
+      constraints: value.constraints.map((x: any) => parseInt(x.id)),
+      offer: value.offer.map((x: any) => parseInt(x.id)),
+      id: value.id
+    }
+    this.myListingsService.isListEdit = true;
+    this.myListingsService.newListing = editList
+    this.showAllListing = !this.showAllListing;
+
   }
 
   getAllMyListings() {
@@ -72,6 +106,8 @@ export class MyListingComponent implements OnInit {
       (response) => {
         this.myListings = response?.filter((item) => item.status.status === this.listStatus)
         this.copyListings = response
+        this.listStatus = 'Active';
+        this.handleFilterList()
         console.log(response)
       },
       (error: any) => console.log(error),

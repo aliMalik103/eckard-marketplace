@@ -6,7 +6,8 @@
             <ol class="breadcrumb breadcrumb-link">
                 <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
                 <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/my-listing']">My
+                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/my-listing']"
+                        (click)="handleResetNewList()">My
                         Listings</a> </li>
             </ol>
         </nav>
@@ -18,7 +19,8 @@
 
         <div class="d-flex justify-content-between mt-4 mb-3">
             <div>
-                <select class="form-select form-select-lg" [(ngModel)]="listStatus" (ngModelChange)="handleChange()">
+                <select class="form-select form-select-lg" [(ngModel)]="listStatus"
+                    (ngModelChange)="handleFilterList()">
                     <option *ngFor="let list of listingFilterOptions" [value]="list.value"> {{list.label}}</option>
                 </select>
             </div>
@@ -30,6 +32,7 @@
             <thead>
                 <tr>
                     <th scope="col" *ngFor="let item of listingsColumns;">{{item}}</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody class="my-listing-table-body">
@@ -47,6 +50,11 @@
                         <td>{{list.minimumAsk}}</td>
                         <td></td>
                         <td> <span class="listing-td pe-auto float-end">2</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip"
+                                data-placement="top" title="Edit" (click)="handleEdit(list)"><i
+                                    class="fa fa-edit"></i></button>
+                        </td>
                     </tr>
 
                 </ng-container>

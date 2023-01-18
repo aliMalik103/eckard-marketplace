@@ -58,4 +58,11 @@ export class ListingDetailsTabComponent implements OnInit {
     this.addNewListingService.handleRemoveAndAddClass()
   }
 
+  handleTractLength() {
+    if (this.tracts) {
+      return this.tracts.length
+    }
+    return 0;
+  }
+
 }

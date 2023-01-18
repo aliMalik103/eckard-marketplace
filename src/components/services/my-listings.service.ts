@@ -10,7 +10,47 @@ import { MyListing, MyListings } from '../model/my-listings';
 })
 export class MyListingsService {
 
+  newListing: MyListing = {
+    listing_type: null,
+    status: null,
+    listingName: '',
+    listingStart: null,
+    auction_type: '',
+    auctionEnd: '',
+    comments: '',
+    account: null,
+    project: null,
+    nma: null,
+    minimumAsk: null,
+    buyNowPrice: null,
+    constraints: [],
+    offer: []
+  }
+  isListEdit: boolean = false
+
   constructor(private http: HttpClient, private router: Router) { }
+
+
+  handleResetSetNewList() {
+    this.newListing = {
+      listing_type: null,
+      status: null,
+      listingName: '',
+      listingStart: null,
+      auction_type: '',
+      auctionEnd: '',
+      comments: '',
+      account: null,
+      project: null,
+      nma: null,
+      minimumAsk: null,
+      buyNowPrice: null,
+      constraints: [],
+      offer: []
+    }
+    this.isListEdit = false
+  }
+
 
   getAllMyListings(): Observable<MyListings[]> {
     const res = this.http.get<MyListings[]>(`${environment.API_BASE_URL}/listing/`)
@@ -19,6 +59,11 @@ export class MyListingsService {
 
   createNewListing(newList: MyListing): Observable<MyListing> {
     const res = this.http.post<MyListing>(`${environment.API_BASE_URL}/listing/`, newList)
+    return res
+  }
+
+  updateListing(updateList: MyListing): Observable<MyListing> {
+    const res = this.http.patch<MyListing>(`${environment.API_BASE_URL}/listing/${updateList.id}/`, updateList)
     return res
   }
 

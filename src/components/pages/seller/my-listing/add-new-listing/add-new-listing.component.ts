@@ -1,9 +1,10 @@
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListingType, AuctionType, Project, Account, Status, Tract, MyListing } from 'src/components/model/my-listings';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { AddNewListingService } from './add-new-listing.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 
 @Component({
@@ -14,9 +15,8 @@ import { AddNewListingService } from './add-new-listing.service';
 export class AddNewListingComponent implements OnInit {
   @Output() onGoBack = new EventEmitter()
 
-  isError: boolean = false
+  listingId: string = ''
   errorMessages!: any;
-
   listingTypeOptions!: ListingType[]
   auctionTypeOptions!: AuctionType[]
   constraintOptions!: any[]
@@ -24,6 +24,7 @@ export class AddNewListingComponent implements OnInit {
   accountsOptions!: Account[]
   statusOptions!: Status[]
   tracts!: Tract[]
+  isListEdit!: boolean
 
   createNewListing: MyListing = {
     listing_type: null,
@@ -43,9 +44,10 @@ export class AddNewListingComponent implements OnInit {
 
   }
 
-
-  constructor(private addNewListingService: AddNewListingService, private myListingsService: MyListingsService, private router: Router) {
-
+  constructor(private addNewListingService: AddNewListingService, private myListingsService: MyListingsService, private router: Router, private toastr: ToastrService) {
+    this.createNewListing = this.myListingsService.newListing
+    this.isListEdit = this.myListingsService.isListEdit
+    this.listingId = this.createNewListing.listingName
   }
 
   ngOnInit(): void {
@@ -56,11 +58,13 @@ export class AddNewListingComponent implements OnInit {
     this.handleGetAllAccounts()
     this.handleGetStatus()
     this.handleGetTracts()
-    console.log("add new listings service")
   }
 
   handleGoBack() {
     this.onGoBack.emit()
+    this.myListingsService.handleResetSetNewList()
+
+
   }
 
   handleProjectType(value: number) {
@@ -72,21 +76,50 @@ export class AddNewListingComponent implements OnInit {
   handleStatus(id: number) {
     this.createNewListing.status = id
     console.log(this.createNewListing)
-    this.myListingsService.createNewListing(this.createNewListing).subscribe(
-      (response) => {
-        console.log(response)
-        this.router.navigate(['/market-place'])
-      },
-      (error: any) => {
-        this.isError = true
-        this.errorMessages = Object.keys(error.error).map(key => {
-          return { key: key, value: error.error[key][0] };
-        });
+    if (this.isListEdit) {
+      this.myListingsService.updateListing(this.createNewListing).subscribe(
+        (response) => {
+          console.log(response)
+          this.router.navigate(['/my-listing'])
+          this.handleGoBack()
+          this.myListingsService.handleResetSetNewList()
+          this.toastr.success('List update successfully');
 
-        console.log("this.errorMessages", this.errorMessages)
-      },
-      () => console.log("Done getting List Type")
-    )
+
+        },
+        (error: any) => {
+          Object.keys(error.error).map(key => {
+            this.toastr.error(error.error[key][0], key);
+          });
+
+        },
+        () => console.log("Done getting List Type")
+      )
+    }
+    else {
+
+      this.myListingsService.createNewListing(this.createNewListing).subscribe(
+        (response) => {
+          console.log(response)
+          this.router.navigate(['/my-listing'])
+          this.handleGoBack()
+          this.myListingsService.handleResetSetNewList()
+          this.toastr.success('New List create successfully');
+
+
+        },
+        (error: any) => {
+          Object.keys(error.error).map(key => {
+            this.toastr.error(error.error[key][0], key);
+          });
+
+
+
+          console.log("this.errorMessages", this.errorMessages)
+        },
+        () => console.log("Done getting List Type")
+      )
+    }
   }
 
   handleGetListType() {
@@ -123,8 +156,11 @@ export class AddNewListingComponent implements OnInit {
     this.addNewListingService.handleConstraint().subscribe(
       (response) => {
         this.constraintOptions = response?.map(item => {
+          if (this.createNewListing?.constraints?.includes(item.id)) {
+            return { ...item, isChecked: true };
+          }
           return { ...item, isChecked: false };
-        })
+        });
 
       },
       (error: any) => {

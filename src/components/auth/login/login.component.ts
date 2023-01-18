@@ -44,8 +44,8 @@ export class LoginComponent implements OnInit {
         this.isError = false
       },
       (error: any) => {
-        this.isloading = false
         this.isError = true
+        this.isloading = false
         console.log("error", error)
       },
       () => console.log("Done getting user"));

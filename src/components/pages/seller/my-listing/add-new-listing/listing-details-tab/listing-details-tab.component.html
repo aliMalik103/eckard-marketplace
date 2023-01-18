@@ -70,8 +70,8 @@
     </ng-container>
     <ng-container *ngIf="createNewListing.listing_type == 2 ">
 
-        <ng-container *ngIf="tracts.length > 0">
-            <p class="mt-4 "><strong>Tracts in Listing ({{tracts.length}})</strong> </p>
+        <ng-container *ngIf="handleTractLength() > 0">
+            <p class="mt-4 "><strong>Tracts in Listing ({{handleTractLength()}})</strong> </p>
             <table class="table">
                 <thead>
                     <tr>
@@ -108,7 +108,7 @@
             </table>
         </ng-container>
 
-        <ng-container *ngIf="tracts.length == 0">
+        <ng-container *ngIf="handleTractLength() == 0">
             <p class="text-warning"><strong>Please go to
                     <span class=" pe-auto border-bottom border-warning" (click)="handleRemoveAndAddClass()"
                         title="Add New Tracts">
@@ -120,7 +120,7 @@
         </ng-container>
 
     </ng-container>
-    <ng-container *ngIf="!(tracts.length == 0 && createNewListing.listing_type == 2)">
+    <ng-container *ngIf="!(handleTractLength() == 0 && createNewListing.listing_type == 2)">
 
         <div class="mt-3 row">
 
@@ -149,8 +149,8 @@
 
                 <div class="accordion accordion-flush" id="listingAccordion">
                     <div class="accordion-item ">
-                        <h5 class="accordion-header collapsed p-0 col-8" id="listing-headingOne"
-                            data-toggle="collapse" data-target="#listing-collapseOne" aria-expanded="false"
+                        <h5 class="accordion-header collapsed p-0 col-8" id="listing-headingOne" data-toggle="collapse"
+                            data-target="#listing-collapseOne" aria-expanded="false"
                             aria-controls="listing-collapseOne">
                             Listing - Basic Cash Flow Calculator
 

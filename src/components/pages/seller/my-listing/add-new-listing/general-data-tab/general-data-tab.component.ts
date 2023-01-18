@@ -20,8 +20,6 @@ export class GeneralDataTabComponent implements OnInit {
 
   handleChange() {
     this.createNewListing.auction_type = parseInt(this.createNewListing.auction_type);
-    console.log(this.createNewListing)
-
   }
 
   changeSelection() {

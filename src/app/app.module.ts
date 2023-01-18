@@ -11,6 +11,7 @@ import { InformationsModule } from 'src/components/pages/informations/informatio
 import { SellerModule } from 'src/components/pages/seller/seller.module';
 import { AddNewListingService } from 'src/components/pages/seller/my-listing/add-new-listing/add-new-listing.service';
 import { NavbarModule } from 'src/components/navbar/navbar.module';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -28,7 +29,16 @@ import { NavbarModule } from 'src/components/navbar/navbar.module';
     MarketPlaceModule,
     BuyerModule,
     SellerModule,
-    InformationsModule
+    InformationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      closeButton: true,
+      progressBar: true,
+      tapToDismiss: true
+    }), // ToastrModule added
+
 
   ],
   providers: [AddNewListingService],

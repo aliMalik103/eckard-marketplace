@@ -63,7 +63,13 @@ export class AddTractsTabComponent implements OnInit {
   selectAllOperators!: boolean;
   selectAllCountries!: boolean;
   selectAllProject!: boolean;
-  isDisabled: boolean = true
+
+  data = {
+    projectSelect: [],
+    countriesSelect: [],
+    operatorsSelect: [],
+
+  };
 
 
 
@@ -72,7 +78,6 @@ export class AddTractsTabComponent implements OnInit {
   ngOnInit(): void {
     console.log('Method not implemented.');
   }
-
 
   toggleSelection(flag: boolean, value: any) {
 

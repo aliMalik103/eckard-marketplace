@@ -3,8 +3,8 @@
     <div class="col-md-6">
 
         <label for="auctionType" class="form-label">Account <span class="text-danger">*</span></label>
-        <select id="auctionType" class="form-select" [(ngModel)]="createNewListing.account" [disabled]="isDisabled">
-            <option *ngFor="let item of projectsOptions " [value]="item.id" disabled selected>{{item.projectId}}
+        <select id="auctionType" class="form-select" [(ngModel)]="createNewListing.account">
+            <option *ngFor="let item of projectsOptions " [value]="item.id" selected>{{item.projectId}}
             </option>
         </select>
     </div>
@@ -121,15 +121,17 @@
         </div>
         <div>
 
-            <select class="form-select" multiple (change)="getSelectedValues()" id="projectSelect">
+
+            <select class="form-select" name="multipleSelect" id="multipleSelect" [(ngModel)]="data.projectSelect"
+                multiple>
                 <option *ngFor="let option of projectsOptions" [value]="option.id" [selected]="selectAllProject">
                     {{option.projectId}}</option>
-
             </select>
 
 
 
         </div>
+
 
     </div>
     <div class="col-md-6">

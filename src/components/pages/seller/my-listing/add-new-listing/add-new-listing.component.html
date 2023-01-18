@@ -1,28 +1,20 @@
-<ng-container *ngIf="isError">
-
-    <div class="alert alert-danger alert-dismissible fade show w-75 mx-auto" role="alert">
-        <ul>
-            <ol *ngFor="let message of errorMessages"> <strong>{{message.key}} :
-                    {{message.value}}</strong></ol>
-        </ul>
-
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
-            (click)="isError = false"></button>
-    </div>
-</ng-container>
-
 <div class="mt-3">
     <form class="mb-3">
 
         <div class="d-flex  justify-content-start">
+            <ng-container *ngIf="!isListEdit ; else elseBlock">
+                <h4 class="ml-2"> New Listing </h4>
+            </ng-container>
+            <ng-template #elseBlock>
+                <h4 class="ml-2">{{ listingId }} </h4>
+            </ng-template>
 
-            <h4>New Listing</h4>
             <div class="d-flex text-center  align-items-center">
                 <ng-container *ngIf="listingTypeOptions">
 
                     <div class="form-check mx-4" *ngFor="let item of listingTypeOptions;">
                         <input class="form-check-input" (click)="handleProjectType(item.id)" type="radio"
-                            name="listing_type" [id]="item.id">
+                            name="listing_type" [id]="item.id" [checked]="createNewListing.listing_type == item.id">
                         <label class="form-check-label" [for]="item.id">
                             {{item.listingType}}
                         </label>
@@ -92,7 +84,8 @@
                         [accountsOptions]="accountsOptions" [tracts]="tracts">
                     </app-listing-details-tab>
                 </div>
-                <div class="tab-pane fade " id="addTracts" role="tabpanel" aria-labelledby="addTracts-tab">
+                <div class="tab-pane fade " id="addTracts" role="tabpanel" aria-labelledby="addTracts-tab"
+                    *ngIf="createNewListing.listing_type == 2">
 
                     <app-add-tracts-tab [projectsOptions]="projectsOptions" [createNewListing]="createNewListing">
                     </app-add-tracts-tab>

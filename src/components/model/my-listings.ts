@@ -75,7 +75,7 @@ export interface Tract {
     royalityInterest: string
     costPerNma: string
     totalNma: string
-  }
+}
 
 export interface MyListing {
     listing_type: any
@@ -92,4 +92,5 @@ export interface MyListing {
     buyNowPrice: any
     constraints: any[]
     offer: any[]
+    id?: any
 }

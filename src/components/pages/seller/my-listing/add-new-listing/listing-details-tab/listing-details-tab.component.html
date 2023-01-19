@@ -7,7 +7,8 @@
                 <label for="account" class="form-label">Account <span class="text-danger">*</span></label>
                 <select id="account" class="form-select" [(ngModel)]="createNewListing.account"
                     (ngModelChange)="handleChange('account')" #account="ngModel"
-                    [ngClass]="{'border border-danger':account.invalid && (account.dirty || account.touched)}" required>
+                    [ngClass]="{'border border-danger':account.invalid && (account.dirty || account.touched)}" required
+                    [disabled]="!isListDraft">
                     <option *ngFor="let item of accountsOptions " [value]="item.id">{{item.accountName}} </option>
                 </select>
 
@@ -16,11 +17,12 @@
                     Please select valid account
                 </span>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5" *ngIf="handleProjectLEngth() > 0">
                 <label for="project" class="form-label">Project <span class="text-danger">*</span></label>
                 <select id="project" class="form-select" [(ngModel)]="createNewListing.project"
                     (ngModelChange)="handleChange('project')" #project="ngModel"
-                    [ngClass]="{'border border-danger':project.invalid && (project.dirty || project.touched)}" required>
+                    [ngClass]="{'border border-danger':project.invalid && (project.dirty || project.touched)}" required
+                    [disabled]="!isListDraft">
                     <option *ngFor="let item of projectsOptions " [value]="item.id">{{item.projectId}} </option>
                 </select>
                 <span *ngIf="project.invalid && (project.dirty || project.touched ) &&  project.errors"
@@ -43,7 +45,8 @@
                     </small> <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="createNewListing.nma"
                     (change)="handleChange('nma')" id="nma" name="nma" #nma="ngModel"
-                    [ngClass]="{'border border-danger':nma.invalid && (nma.dirty || nma.touched)}" required>
+                    [ngClass]="{'border border-danger':nma.invalid && (nma.dirty || nma.touched)}" required
+                    [disabled]="!isListDraft">
                 <span *ngIf="nma.invalid && (nma.dirty || nma.touched ) &&  nma.errors"
                     class="text-danger rounded px-4 error-message">
                     Please select valid nma
@@ -130,7 +133,7 @@
                 <input type="text" class="form-control" [(ngModel)]="createNewListing.minimumAsk"
                     (change)="handleChange('minimumAsk')" name="minimumAsk" id="minimumAsk" #minimumAsk="ngModel"
                     [ngClass]="{'border border-danger':minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched)}"
-                    required>
+                    required [disabled]="!isListDraft">
                 <span *ngIf="minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched ) &&  minimumAsk.errors"
                     class="text-danger rounded px-4 error-message">
                     Please select valid minimumAsk price
@@ -208,10 +211,8 @@
                                         <label for="gasPrice" class="form-label">Gas Price
                                         </label>
 
-                                        <select id="auctionType" class="form-select">
-                                            <option selected>5.6 </option>
-                                            <option>...</option>
-                                        </select>
+                                        <input type="text" class="form-control" placeholder="" aria-label="Gas Price">
+
                                     </div>
 
                                     <div class="text-end mt-1 align-items-center">

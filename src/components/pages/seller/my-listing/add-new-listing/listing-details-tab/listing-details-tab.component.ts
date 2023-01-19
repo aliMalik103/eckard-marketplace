@@ -9,10 +9,13 @@ import { AddNewListingService } from '../add-new-listing.service';
 })
 export class ListingDetailsTabComponent implements OnInit {
 
-  @Input() projectsOptions!: Project[]
   @Input() accountsOptions!: Account[]
   @Input() createNewListing!: MyListing
   @Input() tracts!: Tract[]
+  @Input() isListDraft!: boolean
+  projectsOptions!: Project[]
+
+
 
   listingColumns: Array<string> = [
     'Location',
@@ -31,13 +34,15 @@ export class ListingDetailsTabComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("listing tab", this.addNewListingService)
+    console.log("listing createNewListing", this.createNewListing)
+    this.handleUserProject(this.createNewListing.account)
   }
 
   handleChange(value: string) {
     switch (value) {
       case 'account':
         this.createNewListing.account = parseInt(this.createNewListing.account);
+        this.handleUserProject(this.createNewListing.account)
         break;
       case 'project':
         this.createNewListing.project = parseInt(this.createNewListing.project);
@@ -54,6 +59,18 @@ export class ListingDetailsTabComponent implements OnInit {
     console.log(this.createNewListing)
   }
 
+  handleUserProject(id: number) {
+    const filteredProjects = this.addNewListingService?.userAccountsAndProjects?.filter(
+      (item) => item.account.id === id
+    );
+
+    this.projectsOptions = filteredProjects?.map((item) => item.project);
+
+
+    console.log("accounts Projects", this.projectsOptions)
+  }
+
+
   handleRemoveAndAddClass() {
     this.addNewListingService.handleRemoveAndAddClass()
   }
@@ -61,6 +78,12 @@ export class ListingDetailsTabComponent implements OnInit {
   handleTractLength() {
     if (this.tracts) {
       return this.tracts.length
+    }
+    return 0;
+  }
+  handleProjectLEngth() {
+    if (this.projectsOptions) {
+      return this.projectsOptions.length
     }
     return 0;
   }

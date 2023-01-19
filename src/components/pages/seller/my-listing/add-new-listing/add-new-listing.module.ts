@@ -8,6 +8,8 @@ import { ListingDetailsTabComponent } from './listing-details-tab/listing-detail
 import { AddTractsTabComponent } from './add-tracts-tab/add-tracts-tab.component';
 import { AddNewListingService } from './add-new-listing.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
+import { ToastrService } from 'ngx-toastr';
+import { LoginService } from 'src/components/services/login.service';
 
 @NgModule({
     declarations: [
@@ -22,7 +24,7 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
         CommonModule,
 
     ],
-    providers: [AddNewListingService,MyListingsService],
+    providers: [AddNewListingService,MyListingsService,ToastrService,LoginService],
     exports: [AddNewListingComponent]
 })
 export class AddNewListingModule {

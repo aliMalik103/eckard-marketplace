@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Account, AuctionType, Constraint, ListingType, Project, Status, Tract } from 'src/components/model/my-listings';
+import { Account, AuctionType, Constraint, ContactAccount, ListingType, Project, Status, Tract } from 'src/components/model/my-listings';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 
@@ -22,9 +22,11 @@ export class AddNewListingService implements OnInit {
   selectAllOperators!: boolean;
   selectAllCountries!: boolean;
   selectAllProject!: boolean;
+  userAccountsAndProjects!: ContactAccount[]
 
 
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -108,6 +110,13 @@ export class AddNewListingService implements OnInit {
     const res = this.http.get<Tract[]>(`${environment.API_BASE_URL}/tract/`).pipe(
       tap(response => console.log("Account type", response))
 
+    )
+    return res;
+  }
+
+  handleGetUserAccounts(id: number): Observable<ContactAccount[]> {
+    const res = this.http.get<ContactAccount[]>(`${environment.API_BASE_URL}/account/getbycontact/${id}`).pipe(
+      tap(response => console.log("ContactAccount type", response))
     )
     return res;
   }

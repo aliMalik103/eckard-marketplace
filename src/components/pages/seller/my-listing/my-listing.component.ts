@@ -19,7 +19,7 @@ export class MyListingComponent implements OnInit {
     "Auction Deadline",
     "Account/Project",
     "Total NMA",
-    "Minimam Ask",
+    "Minimum Ask",
     "Highest Bid",
     "# Bids"
   ]
@@ -49,7 +49,6 @@ export class MyListingComponent implements OnInit {
 
   constructor(private myListingsService: MyListingsService, private router: Router, private loginService: LoginService) {
     this.handleResetNewList()
-
   }
   ngOnInit(): void {
 
@@ -72,8 +71,10 @@ export class MyListingComponent implements OnInit {
   }
 
   handleResetNewList() {
+
     this.myListingsService.handleResetSetNewList()
     this.showAllListing = false
+
   }
 
   handleEdit(value: any) {
@@ -95,7 +96,12 @@ export class MyListingComponent implements OnInit {
       offer: value.offer.map((x: any) => parseInt(x.id)),
       id: value.id
     }
-    this.myListingsService.isListEdit = true;
+    console.log("draft", value.status.status)
+
+    if (value.status.status == 'Active') {
+      console.log("draft", value.status)
+      this.myListingsService.isListDraft = false;
+    }
     this.myListingsService.newListing = editList
     this.showAllListing = !this.showAllListing;
 
@@ -106,7 +112,6 @@ export class MyListingComponent implements OnInit {
       (response) => {
         this.myListings = response?.filter((item) => item.status.status === this.listStatus)
         this.copyListings = response
-        this.listStatus = 'Active';
         this.handleFilterList()
         console.log(response)
       },

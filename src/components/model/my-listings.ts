@@ -94,3 +94,13 @@ export interface MyListing {
     offer: any[]
     id?: any
 }
+
+export interface ContactAccount {
+    id: number
+    account: Account
+    project: Project
+    investmentAmount: string
+    acquiredNma: string
+    status: string
+}
+

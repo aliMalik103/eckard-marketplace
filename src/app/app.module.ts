@@ -12,6 +12,8 @@ import { SellerModule } from 'src/components/pages/seller/seller.module';
 import { AddNewListingService } from 'src/components/pages/seller/my-listing/add-new-listing/add-new-listing.service';
 import { NavbarModule } from 'src/components/navbar/navbar.module';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 
@@ -38,7 +40,7 @@ import { ToastrModule } from 'ngx-toastr';
       progressBar: true,
       tapToDismiss: true
     }), // ToastrModule added
-
+    NgxPaginationModule
 
   ],
   providers: [AddNewListingService],

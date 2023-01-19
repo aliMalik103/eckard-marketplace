@@ -47,6 +47,11 @@ export class MyListingComponent implements OnInit {
   copyListings!: MyListings[];
   userId!: number;
 
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 50;
+  tableSizes: any = [3, 6, 9, 12];
+
 
   constructor(private myListingsService: MyListingsService, private router: Router, private loginService: LoginService) {
     this.handleResetNewList()
@@ -62,7 +67,7 @@ export class MyListingComponent implements OnInit {
   }
 
   handleFilterList() {
-    this.myListings = this.copyListings?.filter((item) => item.status.status === this.listStatus)
+    this.myListings = this.copyListings?.filter((item) => item.status.status === this.listStatus && this.loginService.user.id == item?.account?.contact?.id)
   }
 
   handleToggel() {
@@ -111,13 +116,13 @@ export class MyListingComponent implements OnInit {
   getAllMyListings() {
     this.myListingsService.getAllMyListings().subscribe(
       (response) => {
-        this.myListings = response?.filter((item) => item.status.status === this.listStatus)
+        this.myListings = response?.filter((item) => item.status.status === this.listStatus && this.loginService.user.id == item?.account?.contact?.id)
         this.copyListings = response
         this.handleFilterList()
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));
-      this.handleGetUserAssounts()
+    this.handleGetUserAssounts()
   }
 
   handleGetUserAssounts() {
@@ -131,6 +136,17 @@ export class MyListingComponent implements OnInit {
       },
       () => console.log("Done getting List Type")
     )
+  }
+
+
+  onTableDataChange(event: any) {
+    this.page = event;
+    this.getAllMyListings();
+  }
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.getAllMyListings();
   }
 
 }

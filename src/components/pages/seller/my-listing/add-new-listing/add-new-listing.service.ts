@@ -22,7 +22,6 @@ export class AddNewListingService implements OnInit {
   selectAllOperators!: boolean;
   selectAllCountries!: boolean;
   selectAllProject!: boolean;
-  userAccountsAndProjects!: ContactAccount[]
 
 
 
@@ -114,13 +113,7 @@ export class AddNewListingService implements OnInit {
     return res;
   }
 
-  handleGetUserAccounts(id: number): Observable<ContactAccount[]> {
-    const res = this.http.get<ContactAccount[]>(`${environment.API_BASE_URL}/account/getbycontact/${id}`).pipe(
-      tap(response => console.log("ContactAccount type", response))
-    )
-    return res;
-  }
-
+  
   private toggleActiveClass(elements: string[], isAdd: boolean) {
     elements.forEach(element => {
       let currentElement = document.getElementById(element);

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MyListing, MyListings } from '../model/my-listings';
+import { ContactAccount, MyListing, MyListings } from '../model/my-listings';
 import * as moment from 'moment'
 
 
@@ -31,6 +31,8 @@ export class MyListingsService {
   }
   isListEdit: boolean = false
   isListDraft: boolean = true
+  userAccountsAndProjects!: ContactAccount[]
+
 
   constructor(private http: HttpClient, private router: Router) {
     this.handleSetDate()
@@ -88,6 +90,11 @@ export class MyListingsService {
   updateListing(updateList: MyListing): Observable<MyListing> {
     const res = this.http.patch<MyListing>(`${environment.API_BASE_URL}/listing/${updateList.id}/`, updateList)
     return res
+  }
+
+  handleGetUserAccounts(id: number): Observable<ContactAccount[]> {
+    const res = this.http.get<ContactAccount[]>(`${environment.API_BASE_URL}/account/getbycontact/${id}`)
+    return res;
   }
 
 }

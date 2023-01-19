@@ -4,7 +4,7 @@
 
         <label for="auctionType" class="form-label">Account <span class="text-danger">*</span></label>
         <select id="auctionType" class="form-select" [(ngModel)]="createNewListing.account">
-            <option *ngFor="let item of projectsOptions " [value]="item.id" selected>{{item.projectId}}
+            <option *ngFor="let item of accountsOptions " [value]="item.id" selected>{{item.accountName}}
             </option>
         </select>
     </div>
@@ -120,16 +120,11 @@
 
         </div>
         <div>
-
-
             <select class="form-select" name="multipleSelect" id="multipleSelect" [(ngModel)]="data.projectSelect"
                 multiple>
-                <option *ngFor="let option of projectsOptions" [value]="option.id" [selected]="selectAllProject">
-                    {{option.projectId}}</option>
+                <option *ngFor="let option of accountsOptions" [value]="option.id" [selected]="selectAllProject">
+                    {{option.accountName}}</option>
             </select>
-
-
-
         </div>
 
 

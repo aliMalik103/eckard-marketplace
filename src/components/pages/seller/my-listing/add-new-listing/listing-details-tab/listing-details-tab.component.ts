@@ -1,11 +1,14 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Project, Account, MyListing, Tract } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
+import { MyListingsService } from 'src/components/services/my-listings.service';
+
 
 @Component({
   selector: 'app-listing-details-tab',
   templateUrl: './listing-details-tab.component.html',
-  styleUrls: ['./listing-details-tab.component.css']
+  styleUrls: ['./listing-details-tab.component.css'],
+
 })
 export class ListingDetailsTabComponent implements OnInit {
 
@@ -29,12 +32,11 @@ export class ListingDetailsTabComponent implements OnInit {
     '',
     'Listed Inc.'
   ]
-  constructor(private addNewListingService: AddNewListingService) {
+  constructor(private addNewListingService: AddNewListingService, private myListingsService: MyListingsService) {
 
   }
 
   ngOnInit(): void {
-    console.log("listing createNewListing", this.createNewListing)
     this.handleUserProject(this.createNewListing.account)
   }
 
@@ -60,14 +62,11 @@ export class ListingDetailsTabComponent implements OnInit {
   }
 
   handleUserProject(id: number) {
-    const filteredProjects = this.addNewListingService?.userAccountsAndProjects?.filter(
+    const filteredProjects = this.myListingsService.userAccountsAndProjects?.filter(
       (item) => item.account.id === id
     );
 
     this.projectsOptions = filteredProjects?.map((item) => item.project);
-
-
-    console.log("accounts Projects", this.projectsOptions)
   }
 
 

@@ -117,6 +117,20 @@ export class MyListingComponent implements OnInit {
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));
+      this.handleGetUserAssounts()
+  }
+
+  handleGetUserAssounts() {
+    this.myListingsService.handleGetUserAccounts(this.loginService.user.id).subscribe(
+      (response) => {
+        this.myListingsService.userAccountsAndProjects = response
+      },
+      (error: any) => {
+
+        console.log("error", error)
+      },
+      () => console.log("Done getting List Type")
+    )
   }
 
 }

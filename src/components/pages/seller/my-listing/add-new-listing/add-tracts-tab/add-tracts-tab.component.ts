@@ -10,6 +10,8 @@ import { AddNewListingService } from '../add-new-listing.service';
 export class AddTractsTabComponent implements OnInit {
   @Input() projectsOptions!: Project[]
   @Input() createNewListing!: MyListing
+  @Input() isListDraft!: boolean
+
 
   countriesOptions: Array<string> = [
     'ANY County',

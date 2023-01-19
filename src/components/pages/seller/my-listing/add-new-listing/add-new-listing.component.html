@@ -14,7 +14,8 @@
 
                     <div class="form-check mx-4" *ngFor="let item of listingTypeOptions;">
                         <input class="form-check-input" (click)="handleProjectType(item.id)" type="radio"
-                            name="listing_type" [id]="item.id" [checked]="createNewListing.listing_type == item.id">
+                            name="listing_type" [id]="item.id" [checked]="createNewListing.listing_type == item.id"
+                            [disabled]="!isListDraft">
                         <label class="form-check-label" [for]="item.id">
                             {{item.listingType}}
                         </label>
@@ -23,93 +24,108 @@
             </div>
 
         </div>
-
-        <div class="row p-4">
-            <div class="col-md-6 ">
-                <label for="listingName" class="form-label">Listing Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="createNewListing.listingName" id="listingName"
-                    name="listingName" placeholder="Listing name" required #listingName="ngModel"
-                    [ngClass]="{'border border-danger':listingName.invalid && (listingName.dirty || listingName.touched)}">
-                <span *ngIf="listingName.invalid && (listingName.dirty || listingName.touched ) &&  listingName.errors"
-                    class="text-danger rounded px-4 error-message">
-                    Please enter valid listing name
-                </span>
-            </div>
-
-            <div class="col-md-6">
-                <label for="listingStart" class="form-label">Listing Start <span class="text-danger">*</span></label>
-                <input type="datetime-local" class="form-control" [(ngModel)]="createNewListing.listingStart "
-                    name="listingStart" id="listingStart" required #listingStart="ngModel"
-                    [ngClass]="{'border border-danger':listingStart.invalid && (listingStart.dirty || listingStart.touched)}">
-                <span
-                    *ngIf="listingStart.invalid && (listingStart.dirty || listingStart.touched ) &&  listingStart.errors"
-                    class="text-danger rounded px-4 error-message">
-                    Please enter valid listing Start date
-                </span>
-            </div>
-        </div>
-
-        <div class="row p-4">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item my-listing-item" role="presentation">
-                    <button class="nav-link active " id="GeneralData-tab" data-bs-toggle="tab"
-                        data-bs-target="#GeneralData" type="button" role="tab" aria-controls="GeneralData"
-                        aria-selected="true">General Data</button>
-                </li>
-                <li class="nav-item my-listing-item" role="presentation">
-                    <button class="nav-link " id="listingDetails-tab" data-bs-toggle="tab"
-                        data-bs-target="#listingDetails" type="button" role="tab" aria-controls="listingDetails"
-                        aria-selected="false">Listing
-                        Details</button>
-                </li>
-
-                <li class="nav-item my-listing-item" role="presentation" *ngIf="createNewListing.listing_type == 2">
-                    <button class="nav-link " id="addTracts-tab" data-bs-toggle="tab" data-bs-target="#addTracts"
-                        type="button" role="tab" aria-controls="addTracts" aria-selected="false">Add Tracts
-                    </button>
-                </li>
-
-            </ul>
-
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active " id="GeneralData" role="tabpanel"
-                    aria-labelledby="GeneralData-tab">
-
-                    <app-general-data-tab [auctionTypeOptions]="auctionTypeOptions"
-                        [constraintOptions]="constraintOptions" [createNewListing]="createNewListing">
-                    </app-general-data-tab>
-                </div>
-                <div class="tab-pane fade" id="listingDetails" role="tabpanel" aria-labelledby="listingDetails-tab">
-                    <app-listing-details-tab [createNewListing]="createNewListing" [projectsOptions]="projectsOptions"
-                        [accountsOptions]="accountsOptions" [tracts]="tracts">
-                    </app-listing-details-tab>
-                </div>
-                <div class="tab-pane fade " id="addTracts" role="tabpanel" aria-labelledby="addTracts-tab"
-                    *ngIf="createNewListing.listing_type == 2">
-
-                    <app-add-tracts-tab [projectsOptions]="projectsOptions" [createNewListing]="createNewListing">
-                    </app-add-tracts-tab>
+        <ng-container *ngIf="createNewListing.listing_type != 2; else elseBlockList">
+            <div class="row p-4">
+                <div class="col-md-6 ">
+                    <label for="listingName" class="form-label">Listing Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" [(ngModel)]="createNewListing.listingName" id="listingName"
+                        name="listingName" placeholder="Listing name" required #listingName="ngModel"
+                        [ngClass]="{'border border-danger':listingName.invalid && (listingName.dirty || listingName.touched)}">
+                    <span
+                        *ngIf="listingName.invalid && (listingName.dirty || listingName.touched ) &&  listingName.errors"
+                        class="text-danger rounded px-4 error-message">
+                        Please enter valid listing name
+                    </span>
                 </div>
 
+                <div class="col-md-6">
+                    <label for="listingStart" class="form-label">Listing Start <span
+                            class="text-danger">*</span></label>
+                    <input type="datetime-local" class="form-control" [(ngModel)]="createNewListing.listingStart "
+                        name="listingStart" id="listingStart" required #listingStart="ngModel"
+                        [ngClass]="{'border border-danger':listingStart.invalid && (listingStart.dirty || listingStart.touched)}"
+                        disabled>
+                    <span
+                        *ngIf="listingStart.invalid && (listingStart.dirty || listingStart.touched ) &&  listingStart.errors"
+                        class="text-danger rounded px-4 error-message">
+                        Please enter valid listing Start date
+                    </span>
+                </div>
             </div>
 
-        </div>
+            <div class="row p-4">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item my-listing-item" role="presentation">
+                        <button class="nav-link active " id="GeneralData-tab" data-bs-toggle="tab"
+                            data-bs-target="#GeneralData" type="button" role="tab" aria-controls="GeneralData"
+                            aria-selected="true">General Data</button>
+                    </li>
+                    <li class="nav-item my-listing-item" role="presentation">
+                        <button class="nav-link " id="listingDetails-tab" data-bs-toggle="tab"
+                            data-bs-target="#listingDetails" type="button" role="tab" aria-controls="listingDetails"
+                            aria-selected="false">Listing
+                            Details</button>
+                    </li>
 
-        <div class="d-flex justify-content-between p-4 col-8 col-sm-10">
-            <div class="d-flex ">
-                <div *ngFor="let item of statusOptions; index as i">
-                    <ng-container *ngIf="item.status == 'Draft' || item.status == 'Active'">
-                        <input type="submit" class="btn text-white"
-                            [value]="item.status == 'Draft' ? 'SAVE DRAFT': 'ACTIVATE LISTING' "
-                            [ngClass]="{'mx-2':i>1,'btn-success': item.status == 'Draft' , 'btn-warning': item.status != 'Draft'}"
-                            (click)="handleStatus(item.id)" />
-                    </ng-container>
+                    <li class="nav-item my-listing-item" role="presentation" *ngIf="false">
+                        <button class="nav-link " id="addTracts-tab" data-bs-toggle="tab" data-bs-target="#addTracts"
+                            type="button" role="tab" aria-controls="addTracts" aria-selected="false">Add Tracts
+                        </button>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active " id="GeneralData" role="tabpanel"
+                        aria-labelledby="GeneralData-tab">
+
+                        <app-general-data-tab [auctionTypeOptions]="auctionTypeOptions"
+                            [constraintOptions]="constraintOptions" [createNewListing]="createNewListing"
+                            [isListDraft]="isListDraft">
+                        </app-general-data-tab>
+                    </div>
+                    <div class="tab-pane fade" id="listingDetails" role="tabpanel" aria-labelledby="listingDetails-tab">
+                        <app-listing-details-tab [createNewListing]="createNewListing"
+                            [accountsOptions]="accountsOptions" [tracts]="tracts" [isListDraft]="isListDraft">
+                        </app-listing-details-tab>
+                    </div>
+                    <div class="tab-pane fade " id="addTracts" role="tabpanel" aria-labelledby="addTracts-tab"
+                        *ngIf="false">
+
+                        <app-add-tracts-tab [projectsOptions]="projectsOptions" [createNewListing]="createNewListing"
+                            [isListDraft]="isListDraft">
+                        </app-add-tracts-tab>
+                    </div>
+
                 </div>
 
             </div>
-            <button type="button" class="btn btn-secondary" (click)="handleGoBack()">Go Back</button>
 
-        </div>
+            <div class="d-flex justify-content-between p-4 col-8 col-sm-10">
+                <div class="d-flex ">
+                    <div *ngFor="let item of statusOptions; index as i">
+                        <ng-container *ngIf="item.status == 'Draft' || item.status == 'Active'">
+                            <input type="submit" class="btn text-white"
+                                [value]="item.status == 'Draft' ? 'SAVE DRAFT': 'ACTIVATE LISTING' "
+                                [ngClass]="{'mx-2':i>1,'btn-success': item.status == 'Draft' , 'btn-warning': item.status != 'Draft', 'd-none':(!isListDraft && item.status == 'Draft')}"
+                                (click)="handleStatus(item.id)" />
+                        </ng-container>
+                    </div>
+
+                </div>
+                <button type="button" class="btn btn-secondary" (click)="handleGoBack()">Go Back</button>
+
+            </div>
+
+        </ng-container>
+        <ng-template #elseBlockList>
+            <div
+                class=" h-100 d-flex mx-auto align-items-center justify-content-center max-w-7xl text-center p-5 mt-5 mb-5">
+
+                Still Work in Progress ....
+
+            </div>
+        </ng-template>
 
     </form>
 

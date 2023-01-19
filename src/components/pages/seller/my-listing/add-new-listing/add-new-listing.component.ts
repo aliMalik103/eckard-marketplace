@@ -1,9 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { ListingType, AuctionType, Project, Account, Status, Tract, MyListing } from 'src/components/model/my-listings';
+import { ListingType, AuctionType, Project, Account, Status, Tract, MyListing, ContactAccount } from 'src/components/model/my-listings';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { AddNewListingService } from './add-new-listing.service';
 import { ToastrService } from 'ngx-toastr';
+import { LoginService } from 'src/components/services/login.service';
 
 
 
@@ -25,6 +26,7 @@ export class AddNewListingComponent implements OnInit {
   statusOptions!: Status[]
   tracts!: Tract[]
   isListEdit!: boolean
+  isListDraft!: boolean
 
   createNewListing: MyListing = {
     listing_type: null,
@@ -44,18 +46,25 @@ export class AddNewListingComponent implements OnInit {
 
   }
 
-  constructor(private addNewListingService: AddNewListingService, private myListingsService: MyListingsService, private router: Router, private toastr: ToastrService) {
+  constructor(private addNewListingService: AddNewListingService,
+    private myListingsService: MyListingsService,
+    private router: Router,
+    private toastr: ToastrService,
+    private loginService: LoginService) {
+
     this.createNewListing = this.myListingsService.newListing
     this.isListEdit = this.myListingsService.isListEdit
+    this.isListDraft = this.myListingsService.isListDraft
     this.listingId = this.createNewListing.listingName
   }
 
   ngOnInit(): void {
+    this.handleGetUserAssounts()
     this.handleGetListType()
     this.handleAuctionType()
     this.handleConstraint()
-    this.handleGetAllProjects()
-    this.handleGetAllAccounts()
+    // this.handleGetAllProjects()
+    // this.handleGetAllAccounts()
     this.handleGetStatus()
     this.handleGetTracts()
   }
@@ -69,6 +78,10 @@ export class AddNewListingComponent implements OnInit {
 
   handleProjectType(value: number) {
     this.createNewListing.listing_type = value;
+    if (value == 2) {
+      this.toastr.info('Still work in progress');
+
+    }
     console.log(this.createNewListing.listing_type)
 
   }
@@ -179,20 +192,20 @@ export class AddNewListingComponent implements OnInit {
 
         console.log("error", error)
       },
-      () => console.log("Done getting handleGetAllAccounts "));
+      () => console.log("Done getting handleGetAllProjects "));
   }
 
-  handleGetAllAccounts() {
-    this.addNewListingService.handleGetAllAccounts().subscribe(
-      (response) => {
-        this.accountsOptions = response
-      },
-      (error: any) => {
+  // handleGetAllAccounts() {
+  //   this.addNewListingService.handleGetAllAccounts().subscribe(
+  //     (response) => {
+  //       this.accountsOptions = response
+  //     },
+  //     (error: any) => {
 
-        console.log("error", error)
-      },
-      () => console.log("Done getting List Type"));
-  }
+  //       console.log("error", error)
+  //     },
+  //     () => console.log("Done getting List Type"));
+  // }
 
   handleGetStatus() {
     this.addNewListingService.handleGetStatus().subscribe(
@@ -216,6 +229,21 @@ export class AddNewListingComponent implements OnInit {
         console.log("error", error)
       },
       () => console.log("Done getting List Type"));
+  }
+
+  handleGetUserAssounts() {
+    this.addNewListingService.handleGetUserAccounts(this.loginService.user.id).subscribe(
+      (response) => {
+        this.addNewListingService.userAccountsAndProjects = response
+        this.accountsOptions = response.map((item, i) => item?.account)
+
+      },
+      (error: any) => {
+
+        console.log("error", error)
+      },
+      () => console.log("Done getting List Type")
+    )
   }
 
 

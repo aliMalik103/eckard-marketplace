@@ -11,6 +11,9 @@ export class GeneralDataTabComponent implements OnInit {
   @Input() auctionTypeOptions!: AuctionType[]
   @Input() constraintOptions!: any[]
   @Input() createNewListing!: MyListing
+  @Input() isListDraft!:boolean
+
+
 
   constructor() {}
 

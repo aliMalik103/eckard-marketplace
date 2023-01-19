@@ -45,13 +45,14 @@ export class MyListingComponent implements OnInit {
   ]
   myListings!: MyListings[];
   copyListings!: MyListings[];
+  userId!: number;
 
 
   constructor(private myListingsService: MyListingsService, private router: Router, private loginService: LoginService) {
     this.handleResetNewList()
   }
   ngOnInit(): void {
-
+    this.userId = this.loginService.user.id
     if (this.loginService.user.status != "active") {
       this.router.navigate(['/market-place']);
       return
@@ -113,7 +114,6 @@ export class MyListingComponent implements OnInit {
         this.myListings = response?.filter((item) => item.status.status === this.listStatus)
         this.copyListings = response
         this.handleFilterList()
-        console.log(response)
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));

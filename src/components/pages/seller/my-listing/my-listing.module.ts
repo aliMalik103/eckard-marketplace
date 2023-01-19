@@ -5,6 +5,8 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { AddNewListingModule } from './add-new-listing/add-new-listing.module';
 import { AddNewListingService } from './add-new-listing/add-new-listing.service';
 import { MyListingComponent } from './my-listing.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 @NgModule({
     declarations: [
@@ -16,6 +18,7 @@ import { MyListingComponent } from './my-listing.component';
         FormsModule,
         AddNewListingModule,
         CommonModule,
+        NgxPaginationModule
 
     ],
     providers: [AddNewListingService],

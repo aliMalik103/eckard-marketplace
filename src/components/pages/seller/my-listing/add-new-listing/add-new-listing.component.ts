@@ -21,7 +21,6 @@ export class AddNewListingComponent implements OnInit {
   listingTypeOptions!: ListingType[]
   auctionTypeOptions!: AuctionType[]
   constraintOptions!: any[]
-  projectsOptions!: Project[]
   accountsOptions!: Account[]
   statusOptions!: Status[]
   tracts!: Tract[]
@@ -183,17 +182,17 @@ export class AddNewListingComponent implements OnInit {
       () => console.log("Done getting constraint Type"));
   }
 
-  handleGetAllProjects() {
-    this.addNewListingService.handleGetAllProjects().subscribe(
-      (response) => {
-        this.projectsOptions = response
-      },
-      (error: any) => {
+  // handleGetAllProjects() {
+  //   this.addNewListingService.handleGetAllProjects().subscribe(
+  //     (response) => {
+  //       this.projectsOptions = response
+  //     },
+  //     (error: any) => {
 
-        console.log("error", error)
-      },
-      () => console.log("Done getting handleGetAllProjects "));
-  }
+  //       console.log("error", error)
+  //     },
+  //     () => console.log("Done getting handleGetAllProjects "));
+  // }
 
   // handleGetAllAccounts() {
   //   this.addNewListingService.handleGetAllAccounts().subscribe(
@@ -232,9 +231,9 @@ export class AddNewListingComponent implements OnInit {
   }
 
   handleGetUserAssounts() {
-    this.addNewListingService.handleGetUserAccounts(this.loginService.user.id).subscribe(
+    this.myListingsService.handleGetUserAccounts(this.loginService.user.id).subscribe(
       (response) => {
-        this.addNewListingService.userAccountsAndProjects = response
+        this.myListingsService.userAccountsAndProjects = response
         this.accountsOptions = response.map((item, i) => item?.account)
 
       },

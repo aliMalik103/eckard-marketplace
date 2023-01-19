@@ -22,7 +22,8 @@ export class MarketPlaceComponent implements OnInit {
   getAllMyListings() {
     this.myListingsService.getAllMyListings().subscribe(
       (response) => {
-        this.totalMyListings = response.length
+        let mylists = response.filter((item) => this.loginService.user.id == item?.account?.contact?.id)
+        this.totalMyListings = mylists ? mylists.length : 0
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));

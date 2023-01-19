@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MyListing, Project } from 'src/components/model/my-listings';
+import { MyListing, Account } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
 
 @Component({
@@ -8,9 +8,9 @@ import { AddNewListingService } from '../add-new-listing.service';
   styleUrls: ['./add-tracts-tab.component.css']
 })
 export class AddTractsTabComponent implements OnInit {
-  @Input() projectsOptions!: Project[]
   @Input() createNewListing!: MyListing
   @Input() isListDraft!: boolean
+  @Input() accountsOptions!: Account[]
 
 
   countriesOptions: Array<string> = [

@@ -45,6 +45,7 @@ export interface Contact {
     email: string
     password: string
     mpStatus: string
+    id: any
 }
 
 export interface Project {

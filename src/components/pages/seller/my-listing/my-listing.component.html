@@ -1,4 +1,4 @@
-<div class="container card mt-2 pt-4 h-100">
+<div class="container card mt-4 pt-4 h-100">
 
     <div class="breadcrumb-container">
 
@@ -38,7 +38,13 @@
             <tbody class="my-listing-table-body">
                 <ng-container *ngIf="myListings">
 
-                    <tr *ngFor="let list of myListings">
+                    <tr *ngFor="let list of myListings | paginate
+                    : {
+                        itemsPerPage: tableSize,
+                        currentPage: page,
+                        totalItems: count
+                      };
+                let i = index">
                         <td> <span class="listing-td pe-auto">{{list.listingName}}</span>
                         </td>
                         <td>{{ list.auctionEnd | date:'MMM d, y'}}</td>
@@ -52,8 +58,8 @@
                         <td> <span class="listing-td pe-auto float-end">2</span></td>
                         <td class="text-center">
                             <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip"
-                                data-placement="top" title="Edit" (click)="handleEdit(list)"><i
-                                    class="fa fa-edit"></i></button>
+                                data-placement="top" title="Edit" (click)="handleEdit(list)"
+                                [disabled]="userId!=list?.account?.contact?.id"><i class="fa fa-edit"></i></button>
                         </td>
                     </tr>
 
@@ -63,6 +69,10 @@
 
             </tbody>
         </table>
+        <div class="d-flex justify-content-center">
+            <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+            </pagination-controls>
+        </div>
     </ng-container>
 
     <ng-template #elseBlock>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { Project, Account, MyListing, Tract, UserProject } from 'src/components/model/my-listings';
+import { Project, Account, MyListing, Tract } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
 
 @Component({

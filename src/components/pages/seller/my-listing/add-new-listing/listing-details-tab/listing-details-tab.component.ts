@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Project, Account, MyListing, Tract } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
@@ -10,13 +10,16 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
   styleUrls: ['./listing-details-tab.component.css'],
 
 })
-export class ListingDetailsTabComponent implements OnInit {
+export class ListingDetailsTabComponent implements OnChanges {
 
   @Input() accountsOptions!: Account[]
   @Input() createNewListing!: MyListing
   @Input() tracts!: Tract[]
   @Input() isListDraft!: boolean
+  @Output() isValidNMA = new EventEmitter()
+
   projectsOptions!: Project[]
+  selectedProject!: Project
 
 
 
@@ -36,8 +39,17 @@ export class ListingDetailsTabComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.handleUserProject(this.createNewListing.account)
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.accountsOptions?.length == 1) {
+      this.handleUserProject(this.accountsOptions[0].id)
+    }
+    if (this.createNewListing) {
+      this.handleFindTotalNMA(this.createNewListing?.project)
+
+    }
+    if (this.selectedProject) {
+      this.isValidNMA.emit(this.selectedProject.totalNma < this.createNewListing.nma)
+    }
   }
 
   handleChange(value: string) {
@@ -48,9 +60,13 @@ export class ListingDetailsTabComponent implements OnInit {
         break;
       case 'project':
         this.createNewListing.project = parseInt(this.createNewListing.project);
+        this.handleFindTotalNMA(this.createNewListing?.project)
         break;
       case 'nma':
         this.createNewListing.nma = parseFloat(this.createNewListing.nma);
+        if (this.selectedProject) {
+          this.isValidNMA.emit(this.selectedProject.totalNma < this.createNewListing.nma)
+        }
         break;
       case 'minimumAsk':
         this.createNewListing.minimumAsk = parseFloat(this.createNewListing.minimumAsk);
@@ -62,13 +78,38 @@ export class ListingDetailsTabComponent implements OnInit {
   }
 
   handleUserProject(id: number) {
-    const filteredProjects = this.myListingsService.userAccountsAndProjects?.filter(
-      (item) => item.account.id === id
-    );
+    const filteredProjects = this.myListingsService.userAccountsAndProjects
+      .filter(item => item.account.id === id)
+      .map(item => item.project);
 
-    this.projectsOptions = filteredProjects?.map((item) => item.project);
+    const uniqueProjects = filteredProjects?.reduce((acc: any, current: any) => {
+      const x = acc.find((item: any) => item.id === current.id && item.projectId === current.projectId);
+      if (!x) {
+        return [...acc, current];
+      } else {
+        x.totalNma = (parseFloat(x.totalNma) + parseFloat(current.totalNma)).toFixed(2).toString();
+        x.totalRevenue = (parseFloat(x.totalRevenue) + parseFloat(current.totalRevenue)).toFixed(2).toString();
+        return acc;
+      }
+    }, []);
+
+    this.projectsOptions = uniqueProjects;
+
+    if (this.projectsOptions.length === 1) {
+      this.createNewListing.project = this.projectsOptions[0].id;
+      this.handleFindTotalNMA(this.projectsOptions[0]?.id)
+    }
   }
 
+  handleFindTotalNMA(id: number) {
+    this.projectsOptions
+      ?.filter(item => {
+        if (item.id === id) {
+          this.selectedProject = item
+        }
+      })
+
+  }
 
   handleRemoveAndAddClass() {
     this.addNewListingService.handleRemoveAndAddClass()
@@ -80,7 +121,8 @@ export class ListingDetailsTabComponent implements OnInit {
     }
     return 0;
   }
-  handleProjectLEngth() {
+
+  handleProjectLength() {
     if (this.projectsOptions) {
       return this.projectsOptions.length
     }

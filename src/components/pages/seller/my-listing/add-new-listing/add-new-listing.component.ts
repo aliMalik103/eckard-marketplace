@@ -44,6 +44,7 @@ export class AddNewListingComponent implements OnInit {
     offer: []
 
   }
+  isValidNma!: boolean
 
   constructor(private addNewListingService: AddNewListingService,
     private myListingsService: MyListingsService,
@@ -71,8 +72,6 @@ export class AddNewListingComponent implements OnInit {
   handleGoBack() {
     this.onGoBack.emit()
     this.myListingsService.handleResetSetNewList()
-
-
   }
 
   handleProjectType(value: number) {
@@ -81,13 +80,21 @@ export class AddNewListingComponent implements OnInit {
       this.toastr.info('Still work in progress');
 
     }
-    console.log(this.createNewListing.listing_type)
 
+  }
+  handleValidNMA(event: any) {
+    this.isValidNma = event
+  }
+
+  isValid(obj: any) {
+    const requiredFields = ['listing_type', 'listingName', 'listingStart', 'auction_type', 'auctionEnd', 'account', 'project', 'nma', 'minimumAsk'];
+    const isValid = requiredFields.every(field => obj[field]);
+
+    return isValid;
   }
 
   handleStatus(id: number) {
     this.createNewListing.status = id
-    console.log(this.createNewListing)
     if (this.isListEdit) {
       this.myListingsService.updateListing(this.createNewListing).subscribe(
         (response) => {
@@ -96,7 +103,6 @@ export class AddNewListingComponent implements OnInit {
           this.handleGoBack()
           this.myListingsService.handleResetSetNewList()
           this.toastr.success('List update successfully');
-
 
         },
         (error: any) => {
@@ -157,9 +163,9 @@ export class AddNewListingComponent implements OnInit {
       },
       (error: any) => {
 
-        console.log("error", error)
+        console.log("Error getting listing Auction Type", error)
       },
-      () => console.log("Done getting auction Type"));
+      () => console.log("Done getting listing Auction Type"));
 
   }
 
@@ -177,9 +183,9 @@ export class AddNewListingComponent implements OnInit {
       },
       (error: any) => {
 
-        console.log("error", error)
+        console.log("Error getting listing Constraint", error)
       },
-      () => console.log("Done getting constraint Type"));
+      () => console.log("Done getting listing Constraint"));
   }
 
   // handleGetAllProjects() {
@@ -213,9 +219,9 @@ export class AddNewListingComponent implements OnInit {
       },
       (error: any) => {
 
-        console.log("error", error)
+        console.log("Error getting listing status", error)
       },
-      () => console.log("Done getting List Type"));
+      () => console.log("Done getting listing status "));
   }
 
   handleGetTracts() {
@@ -225,9 +231,9 @@ export class AddNewListingComponent implements OnInit {
       },
       (error: any) => {
 
-        console.log("error", error)
+        console.log("Error getting listing Tracts", error)
       },
-      () => console.log("Done getting List Type"));
+      () => console.log("Done getting listing Tracts"));
   }
 
   handleGetUserAssounts() {
@@ -235,13 +241,17 @@ export class AddNewListingComponent implements OnInit {
       (response) => {
         this.myListingsService.userAccountsAndProjects = response
         this.accountsOptions = response.map((item, i) => item?.account)
+        this.accountsOptions = this.accountsOptions.filter((obj, index, self) => self.findIndex(t => t.id === obj.id) === index);
+        if (this.accountsOptions.length == 1) {
+          this.createNewListing.account = this.accountsOptions[0].id
+        }
 
       },
       (error: any) => {
 
-        console.log("error", error)
+        console.error("Error getting user accounts: ", error);
       },
-      () => console.log("Done getting List Type")
+      () => console.log("Done getting user accounts.")
     )
   }
 

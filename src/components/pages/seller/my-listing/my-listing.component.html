@@ -19,7 +19,7 @@
 
         <div class="d-flex justify-content-between mt-4 mb-3">
             <div>
-                <select class="form-select form-select-lg" [(ngModel)]="listStatus"
+                <select class="form-select form-select fw-bold " [(ngModel)]="listStatus"
                     (ngModelChange)="handleFilterList()">
                     <option *ngFor="let list of listingFilterOptions" [value]="list.value"> {{list.label}}</option>
                 </select>
@@ -31,8 +31,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col" *ngFor="let item of listingsColumns;">{{item}}</th>
-                    <th>Action</th>
+                    <th scope="col" *ngFor="let item of listingsColumns;" class="text-secondary">{{item}}</th>
                 </tr>
             </thead>
             <tbody class="my-listing-table-body">
@@ -45,22 +44,20 @@
                         totalItems: count
                       };
                 let i = index">
-                        <td> <span class="listing-td pe-auto">{{list.listingName}}</span>
+                        <td> <span class="listing-td pe-auto" (click)="handleEdit(list)"
+                                title="Edit List">{{list.listingName}}</span>
                         </td>
                         <td>{{ list.auctionEnd | date:'MMM d, y'}}</td>
                         <td>
                             <span class="listing-td pe-auto">{{list.account.accountName}} /
                                 {{list.project.projectId}}</span>
                         </td>
-                        <td>{{list.nma}}</td>
-                        <td>{{list.minimumAsk | currency:'CAD':'symbol-narrow':'4.2-2'}}</td>
-                        <td></td>
-                        <td> <span class="listing-td pe-auto float-end">2</span></td>
-                        <td class="text-center">
-                            <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip"
-                                data-placement="top" title="Edit" (click)="handleEdit(list)"
-                                [disabled]="userId!=list?.account?.contact?.id"><i class="fa fa-edit"></i></button>
-                        </td>
+                        <td> <span class=" float-end">{{list.nma}}</span></td>
+                        <td> <span class=" float-end">{{list.minimumAsk |
+                                currency:'CAD':'symbol-narrow':'4.2-2'}}</span></td>
+                        <td><span class=" float-end"></span></td>
+                        <td> <span class="listing-td pe-auto float-end"></span></td>
+
                     </tr>
 
                 </ng-container>
@@ -69,7 +66,7 @@
 
             </tbody>
         </table>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" *ngIf="handleListingLength() > 0 ">
             <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
             </pagination-controls>
         </div>
@@ -78,8 +75,4 @@
     <ng-template #elseBlock>
         <app-add-new-listing (onGoBack)="handleToggel()"></app-add-new-listing>
     </ng-template>
-
-
-
-
 </div>

@@ -21,7 +21,7 @@
         <input type="datetime-local" class="form-control" name="auctionEnd" id="auctionEnd"
             [(ngModel)]="createNewListing.auctionEnd" required #auctionEnd="ngModel"
             [ngClass]="{'border border-danger':auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched)}"
-            disabled>
+            [disabled]="!isListDraft">
         <span *ngIf="auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched ) &&  auctionEnd.errors"
             class="text-danger rounded px-4 error-message">
             Please enter valid auction End date

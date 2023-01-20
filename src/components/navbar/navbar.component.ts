@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { UserDetails } from '../model/login';
 import { LoginService } from '../services/login.service';
 
 
@@ -10,9 +11,11 @@ import { LoginService } from '../services/login.service';
 })
 export class NavbarComponent {
   logo!: string;
+  user!: UserDetails
 
   constructor(private loginService: LoginService) {
     this.logo = environment.LOGO
+    this.user = this.loginService?.user
 
   }
 

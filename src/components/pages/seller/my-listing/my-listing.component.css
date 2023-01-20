@@ -16,3 +16,7 @@
 .my-listing-table-body tr td {
     color: gray
 }
+
+.form-select {
+    background-color: #a9a9a969;
+}

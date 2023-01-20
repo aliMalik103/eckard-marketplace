@@ -65,15 +65,11 @@ export class MyListingsService {
 
   handleSetDate() {
 
-    const now = new Date();
-    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const today = moment(todayMidnight).format('yyyy-MM-DDTHH:MM')
+    const todayMidnight = moment().startOf('day');
+    const today = todayMidnight.format().slice(0, 16)
     this.newListing.listingStart = today
-
-    const fourWeeksFromNow = new Date(now.getTime() + (4 * 7 * 24 * 60 * 60 * 1000));
-    const fourWeeksMidnight = new Date(fourWeeksFromNow.getFullYear(), fourWeeksFromNow.getMonth(), fourWeeksFromNow.getDate());
-    const auctionEndDate = moment(fourWeeksMidnight).format('yyyy-MM-DDTHH:MM')
-    this.newListing.auctionEnd = auctionEndDate
+    const fourWeeksFromNow = moment().add(4, 'weeks').startOf('day');
+    this.newListing.auctionEnd = fourWeeksFromNow.format().slice(0, 16)
   }
 
 

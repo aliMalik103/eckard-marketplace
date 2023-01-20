@@ -1,39 +1,33 @@
-<div class="container p-4">
+<div class="container card mt-4 pt-4 h-100">
+    <div class="tab-content " id="myTabContent">
+        <div class="breadcrumb-container mb-4">
 
-
-    <ul class="nav nav-tabs w-25 border-0 bg-white market-tabs" id="myTab" role="tablist">
-
-        <div class="breadcrumb-container mx-auto pt-1">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-link">
-                    <li class="breadcrumb-item"><a [routerLink]="['/market-place']">Home</a></li>
-                    <li class="breadcrumb-item active"><a [routerLink]="['/market-place']">MarketPlace</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
 
                 </ol>
+                <div class="d-flex justify-content-between text-center align-items-center col-lg-3 col-md-4 px-0">
+                    <!-- <div class="m-0">
+                        <h4>MAXT123</h4>
+                    </div> -->
+
+                    <div class="text-danger" *ngIf="!isActiveUser">
+                        <strong>inactive</strong>
+                    </div>
+                </div>
             </nav>
 
+
         </div>
-
-        <div class="d-flex justify-content-between w-100 px-2">
-            <div class="m-0">
-                <h4>MAXT123</h4>
-            </div>
-
-            <div class="text-danger" *ngIf="!isActiveUser">
-                <strong>inactive</strong>
-            </div>
-        </div>
-
-    </ul>
-
-    <div class="tab-content card border-0 mb-4" id="myTabContent">
-        <div class="tab-pane fade show active" id="marketPlace" role="tabpanel" aria-labelledby="home-tab">
+        <div class="tab-pane fade show active mt-4" id="marketPlace" role="tabpanel" aria-labelledby="home-tab">
             <div class="d-flex justify-content-start mb-2">
-                <div class="w-25 p-4">
+                <div class="w-25">
                     <h5>Buyer </h5>
 
                 </div>
-                <div class="p-4">
+                <div class="pb-4">
                     <div class="mb-3" [ngClass]="{'isDisabled':!isActiveUser}">
                         <a class="marketplace-items " [routerLink]="['/my-bids']">My Bids
                         </a>(2)
@@ -51,11 +45,11 @@
             </div>
 
             <div class="d-flex justify-content-start mb-2">
-                <div class="w-25 p-4">
+                <div class="w-25 pt-4 pb-4">
                     <h5>Seller</h5>
 
                 </div>
-                <div class="p-4">
+                <div class="pt-4 pb-4">
                     <div class="mb-3 " [ngClass]="{'isDisabled':!isActiveUser}">
                         <a class="marketplace-items " [routerLink]="['/my-listing']">My Listings
                         </a>({{totalMyListings}})
@@ -73,11 +67,11 @@
             </div>
 
             <div class="d-flex justify-content-start mb-2">
-                <div class="w-25 p-4">
+                <div class="w-25 pt-4 pb-4">
                     <h5> Information </h5>
 
                 </div>
-                <div class="p-4">
+                <div class=" pt-4 pb-4">
                     <div class="mb-3">
                         <a class="marketplace-items" [routerLink]="['/sec-disclosure']">SEC Disclosure </a>
                     </div>

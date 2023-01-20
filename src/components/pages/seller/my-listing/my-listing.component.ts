@@ -4,6 +4,7 @@ import { MyListings } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 
+
 @Component({
   selector: 'app-my-listing',
   templateUrl: './my-listing.component.html',
@@ -18,7 +19,7 @@ export class MyListingComponent implements OnInit {
     "Listing Name",
     "Auction Deadline",
     "Account/Project",
-    "Total NMA",
+    "Listed NMA",
     "Minimum Ask",
     "Highest Bid",
     "# Bids"
@@ -56,6 +57,7 @@ export class MyListingComponent implements OnInit {
   constructor(private myListingsService: MyListingsService, private router: Router, private loginService: LoginService) {
     this.handleResetNewList()
   }
+
   ngOnInit(): void {
     this.userId = this.loginService.user.id
     if (this.loginService.user.status != "active") {
@@ -122,10 +124,10 @@ export class MyListingComponent implements OnInit {
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));
-    this.handleGetUserAssounts()
+    this.handleGetUserAccounts()
   }
 
-  handleGetUserAssounts() {
+  handleGetUserAccounts() {
     this.myListingsService.handleGetUserAccounts(this.loginService.user.id).subscribe(
       (response) => {
         this.myListingsService.userAccountsAndProjects = response
@@ -138,15 +140,22 @@ export class MyListingComponent implements OnInit {
     )
   }
 
-
   onTableDataChange(event: any) {
     this.page = event;
     this.getAllMyListings();
   }
+  
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
     this.getAllMyListings();
+  }
+
+  handleListingLength() {
+    if (this.myListings) {
+      return this.myListings.length
+    }
+    return 0
   }
 
 }

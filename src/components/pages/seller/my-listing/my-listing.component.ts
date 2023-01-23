@@ -104,10 +104,7 @@ export class MyListingComponent implements OnInit {
       offer: value.offer.map((x: any) => parseInt(x.id)),
       id: value.id
     }
-    console.log("draft", value.status.status)
-
     if (value.status.status == 'Active') {
-      console.log("draft", value.status)
       this.myListingsService.isListDraft = false;
     }
     this.myListingsService.newListing = editList
@@ -124,21 +121,8 @@ export class MyListingComponent implements OnInit {
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));
-    this.handleGetUserAccounts()
   }
 
-  handleGetUserAccounts() {
-    this.myListingsService.handleGetUserAccounts(this.loginService.user.id).subscribe(
-      (response) => {
-        this.myListingsService.userAccountsAndProjects = response
-      },
-      (error: any) => {
-
-        console.log("error", error)
-      },
-      () => console.log("Done getting List Type")
-    )
-  }
 
   onTableDataChange(event: any) {
     this.page = event;

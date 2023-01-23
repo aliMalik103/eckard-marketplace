@@ -105,3 +105,14 @@ export interface ContactAccount {
     status: string
 }
 
+export interface ListingCost {
+    costPerNma: number
+    totalCost: number
+    totalNma: number
+    ct: number
+  }
+
+  export interface IncomListing {
+    incomeToDate: number
+    availableNma: number
+  }

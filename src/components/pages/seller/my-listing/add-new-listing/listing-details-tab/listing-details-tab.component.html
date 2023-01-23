@@ -31,7 +31,8 @@
                     (ngModelChange)="handleChange('project')" #project="ngModel"
                     [ngClass]="{'border border-danger':project.invalid && (project.dirty || project.touched)}" required
                     [disabled]="!isListDraft">
-                    <option *ngFor="let item of projectsOptions " [value]="item.id">{{item.projectId}} </option>
+                    <option *ngFor="let item of projectsOptions " [value]="item.project.id">{{item.project.projectId}}
+                    </option>
                 </select>
                 <span *ngIf="project.invalid && (project.dirty || project.touched ) &&  project.errors"
                     class="text-danger rounded px-4 error-message">
@@ -43,25 +44,31 @@
 
             <div class=" col-md-6">
                 <label for="nma" class="form-label">NMA Listed <small class="text-muted">(max:
-                        <ng-container *ngIf="selectedProject">{{selectedProject.totalNma}}</ng-container>
+                        <ng-container *ngIf="listingCost">{{listingCost.totalNma}}</ng-container>
                         NMA)
                     </small> <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" [(ngModel)]="createNewListing.nma"
                     (change)="handleChange('nma')" id="nma" name="nma" #nma="ngModel"
-                    [ngClass]="{'border border-danger':nma.invalid && (nma.dirty || nma.touched) ||  selectedProject && selectedProject.totalNma < createNewListing.nma}"
+                    [ngClass]="{'border border-danger':nma.invalid && (nma.dirty || nma.touched) ||  handleIsValidNma()}"
                     required [disabled]="!isListDraft">
-                <span
-                    *ngIf="nma.invalid && (nma.dirty || nma.touched ) &&  nma.errors || (selectedProject && selectedProject.totalNma < createNewListing.nma)"
+                <span *ngIf="nma.invalid && (nma.dirty || nma.touched ) &&  nma.errors || handleIsValidNma()"
                     class="text-danger rounded px-4 error-message">
                     Please enter valid NMA
                 </span>
             </div>
-            <div class="col-6 d-flex flex-column pt-4">
+            <div class="col-6 d-flex flex-column pt-4" *ngIf="listingCost && createNewListing.nma">
                 <div class="align-items-center text-secondary">
-                    <small>Listing Cost : 75,000.00 (12,500,00 / NMA)</small>
+                    <small>Listing Cost :
+                        {{(listingCost.costPerNma/createNewListing.nma) |
+                        currency:'CAD':'symbol-narrow':'.2-2'}} ({{listingCost.costPerNma |
+                        currency:'CAD':'symbol-narrow':'.2-2'}} per NMA)</small>
                 </div>
                 <div class="align-items-center text-secondary">
-                    <small>Listing Income To Date : 31,235.11 (41% ROI) </small>
+                    <small *ngIf="incomeListing">Listing Income To Date :
+                        {{((incomeListing.incomeToDate/incomeListing.availableNma)*createNewListing.nma) |
+                        currency:'CAD':'symbol-narrow':'.2-2'}}
+                        ({{(((incomeListing.incomeToDate/incomeListing.availableNma)*createNewListing.nma)/(listingCost.costPerNma/createNewListing.nma
+                        )) | percent:'.2-2'}} ROI) </small>
                 </div>
 
 
@@ -123,7 +130,7 @@
 
     </ng-container>
     <ng-container *ngIf="!(handleTractLength() == 0 && createNewListing.listing_type == 2)">
-        <ng-container *ngIf="createNewListing.project">
+        <ng-container *ngIf="createNewListing.project && createNewListing.nma">
             <div class="mt-3 row ">
 
                 <div class=" col-md-6">
@@ -135,11 +142,30 @@
                         required [disabled]="!isListDraft">
                     <span *ngIf="minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched ) &&  minimumAsk.errors"
                         class="text-danger rounded px-4 error-message">
-                        Please select valid minimumAsk price
+                        Please enter minimum ask price
                     </span>
                 </div>
-                <div class="text-muted small d-flex align-items-end col-6">
-                    $16,600.00 per NMA; Profit on Exit: 24,600.00; Total Profit: $55,835.11 (74.45%)
+                <div class="col-6 d-flex flex-column pt-4"
+                    *ngIf="listingCost && createNewListing.nma && createNewListing.minimumAsk">
+                    <div class="align-items-center text-secondary">
+                        <small>
+                            {{(createNewListing.minimumAsk/createNewListing.nma) |
+                            currency:'CAD':'symbol-narrow':'.2-2'}} per NMA</small>
+                    </div>
+                    <div class="align-items-center text-secondary">
+                        <small *ngIf="incomeListing">Profit on Exit:
+                            {{ (createNewListing.minimumAsk -
+                            (listingCost.costPerNma/createNewListing.nma)) |
+                            currency:'CAD':'symbol-narrow':'.2-2'}}, Total Profit: {{(((createNewListing.minimumAsk -
+                            (listingCost.costPerNma/createNewListing.nma)) +
+                            ((incomeListing.incomeToDate/incomeListing.availableNma)*createNewListing.nma))) |
+                            currency:'CAD':'symbol-narrow':'.2-2'}}
+                            ({{ ((((createNewListing.minimumAsk -
+                            (listingCost.costPerNma/createNewListing.nma)) +
+                            ((incomeListing.incomeToDate/incomeListing.availableNma)*createNewListing.nma)))/(listingCost.costPerNma/createNewListing.nma))
+                            | percent:'.2-2'}} ROI)
+                        </small>
+                    </div>
 
 
                 </div>
@@ -148,54 +174,55 @@
             </div>
 
             <div class="mt-3 row">
-                <div class="col-12 p-0">
+                <div class="col-12 p-0 d-flex">
 
-                    <div class="accordion accordion-flush" id="listingAccordion">
+                    <div class="accordion accordion-flush col-10" id="listingAccordion">
                         <div class="accordion-item ">
-                            <h5 class="accordion-header collapsed p-0 col-8" id="listing-headingOne"
-                                data-toggle="collapse" data-target="#listing-collapseOne" aria-expanded="false"
+                            <h5 class="accordion-header collapsed p-0 " id="listing-headingOne" data-toggle="collapse"
+                                data-target="#listing-collapseOne" aria-expanded="false"
                                 aria-controls="listing-collapseOne">
-                                Listing - Basic Cash Flow Calculator
+                                Basic CashFlow Calculator
 
-                                <span class="small float-end">
-                                    Est. Cash Flow: <span class="text-primary">100,108.27</span>
-                                </span>
-
+                                <strong class="small float-end fw-bold" *ngIf="calculateTotalCashFlow > 0">
+                                    Est. CashFlow: {{calculateTotalCashFlow |
+                                    currency:'CAD':'symbol-narrow':'.2-2'}}</strong>
                             </h5>
                             <div id="listing-collapseOne" class="accordion-collapse collapse"
                                 aria-labelledby="listing-headingOne" data-parent="#listingAccordion">
                                 <div class="accordion-body  d-flex gap-3 w-100">
                                     <div class="d-flex flex-column col-2">
                                         <div>
-                                            <label for="monts" class="form-label"># of
+                                            <label for="noOfMonths" class="form-label"># of
                                                 Months</label>
 
-                                            <input type="number" class="form-control" aria-label="# of Months">
+                                            <input type="number" class="form-control" aria-label="# of Months"
+                                                [(ngModel)]="basicCashFlow.noOfMonths" id="noOfMonths"
+                                                name="noOfMonths">
                                         </div>
                                         <div class="d-flex justify-content-between mt-1 align-items-center">
                                             <div>
-                                                <a [routerLink]="['']" class="text-secondary">
+                                                <a class="text-secondary">
                                                     <i class="fa fa-refresh" aria-hidden="true"></i></a>
 
 
                                             </div>
                                             <div class="text-end">
-                                                <div>2</div>
-                                                <div>12,038.01</div>
+                                                <div></div>
+                                                <div></div>
                                             </div>
 
                                         </div>
                                     </div>
-                                    <div class="d-flex flex-column col-4">
+                                    <div class="d-flex flex-column col">
                                         <div>
 
-                                            <label for="expectedOutputDecline" class="form-label">Expected
-                                                Output
-                                                Decline(%)
+                                            <label for="expectedOutputDecline" class="form-label">Exp. Decline[%]
                                             </label>
 
                                             <input type="number" class="form-control"
-                                                aria-label="Expected Output Decline(%)">
+                                                aria-label="Expected Output Decline(%)"
+                                                [(ngModel)]="basicCashFlow.expDecline" id="expDecline"
+                                                name="expDecline">
                                         </div>
                                         <div class="d-flex justify-content-between mt-1 align-items-center">
 
@@ -208,11 +235,29 @@
                                     </div>
                                     <div class="d-flex flex-column col">
                                         <div>
-
-                                            <label for="gasPrice" class="form-label">Gas Price
+                                            <label for="oilPrice" class="form-label">Oil Price[BBL]
                                             </label>
 
-                                            <input type="number" class="form-control" aria-label="Gas Price">
+                                            <input type="number" class="form-control" aria-label="Oil Price"
+                                                [(ngModel)]="basicCashFlow.oilPrice" id="oilPrice" name="oilPrice">
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-1 align-items-center">
+
+                                            <div class="">
+                                                <div>NMA</div>
+                                                <div>Cash Flow / NMA</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column col">
+                                        <div>
+
+                                            <label for="gasPrice" class="form-label">Gas Price [MCF]
+                                            </label>
+
+                                            <input type="number" class="form-control" aria-label="Gas Price"
+                                                [(ngModel)]="basicCashFlow.gasPrice" id="gasPrice" name="gasPrice">
 
                                         </div>
 
@@ -225,24 +270,9 @@
 
                                         </div>
                                     </div>
-                                    <div class="d-flex flex-column col">
-                                        <div>
-                                            <label for="oilPrice" class="form-label">Oil Price
-                                            </label>
 
-                                            <input type="number" class="form-control" aria-label="Oil Price">
-                                        </div>
-                                        <div class="d-flex justify-content-between mt-1 align-items-center">
-
-                                            <div class="">
-                                                <div>NMA</div>
-                                                <div>Cash Flow / NMA</div>
-                                            </div>
-
-                                        </div>
-                                    </div>
                                     <div class=" m-auto col">
-                                        <label for="drafts" class="form-label"><a [routerLink]="['']">
+                                        <label for="drafts" class="form-label"><a>
                                                 Save as Default</a>
                                         </label>
                                     </div>
@@ -251,6 +281,15 @@
                             </div>
                         </div>
 
+                    </div>
+
+
+                    <div class="col">
+                        <span for="recalculate"
+                            class="form-label d-inline-block text-primary pe-auto border-bottom border-primary"
+                            (click)="handleCalculateCashFlow()">
+                            Re/Calculate
+                        </span>
                     </div>
 
                 </div>

@@ -1,9 +1,10 @@
+import { Account, IncomListing, Project } from './../model/my-listings';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ContactAccount, MyListing, MyListings } from '../model/my-listings';
+import { ContactAccount, MyListing, MyListings, ListingCost } from '../model/my-listings';
 import * as moment from 'moment'
 
 
@@ -31,7 +32,7 @@ export class MyListingsService {
   }
   isListEdit: boolean = false
   isListDraft: boolean = true
-  userAccountsAndProjects!: ContactAccount[]
+  userAccountsAndProjects!: any[]
 
 
   constructor(private http: HttpClient, private router: Router) {
@@ -88,8 +89,28 @@ export class MyListingsService {
     return res
   }
 
-  handleGetUserAccounts(id: number): Observable<ContactAccount[]> {
-    const res = this.http.get<ContactAccount[]>(`${environment.API_BASE_URL}/account/getbycontact/${id}`)
+  handleGetUserAccounts(id: number): Observable<Account[]> {
+    const res = this.http.get<Account[]>(`${environment.API_BASE_URL}/account/getbycontact/${id}/`)
+    return res;
+  }
+
+  handleGetProjects(id: number): Observable<ContactAccount[]> {
+    const res = this.http.get<ContactAccount[]>(`${environment.API_BASE_URL}/investment/getbyaccount/${id}/`)
+    return res;
+  }
+
+  handleGetListingCost(accountId: number, projectId: number): Observable<ListingCost> {
+    const res = this.http.get<ListingCost>(`${environment.API_BASE_URL}/investment/get_listing_cost/${accountId}/${projectId}`)
+    return res;
+  }
+
+  handleGetIncomeListing(accountId: number, projectId: number): Observable<IncomListing> {
+    const res = this.http.get<IncomListing>(`${environment.API_BASE_URL}/income/get_icome_toDate/${accountId}/${projectId}`)
+    return res;
+  }
+
+  handleGetCashFlow(projectId: number) {
+    const res = this.http.get(`${environment.API_BASE_URL}/project/${projectId}/recent_prices`)
     return res;
   }
 

@@ -59,7 +59,7 @@ export class AddNewListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.handleGetUserAssounts()
+    this.handleGetUserAccounts()
     this.handleGetListType()
     this.handleAuctionType()
     this.handleConstraint()
@@ -236,12 +236,10 @@ export class AddNewListingComponent implements OnInit {
       () => console.log("Done getting listing Tracts"));
   }
 
-  handleGetUserAssounts() {
+  handleGetUserAccounts() {
     this.myListingsService.handleGetUserAccounts(this.loginService.user.id).subscribe(
       (response) => {
-        this.myListingsService.userAccountsAndProjects = response
-        this.accountsOptions = response.map((item, i) => item?.account)
-        this.accountsOptions = this.accountsOptions.filter((obj, index, self) => self.findIndex(t => t.id === obj.id) === index);
+        this.accountsOptions = response
         if (this.accountsOptions.length == 1) {
           this.createNewListing.account = this.accountsOptions[0].id
         }

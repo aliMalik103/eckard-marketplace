@@ -84,6 +84,7 @@ export class AddNewListingComponent implements OnInit {
   }
   handleValidNMA(event: any) {
     this.isValidNma = event
+    return this.isValidNma
   }
 
   isValid(obj: any) {

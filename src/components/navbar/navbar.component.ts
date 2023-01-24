@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { UserDetails } from '../model/login';
 import { LoginService } from '../services/login.service';
@@ -9,7 +9,7 @@ import { LoginService } from '../services/login.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnChanges {
   logo!: string;
   user!: UserDetails
 
@@ -17,6 +17,12 @@ export class NavbarComponent {
     this.logo = environment.LOGO
     this.user = this.loginService?.user
 
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.loginService?.user) {
+      this.user = this.loginService.user
+    }
   }
 
   isAuthanticated() {

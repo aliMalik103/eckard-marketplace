@@ -49,14 +49,14 @@
                         </td>
                         <td>{{ list.auctionEnd | date:'MMM d, y'}}</td>
                         <td>
-                            <span class="listing-td pe-auto">{{list.account.accountName}} /
-                                {{list.project.projectId}}</span>
+                            <span class="listing-td pe-auto">{{list['Account/Project']}}</span>
                         </td>
-                        <td> <span class=" float-end">{{list.nma}}</span></td>
+                        <td> <span class=" float-end">{{list.listedNMA}}</span></td>
                         <td> <span class=" float-end">{{list.minimumAsk |
                                 currency:'CAD':'symbol-narrow':'4.2-2'}}</span></td>
-                        <td><span class=" float-end"></span></td>
-                        <td> <span class="listing-td pe-auto float-end"></span></td>
+                        <td><span class=" float-end">{{list.highestBid |
+                                currency:'CAD':'symbol-narrow':'4.2-2'}}</span></td>
+                        <td> <span class="listing-td pe-auto float-end">{{list['# Bids']}}</span></td>
 
                     </tr>
 

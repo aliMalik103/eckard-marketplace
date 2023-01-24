@@ -18,11 +18,11 @@
                 <div class="navbar-nav">
                     <div class="dropdown">
                         <a class="nav-item nav-link dropdown-toggle text-black" href="#" id="user-dropdown"
-                            data-toggle="dropdown">
+                            data-toggle="dropdown" *ngIf="user">
                             {{user.name}}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="nav-link text-black pe-auto text-center" (click)="handleLogOut()"><i
+                            <a class="nav-link text-black pe-auto text-center" (click)="handleLogOut()" title="Log Out"><i
                                     class="fa fa-sign-out" aria-hidden="true"></i>
                                 Log Out</a>
 

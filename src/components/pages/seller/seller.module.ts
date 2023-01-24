@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { MyListingModule } from './my-listing/my-listing.module';
@@ -14,8 +15,8 @@ import { SellerTransactionsModule } from './seller-transactions/seller-transacti
         FormsModule,
         MyListingModule,
         SellerNotificationsModule,
-        SellerTransactionsModule
-        
+        SellerTransactionsModule,
+        BrowserAnimationsModule
     ],
     providers: [MyListingsService],
     exports: []

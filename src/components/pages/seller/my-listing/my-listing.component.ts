@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MyListings } from 'src/components/model/my-listings';
+import { ContactListing } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 
@@ -21,8 +21,8 @@ export class MyListingComponent implements OnInit {
     "Account/Project",
     "Listed NMA",
     "Minimum Ask",
-    "Highest Bid",
-    "# Bids"
+    "Highest Offer",
+    "# Offers"
   ]
 
   listingFilterOptions = [
@@ -34,18 +34,18 @@ export class MyListingComponent implements OnInit {
       value: "Draft",
       label: "My Drafted Listings"
     },
-    {
-      value: "Accepted",
-      label: "My Closed Transactions"
-    },
-    {
-      value: "Cancelled",
-      label: "My Cancelled Listings"
-    },
+    // {
+    //   value: "Accepted",
+    //   label: "My Closed Transactions"
+    // },
+    // {
+    //   value: "Cancelled",
+    //   label: "My Cancelled Listings"
+    // },
 
   ]
-  myListings!: MyListings[];
-  copyListings!: MyListings[];
+  myListings!: ContactListing[];
+  copyListings!: ContactListing[];
   userId!: number;
 
   page: number = 1;
@@ -69,7 +69,7 @@ export class MyListingComponent implements OnInit {
   }
 
   handleFilterList() {
-    this.myListings = this.copyListings?.filter((item) => item.status.status === this.listStatus && this.loginService.user.id == item?.account?.contact?.id)
+    this.myListings = this.copyListings?.filter((item) => item.status === this.listStatus)
   }
 
   handleToggel() {
@@ -86,36 +86,43 @@ export class MyListingComponent implements OnInit {
   }
 
   handleEdit(value: any) {
-    this.myListingsService.isListEdit = true;
-    let editList = {
-      listing_type: value.listing_type.id,
-      status: value.status.id,
-      listingName: value.listingName,
-      listingStart: new Date(value.listingStart).toISOString().slice(0, 16),
-      auction_type: value.auction_type,
-      auctionEnd: new Date(value.auctionEnd).toISOString().slice(0, 16),
-      comments: value.comments,
-      account: value.account.id,
-      project: value.project.id,
-      nma: value.nma,
-      minimumAsk: value.minimumAsk,
-      buyNowPrice: value.buyNowPrice,
-      constraints: value.constraints.map((x: any) => parseInt(x.id)),
-      offer: value.offer.map((x: any) => parseInt(x.id)),
-      id: value.id
-    }
-    if (value.status.status == 'Active') {
-      this.myListingsService.isListDraft = false;
-    }
-    this.myListingsService.newListing = editList
-    this.showAllListing = !this.showAllListing;
+
+    this.myListingsService.getMyList(value.listingId).subscribe(
+      (response) => {
+        this.myListingsService.isListEdit = true;
+        let editList = {
+          listing_type: response?.listing_type.id,
+          status: response.status.id,
+          listingName: response.listingName,
+          listingStart: new Date(response.listingStart).toISOString().slice(0, 16),
+          auction_type: response.auction_type,
+          auctionEnd: new Date(response.auctionEnd).toISOString().slice(0, 16),
+          comments: response.comments,
+          account: response.account.id,
+          project: response.project.id,
+          nma: response.nma,
+          minimumAsk: response.minimumAsk,
+          buyNowPrice: response.buyNowPrice,
+          constraints: response.constraints.map((x: any) => parseInt(x.id)),
+          offer: response.offer.map((x: any) => parseInt(x.id)),
+          id: response.id
+        }
+        if (response.status.status == 'Active') {
+          this.myListingsService.isListDraft = false;
+        }
+        this.myListingsService.newListing = editList
+        this.showAllListing = !this.showAllListing;
+
+      },
+      (error: any) => console.log(error),
+      () => console.log("Done getting my listings"));
 
   }
 
   getAllMyListings() {
-    this.myListingsService.getAllMyListings().subscribe(
+    this.myListingsService.getAllMyListings(this.loginService.user.id).subscribe(
       (response) => {
-        this.myListings = response?.filter((item) => item.status.status === this.listStatus && this.loginService.user.id == item?.account?.contact?.id)
+        this.myListings = response
         this.copyListings = response
         this.handleFilterList()
       },
@@ -128,7 +135,7 @@ export class MyListingComponent implements OnInit {
     this.page = event;
     this.getAllMyListings();
   }
-  
+
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;

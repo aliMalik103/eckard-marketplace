@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -24,7 +24,7 @@ import { LoginService } from 'src/components/services/login.service';
         CommonModule,
 
     ],
-    providers: [AddNewListingService,MyListingsService,ToastrService,LoginService],
+    providers: [AddNewListingService, MyListingsService, ToastrService, LoginService, CurrencyPipe],
     exports: [AddNewListingComponent]
 })
 export class AddNewListingModule {

@@ -110,9 +110,31 @@ export interface ListingCost {
     totalCost: number
     totalNma: number
     ct: number
-  }
+}
 
-  export interface IncomListing {
+export interface IncomListing {
     incomeToDate: number
     availableNma: number
-  }
+}
+
+export interface ContactListing {
+    listingId: number
+    listingName: string
+    auctionEnd: string
+    "Account/Project": string
+    status: string
+    contact_id: number
+    listedNMA: number
+    minimumAsk: number
+    highestBid: any
+    "# Bids": number
+}
+export interface CashConfig {
+    id?: any,
+    account: any,
+    project: any,
+    noOfMonths: any,
+    decline: any,
+    gasPrice: any,
+    oilPrice: any
+}

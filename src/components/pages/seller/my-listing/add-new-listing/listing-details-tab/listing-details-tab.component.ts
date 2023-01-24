@@ -1,7 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { ListingCost, Account, MyListing, Tract, IncomListing } from 'src/components/model/my-listings';
+import { ListingCost, Account, MyListing, Tract, IncomListing, CashConfig } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 
 @Component({
@@ -16,6 +18,7 @@ export class ListingDetailsTabComponent implements OnChanges {
   @Input() createNewListing!: MyListing
   @Input() tracts!: Tract[]
   @Input() isListDraft!: boolean
+  @Input() isListEdit!: boolean
   @Output() isValidNMA = new EventEmitter()
 
   projectsOptions!: any[]
@@ -26,11 +29,14 @@ export class ListingDetailsTabComponent implements OnChanges {
 
 
 
-  basicCashFlow: any = {
-    noOfMonths: 36,
-    expDecline: 1.5,
-    oilPrice: 75.00,
-    gasPrice: 3.5
+  basicCashFlow: CashConfig = {
+    id: null,
+    account: null,
+    project: null,
+    noOfMonths: null,
+    decline: null,
+    gasPrice: null,
+    oilPrice: null
   }
 
   listingColumns: Array<string> = [
@@ -45,7 +51,7 @@ export class ListingDetailsTabComponent implements OnChanges {
     '',
     'Listed Inc.'
   ]
-  constructor(private addNewListingService: AddNewListingService, private myListingsService: MyListingsService) {
+  constructor(private addNewListingService: AddNewListingService, private myListingsService: MyListingsService, private toastr: ToastrService,) {
 
   }
 
@@ -56,9 +62,7 @@ export class ListingDetailsTabComponent implements OnChanges {
     if (this.createNewListing?.account) {
       this.handleUserProject(this.createNewListing.account)
     }
-    if (this.listingCost) {
-      this.isValidNMA.emit(this.listingCost.totalNma < parseFloat(this.createNewListing.nma))
-    }
+
   }
 
   handleChange(value: string) {
@@ -73,8 +77,8 @@ export class ListingDetailsTabComponent implements OnChanges {
         break;
       case 'nma':
         this.createNewListing.nma = parseFloat(this.createNewListing.nma);
-        if (this.listingCost) {
-          this.isValidNMA.emit(this.listingCost.totalNma < parseFloat(this.createNewListing.nma))
+        if (this.incomeListing) {
+          this.isValidNMA.emit(this.incomeListing.availableNma < parseFloat(this.createNewListing.nma))
         }
         break;
       case 'minimumAsk':
@@ -114,7 +118,7 @@ export class ListingDetailsTabComponent implements OnChanges {
           this.projectsOptions = uniqueProjects;
 
           if (this.projectsOptions.length === 1) {
-            this.createNewListing.project = this.projectsOptions[0].id;
+            this.createNewListing.project = this.projectsOptions[0].project.id;
             this.handleFindTotalNMA()
           }
           else {
@@ -136,6 +140,7 @@ export class ListingDetailsTabComponent implements OnChanges {
       this.handleGetListingCost()
       this.handleGetIncomeListing()
       this.handleGetCashFlow()
+      this.handleGetCashConfig()
     }
   }
 
@@ -158,7 +163,8 @@ export class ListingDetailsTabComponent implements OnChanges {
   }
 
   handleIsValidNma() {
-    return this.listingCost ? (this.listingCost.totalNma < parseFloat(this.createNewListing.nma)) : null;
+    let flag = this.incomeListing ? (this.incomeListing.availableNma < parseFloat(this.createNewListing.nma)) : null;
+    return flag
   }
 
   handleGetListingCost() {
@@ -178,6 +184,9 @@ export class ListingDetailsTabComponent implements OnChanges {
     this.myListingsService.handleGetIncomeListing(this.createNewListing.account, this.createNewListing.project).subscribe(
       (response) => {
         this.incomeListing = response
+        if (this.incomeListing) {
+          this.isValidNMA.emit(this.incomeListing.availableNma < parseFloat(this.createNewListing.nma))
+        }
       },
       (error: any) => {
 
@@ -190,7 +199,6 @@ export class ListingDetailsTabComponent implements OnChanges {
   handleGetCashFlow() {
     this.myListingsService.handleGetCashFlow(this.createNewListing.project).subscribe(
       (response) => {
-        console.log("cash flow", response)
         this.cashFlow = response
       },
       (error: any) => {
@@ -201,18 +209,93 @@ export class ListingDetailsTabComponent implements OnChanges {
     )
   }
 
+  handleGetCashConfig() {
+    this.myListingsService.handleGetCashConfig(this.createNewListing.account, this.createNewListing.project).subscribe(
+      (response: any) => {
+        if (response.length > 0) {
+          this.basicCashFlow.id = response[0].id
+          this.basicCashFlow.account = response[0].account.id
+          this.basicCashFlow.project = response[0].project.id
+          this.basicCashFlow.decline = response[0].decline
+          this.basicCashFlow.gasPrice = response[0].gasPrice
+          this.basicCashFlow.oilPrice = response[0].oilPrice
+          this.basicCashFlow.noOfMonths = response[0].noOfMonths
+        }
+        else {
+          this.basicCashFlow.id = null
+          this.basicCashFlow.account = null
+          this.basicCashFlow.project = null
+          this.basicCashFlow.decline = null
+          this.basicCashFlow.gasPrice = null
+          this.basicCashFlow.oilPrice = null
+          this.basicCashFlow.noOfMonths = null
+        }
+      },
+      (error: any) => {
 
-  handleCalculateCashFlow() {
-    if (!this.basicCashFlow.noOfMonths || !this.basicCashFlow.expDecline || !this.basicCashFlow.oilPrice || !this.basicCashFlow.gasPrice) {
-      return;
+        console.error("Error getting listing cost : ", error);
+      },
+      () => console.log("Done getting listing cost .")
+    )
+  }
+  handleSaveAsDefault(value: any) {
+    value.account = this.createNewListing.account
+    value.project = this.createNewListing.project
+    if (value.id) {
+      this.handleUpdateCashConfig(value)
+    }
+    else {
+      delete value.id
+      this.handleCreateCashConfig(value)
     }
 
+  }
+
+  handleCreateCashConfig(body: any) {
+    this.myListingsService.handleCreateCashConfig(body).subscribe(
+      (response) => {
+        if (response) {
+          this.handleGetCashConfig()
+        }
+        this.toastr.success('CashFlow default values add successfully');
+
+      },
+      (error: any) => {
+
+        console.error("Error getting cash Config : ", error);
+      },
+      () => console.log("Done getting cash Config .")
+    )
+  }
+
+  handleUpdateCashConfig(body: any) {
+    this.myListingsService.handleUpdateCashConfig(body).subscribe(
+      (response) => {
+        console.log("update cash Config", response)
+        if (response) {
+          this.handleGetCashConfig()
+          this.toastr.success('CashFlow default values update successfully');
+        }
+      },
+      (error: any) => {
+
+        console.error("Error getting cash Config : ", error);
+      },
+      () => console.log("Done getting cash Config .")
+    )
+  }
+
+
+  handleCalculateCashFlow() {
+    if (!this.basicCashFlow.noOfMonths || !this.basicCashFlow.decline || !this.basicCashFlow.oilPrice || !this.basicCashFlow.gasPrice) {
+      return;
+    }
     let gasArray = 0;
     let oilArray = 0;
 
     for (let i = 1; i <= this.basicCashFlow.noOfMonths; i++) {
-      gasArray += this.cashFlow.gas * (1 - (this.basicCashFlow.expDecline * i) / 100);
-      oilArray += this.cashFlow.oil * (1 - (this.basicCashFlow.expDecline * i) / 100);
+      gasArray += this.cashFlow.gas * (1 - (this.basicCashFlow.decline * i) / 100);
+      oilArray += this.cashFlow.oil * (1 - (this.basicCashFlow.decline * i) / 100);
     }
 
     gasArray *= this.basicCashFlow.gasPrice;

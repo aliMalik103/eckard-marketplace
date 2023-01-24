@@ -1,4 +1,4 @@
-import { Account, IncomListing, Project } from './../model/my-listings';
+import { Account, ContactListing, IncomListing, Project } from './../model/my-listings';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -74,8 +74,13 @@ export class MyListingsService {
   }
 
 
-  getAllMyListings(): Observable<MyListings[]> {
-    const res = this.http.get<MyListings[]>(`${environment.API_BASE_URL}/listing/`)
+  getAllMyListings(id: number): Observable<ContactListing[]> {
+    const res = this.http.get<ContactListing[]>(`${environment.API_BASE_URL}/listing/contact/${id}`)
+    return res;
+  }
+
+  getMyList(id: number): Observable<MyListings> {
+    const res = this.http.get<MyListings>(`${environment.API_BASE_URL}/listing/${id}`)
     return res;
   }
 
@@ -100,17 +105,33 @@ export class MyListingsService {
   }
 
   handleGetListingCost(accountId: number, projectId: number): Observable<ListingCost> {
-    const res = this.http.get<ListingCost>(`${environment.API_BASE_URL}/investment/get_listing_cost/${accountId}/${projectId}`)
+    const res = this.http.get<ListingCost>(`${environment.API_BASE_URL}/investment/account/${accountId}/project/${projectId}`)
     return res;
   }
 
   handleGetIncomeListing(accountId: number, projectId: number): Observable<IncomListing> {
-    const res = this.http.get<IncomListing>(`${environment.API_BASE_URL}/income/get_icome_toDate/${accountId}/${projectId}`)
+    const res = this.http.get<IncomListing>(`${environment.API_BASE_URL}/income/account/${accountId}/project/${projectId}`)
     return res;
   }
 
   handleGetCashFlow(projectId: number) {
     const res = this.http.get(`${environment.API_BASE_URL}/project/${projectId}/recent_prices`)
+    return res;
+  }
+
+  handleGetCashConfig(accountId: number, projectId: number) {
+    const res = this.http.get(`${environment.API_BASE_URL}/cash_config/account/${accountId}/project/${projectId}`)
+    return res;
+  }
+
+  handleCreateCashConfig(body: any) {
+    const res = this.http.post(`${environment.API_BASE_URL}/cash_config/`, body)
+    return res;
+  }
+
+  handleUpdateCashConfig(body: any) {
+    console.log(body)
+    const res = this.http.patch(`${environment.API_BASE_URL}/cash_config/${body.id}`, body)
     return res;
   }
 

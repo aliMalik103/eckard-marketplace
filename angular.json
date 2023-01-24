@@ -16,6 +16,10 @@
             "outputPath": "dist/eckard-marketplace",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "moment"
+           ],
             "polyfills": [
               "zone.js"
             ],

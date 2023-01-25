@@ -30,7 +30,6 @@ export class LoginService {
   login(user: LoginForm): Observable<User> {
     const res = this.http.post<User>(`${environment.API_BASE_URL}/auth/login/`, user).pipe(
       tap((users) => {
-        console.log(users)
         if (users.data.valid) {
           this.user = users.data
           this.isAuthanticated = true;
@@ -48,8 +47,6 @@ export class LoginService {
     localStorage.setItem("isAuthanticated", "false");
     localStorage.setItem("user", 'null');
     this.router.navigate([''])
-
-
   }
 
 }

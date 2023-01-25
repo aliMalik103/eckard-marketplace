@@ -115,6 +115,7 @@ export interface ListingCost {
 export interface IncomListing {
     incomeToDate: number
     availableNma: number
+    totalNma: number
 }
 
 export interface ContactListing {

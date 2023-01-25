@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { UserDetails } from '../model/login';
 import { LoginService } from '../services/login.service';
@@ -20,14 +20,16 @@ export class NavbarComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.loginService?.user) {
-      this.user = this.loginService.user
-    }
+    console.log("navbar onChange")
   }
 
   isAuthanticated() {
+    if (this.loginService?.user) {
+      this.user = this.loginService.user
+    }
     return this.loginService.isAuthanticated;
   }
+
   handleLogOut() {
     this.loginService.logout();
   }

@@ -26,6 +26,7 @@ export class ListingDetailsTabComponent implements OnChanges {
   listingCost!: ListingCost
   cashFlow!: any
   calculateTotalCashFlow: any = 0
+  isRecalculate: boolean = false
 
 
 
@@ -33,10 +34,10 @@ export class ListingDetailsTabComponent implements OnChanges {
     id: null,
     account: null,
     project: null,
-    noOfMonths: null,
-    decline: null,
-    gasPrice: null,
-    oilPrice: null
+    noOfMonths: 0,
+    decline: 0,
+    gasPrice: 0,
+    oilPrice: 0
   }
 
   listingColumns: Array<string> = [
@@ -225,10 +226,10 @@ export class ListingDetailsTabComponent implements OnChanges {
           this.basicCashFlow.id = null
           this.basicCashFlow.account = null
           this.basicCashFlow.project = null
-          this.basicCashFlow.decline = null
-          this.basicCashFlow.gasPrice = null
-          this.basicCashFlow.oilPrice = null
-          this.basicCashFlow.noOfMonths = null
+          this.basicCashFlow.decline = 0
+          this.basicCashFlow.gasPrice = 0
+          this.basicCashFlow.oilPrice = 0
+          this.basicCashFlow.noOfMonths = 0
         }
       },
       (error: any) => {
@@ -287,9 +288,7 @@ export class ListingDetailsTabComponent implements OnChanges {
 
 
   handleCalculateCashFlow() {
-    if (!this.basicCashFlow.noOfMonths || !this.basicCashFlow.decline || !this.basicCashFlow.oilPrice || !this.basicCashFlow.gasPrice) {
-      return;
-    }
+    this.isRecalculate = true
     let gasArray = 0;
     let oilArray = 0;
 
@@ -300,9 +299,11 @@ export class ListingDetailsTabComponent implements OnChanges {
 
     gasArray *= this.basicCashFlow.gasPrice;
     oilArray *= this.basicCashFlow.oilPrice;
+    gasArray /= this.cashFlow.totalProjectNma;
+    oilArray /= this.cashFlow.totalProjectNma;
 
     let totalCashFlow = gasArray + oilArray;
-    this.calculateTotalCashFlow = (totalCashFlow / this.cashFlow.totalProjectNma) * this.createNewListing.nma;
+    this.calculateTotalCashFlow = totalCashFlow * this.createNewListing.nma;
   }
 
 

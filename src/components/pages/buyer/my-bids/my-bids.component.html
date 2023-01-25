@@ -1,9 +1,97 @@
-<div class="card h-100 d-flex mx-auto max-w-7xl text-center p-5 mt-5">
+<div class="container card mt-4 pt-4 h-100">
 
-    <button type="button" class="btn btn-sm btn-secondary col-2  mb-5" [routerLink]="['/market-place']">
-        Go Back
-    </button>
-    My Bids in progress .....
+    <div class="breadcrumb-container">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-link">
+                <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/my-bids']">My Offers</a>
+                </li>
+            </ol>
+        </nav>
+
+    </div>
+
+    <div class="d-flex gap-3 mt-4 mb-3">
+        <div>
+            <select class="form-select form-select fw-bold " [(ngModel)]="offerStatus">
+                <option *ngFor="let list of offersFilterOptions" [value]="list.value"> {{list.label}}</option>
+            </select>
+        </div>
+        <div>
+            <select class="form-select form-select fw-bold " [(ngModel)]="offerStatus">
+                <option *ngFor="let list of offersFilterOptions" [value]="list.value"> {{list.label}}</option>
+            </select>
+        </div>
+
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th *ngFor="let item of offersColumns;" class="text-secondary">{{item}}</th>
+            </tr>
+        </thead>
+        <tbody class="my-listing-table-body">
+            <ng-container>
+
+                <!-- <tr *ngFor="let list of myListings | paginate
+                : {
+                    itemsPerPage: tableSize,
+                    currentPage: page,
+                    totalItems: count
+                  };
+            let i = index">
+                    <td> <span class="listing-td pe-auto" title="Edit List"></span>
+                    </td>
+                    <td></td>
+                    <td>
+                        <span class="listing-td pe-auto"></span>
+                    </td>
+                    <td> <span class=" float-end"></span></td>
+                    <td> <span class=" float-end"></span></td>
+                    <td><span class=" float-end"></span></td>
+                    <td> <span class="listing-td pe-auto float-end"></span></td>
+
+                </tr> -->
+                <tr>
+                    <td> <span class="text-secondary" title="Edit List">seller / project</span>
+                    </td>
+                    <td class="text-secondary"> 20-01-2023</td>
+                    <td class="text-secondary">
+                        121200
+                    </td>
+                    <td> <span class="text-secondary">232333</span></td>
+                    <td> <span class="text-secondary">2</span></td>
+                    <td><span class=" text-secondary">121212</span></td>
+                    <td> <span class="text-secondary">12121212</span></td>
+                    <td> <span class="text-secondary">12121212</span></td>
+
+
+                </tr>
+                <tr>
+                    <td> <span class="text-secondary" title="Edit List">seller / project</span>
+                    </td>
+                    <td class="text-secondary"> 20-01-2023</td>
+                    <td class="text-secondary">
+                        121200
+                    </td>
+                    <td> <span class="text-secondary">232333</span></td>
+                    <td> <span class="text-secondary">2</span></td>
+                    <td><span class=" text-secondary">121212</span></td>
+                    <td> <span class="text-secondary">12121212</span></td>
+                    <td> <span class="text-secondary">12121212</span></td>
+
+
+                </tr>
+
+            </ng-container>
+
+
+
+        </tbody>
+    </table>
 
 
 </div>

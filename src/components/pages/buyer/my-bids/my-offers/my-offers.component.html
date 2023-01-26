@@ -1,0 +1,133 @@
+<div class="mt-3 row">
+    <label for="Constraints" class="form-label fw-bold">Constraints / Contingencies</label>
+    <div class="col-sm-10">
+
+        <!-- <div class="form-check" *ngFor="let item of constraintOptions">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
+                [name]="item.constraint" [id]="'constraint'+item.id" [disabled]="!isListDraft">
+            <label class="form-check-label" [for]="'constraint'+item.id">
+                {{item.constraint}}
+            </label>
+        </div> -->
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="constranits" id='constraint'>
+            <label class="form-check-label" for="constraint">
+                test12
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="constranits" id='constraint'>
+            <label class="form-check-label" for="constraint">
+                test122323
+            </label>
+        </div>
+
+    </div>
+</div>
+<div class="mt-3 row">
+    <label for="comments" class="form-label fw-bold">Comments</label>
+    <textarea class="form-control" id="comments" name="comments" rows="3"></textarea>
+</div>
+
+<div class="row mt-3">
+    <div class="form-inline d-flex gap-5 p-0 ">
+
+        <div class="form-group  mb-2">
+            <label for="myoffer" class="col-form-label fw-bold">My Offer: </label>
+            <input type="number" class="mx-2 form-control" oninput="validity.valid||(value='');" min="0">
+            <small class="text-muted">(1212/NMA)</small>
+        </div>
+        <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-warning text-white fw-bold mb-2">SUBMIT OFFER</button>
+            <button type="submit" class="btn btn-danger mb-2 fw-bold">CANCEL OFFER</button>
+        </div>
+
+    </div>
+
+</div>
+<div class="mt-5 row">
+    <div class="col-12 p-0 d-flex">
+
+        <div class="accordion accordion-flush col-10" id="myOfferAccordion">
+            <div class="accordion-item ">
+                <h5 class="accordion-header collapsed p-0 " id="myOffer-headingOne" data-toggle="collapse"
+                    data-target="#myOffer-collapseOne" aria-expanded="false" aria-controls="myOffer-collapseOne">
+                    Basic CashFlow Calculator
+
+                    <strong class="small float-end fw-bold">
+                        Est. CashFlow: {{'232323' |
+                        currency:'CAD':'symbol-narrow':'.2-2'}}</strong>
+                </h5>
+                <div id="myOffer-collapseOne" class="accordion-collapse collapse" aria-labelledby="myOffer-headingOne"
+                    data-parent="#myOfferAccordion">
+                    <div class="accordion-body  d-flex px-0  w-100">
+                        <div class="d-flex flex-column col">
+                            <div>
+                                <label for="noOfMonths" class="form-label"># of
+                                    Months</label>
+
+                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control"
+                                    aria-label="# of Months" [(ngModel)]="basicCashFlow.noOfMonths" id="noOfMonths"
+                                    name="noOfMonths">
+                            </div>
+
+                        </div>
+                        <div class="d-flex flex-column col">
+                            <div>
+
+                                <label for="expectedOutputDecline" class="form-label">Exp. Decline[%]
+                                </label>
+
+                                <input type="number" class="form-control" aria-label="Expected Output Decline(%)"
+                                    min="0" oninput="validity.valid||(value='');" [(ngModel)]="basicCashFlow.decline"
+                                    id="decline" name="decline">
+                            </div>
+
+                        </div>
+                        <div class="d-flex flex-column col">
+                            <div>
+                                <label for="oilPrice" class="form-label">Oil Price [BBL]
+                                </label>
+
+                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control"
+                                    aria-label="Oil Price" [(ngModel)]="basicCashFlow.oilPrice" id="oilPrice"
+                                    name="oilPrice">
+                            </div>
+
+                        </div>
+                        <div class="d-flex flex-column col">
+                            <div>
+
+                                <label for="gasPrice" class="form-label">Gas Price [MCF]
+                                </label>
+
+                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control"
+                                    aria-label="Gas Price" [(ngModel)]="basicCashFlow.gasPrice" id="gasPrice"
+                                    name="gasPrice">
+
+                            </div>
+
+                        </div>
+
+                        <div class=" m-auto col pt-3">
+                            <span for="default"
+                                class="form-label d-inline-block text-primary pe-auto border-bottom border-primary">
+                                Save as Default
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col">
+            <span for="recalculate" class="form-label d-inline-block text-primary pe-auto border-bottom border-primary">
+                Re/Calculate
+            </span>
+        </div>
+
+    </div>
+</div>

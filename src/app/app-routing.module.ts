@@ -18,7 +18,7 @@ const routes: Routes = [
 
   { path: "", component: LoginComponent },
   { path: "market-place", component: MarketPlaceComponent, canActivate: [AuthGuard] },
-  { path: "my-bids", component: MyBidsComponent, canActivate: [AuthGuard] },
+  { path: "my-offers", component: MyBidsComponent, canActivate: [AuthGuard] },
   { path: "buyer-transactions", component: BuyerTransactionsComponent, canActivate: [AuthGuard] },
   { path: "buyer-notifications", component: BuyerNotificationsComponent, canActivate: [AuthGuard] },
   { path: "my-listing", component: MyListingComponent, canActivate: [AuthGuard] },

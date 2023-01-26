@@ -6,7 +6,7 @@
             <ol class="breadcrumb breadcrumb-link">
                 <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
                 <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/my-bids']">My Offers</a>
+                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/my-offers']">My Offers</a>
                 </li>
             </ol>
         </nav>
@@ -19,9 +19,11 @@
                 <option *ngFor="let list of offersFilterOptions" [value]="list.value"> {{list.label}}</option>
             </select>
         </div>
-        <div>
-            <select class="form-select form-select fw-bold " [(ngModel)]="offerStatus">
-                <option *ngFor="let list of offersFilterOptions" [value]="list.value"> {{list.label}}</option>
+        <div *ngIf="offerStatus == 'All Active Listings'">
+            <select class="form-select form-select fw-bold " [(ngModel)]="filterByProject" (change)="handleChange()">
+                <option value="" disabled selected hidden>Filter by Project</option>
+                <option *ngFor="let list of offersFilterOptions" [ngValue]="list.value"> {{list.label}}</option>
+
             </select>
         </div>
 
@@ -30,68 +32,141 @@
     <table class="table">
         <thead>
             <tr>
-                <th *ngFor="let item of offersColumns;" class="text-secondary">{{item}}</th>
-            </tr>
-        </thead>
-        <tbody class="my-listing-table-body">
-            <ng-container>
-
-                <!-- <tr *ngFor="let list of myListings | paginate
+                <th *ngFor="let item of offersColumns| paginate
                 : {
                     itemsPerPage: tableSize,
                     currentPage: page,
                     totalItems: count
                   };
-            let i = index">
-                    <td> <span class="listing-td pe-auto" title="Edit List"></span>
-                    </td>
-                    <td></td>
+            let i = index" class="text-secondary " [ngClass]="{'text-end': i > 0 }">{{item}}</th>
+            </tr>
+        </thead>
+        <tbody class="my-listing-table-body" id="accordion">
+            <ng-container>
+                <tr class="text-end text-secondary">
+                    <td class="text-start">Seller / <span class="pe-auto offer-td">Project</span></td>
+                    <td class=""> {{"2023-02-22T00:00" | date:'d MMM, y'}}</td>
                     <td>
-                        <span class="listing-td pe-auto"></span>
+                        1
                     </td>
-                    <td> <span class=" float-end"></span></td>
-                    <td> <span class=" float-end"></span></td>
-                    <td><span class=" float-end"></span></td>
-                    <td> <span class="listing-td pe-auto float-end"></span></td>
-
-                </tr> -->
-                <tr>
-                    <td> <span class="text-secondary" title="Edit List">seller / project</span>
+                    <td>{{12122 |
+                        currency:'':'':'4.2-2'}}</td>
+                    <td>{{12122 |
+                        currency:'':'':'4.2-2'}}</td>
+                    <td>2</td>
+                    <td>{{12122 |
+                        currency:'':'':'4.2-2'}}</td>
+                    <td id="heading1">
+                        <span data-toggle="collapse" data-target="#collapse1" aria-expanded="false"
+                            aria-controls="collapse1" class="offer-td collapsed pe-auto" title="Offer details">
+                            {{12122 |
+                            currency:'':'':'4.2-2'}}
+                        </span>
                     </td>
-                    <td class="text-secondary"> 20-01-2023</td>
-                    <td class="text-secondary">
-                        121200
-                    </td>
-                    <td> <span class="text-secondary">232333</span></td>
-                    <td> <span class="text-secondary">2</span></td>
-                    <td><span class=" text-secondary">121212</span></td>
-                    <td> <span class="text-secondary">12121212</span></td>
-                    <td> <span class="text-secondary">12121212</span></td>
 
 
                 </tr>
-                <tr>
-                    <td> <span class="text-secondary" title="Edit List">seller / project</span>
+                <tr id="collapse1" class=" collapse fade" aria-labelledby="heading1" data-parent="#accordion">
+                    <td colspan="8">
+
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="myTab1" role="tablist">
+                                <li class="nav-item my-listing-item" role="presentation">
+                                    <button class="nav-link active " id="listingDetails-tab1" data-bs-toggle="tab"
+                                        data-bs-target="#listingDetails1" type="button" role="tab"
+                                        aria-controls="listingDetails1" aria-selected="true">Listing Details</button>
+                                </li>
+                                <li class="nav-item my-listing-item" role="presentation">
+                                    <button class="nav-link " id="myOffers-tab1" data-bs-toggle="tab"
+                                        data-bs-target="#myOffers1" type="button" role="tab" aria-controls="myOffers1"
+                                        aria-selected="false">My Offer
+                                    </button>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" id="myTab1Content">
+                                <div class="tab-pane fade show active " id="listingDetails1" role="tabpanel"
+                                    aria-labelledby="listingDetails-tab1">
+
+                                    <app-listing-details></app-listing-details>
+                                </div>
+                                <div class="tab-pane fade" id="myOffers1" role="tabpanel"
+                                    aria-labelledby="myOffers-tab1">
+                                    <app-my-offers></app-my-offers>
+                                </div>
+
+
+                            </div>
+                        </div>
                     </td>
-                    <td class="text-secondary"> 20-01-2023</td>
-                    <td class="text-secondary">
-                        121200
+                </tr>
+
+                <tr class="text-end text-secondary">
+                    <td class="text-start">Seller / <span class="pe-auto offer-td">Project</span></td>
+                    <td class=""> {{"2023-02-22T00:00" | date:'d MMM, y'}}</td>
+                    <td>
+                        1
                     </td>
-                    <td> <span class="text-secondary">232333</span></td>
-                    <td> <span class="text-secondary">2</span></td>
-                    <td><span class=" text-secondary">121212</span></td>
-                    <td> <span class="text-secondary">12121212</span></td>
-                    <td> <span class="text-secondary">12121212</span></td>
+                    <td>{{12122 |
+                        currency:'':'':'4.2-2'}}</td>
+                    <td>{{12122 |
+                        currency:'':'':'4.2-2'}}</td>
+                    <td>2</td>
+                    <td>{{12122 |
+                        currency:'':'':'4.2-2'}}</td>
+                    <td id="heading2">
+                        <span data-toggle="collapse" data-target="#collapse2" aria-expanded="false"
+                            aria-controls="collapse2" class="offer-td collapsed pe-auto" title="Offer details">
+                            {{12122 |
+                            currency:'':'':'4.2-2'}}
+                        </span>
+                    </td>
 
 
                 </tr>
+                <tr id="collapse2" class=" collapse fade" aria-labelledby="heading2" data-parent="#accordion">
+                    <td colspan="8">
 
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                                <li class="nav-item my-listing-item" role="presentation">
+                                    <button class="nav-link active " id="listingDetails-tab2" data-bs-toggle="tab"
+                                        data-bs-target="#listingDetails2" type="button" role="tab"
+                                        aria-controls="listingDetails2" aria-selected="true">Listing Details</button>
+                                </li>
+                                <li class="nav-item my-listing-item" role="presentation">
+                                    <button class="nav-link " id="myOffers-tab2" data-bs-toggle="tab"
+                                        data-bs-target="#myOffers2" type="button" role="tab" aria-controls="myOffers2"
+                                        aria-selected="false">My Offer
+                                    </button>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" id="myTab2Content">
+                                <div class="tab-pane fade show active " id="listingDetails2" role="tabpanel"
+                                    aria-labelledby="listingDetails-tab2">
+
+                                    <app-listing-details></app-listing-details>
+                                </div>
+                                <div class="tab-pane fade" id="myOffers2" role="tabpanel"
+                                    aria-labelledby="myOffers-tab2">
+                                    <app-my-offers></app-my-offers>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
             </ng-container>
-
-
 
         </tbody>
     </table>
-
+    <div class="d-flex justify-content-center">
+        <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+        </pagination-controls>
+    </div>
 
 </div>

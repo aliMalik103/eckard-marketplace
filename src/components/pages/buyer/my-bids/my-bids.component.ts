@@ -10,6 +10,13 @@ import { LoginService } from 'src/components/services/login.service';
 export class MyBidsComponent implements OnInit {
 
   offerStatus: string = 'My Offers';
+  filterByProject: string = ''
+
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 50;
+  tableSizes: any = [3, 6, 9, 12];
+
 
   offersFilterOptions: any = [
     {
@@ -49,6 +56,19 @@ export class MyBidsComponent implements OnInit {
       return
 
     }
+  }
+
+  handleChange() {
+    console.log(this.filterByProject)
+  }
+
+  onTableDataChange(event: any) {
+    this.page = event;
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
   }
 
 }

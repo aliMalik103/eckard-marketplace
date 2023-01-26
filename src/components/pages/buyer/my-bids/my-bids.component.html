@@ -71,36 +71,36 @@
                         </span>
                     </td>
 
-
                 </tr>
                 <tr id="collapse{{i}}" class=" collapse fade" [attr.aria-labelledby]="'heading'+i"
                     data-parent="#accordion">
                     <td colspan="8">
 
                         <div class="card-body">
-                            <ul class="nav nav-tabs" id="myTab1" role="tablist">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item my-listing-item" role="presentation">
-                                    <button class="nav-link active " id="listingDetails-tab1" data-bs-toggle="tab"
-                                        data-bs-target="#listingDetails1" type="button" role="tab"
-                                        aria-controls="listingDetails1" aria-selected="true">Listing Details</button>
+                                    <button class="nav-link active " id="listingDetails-tab{{i}}" data-bs-toggle="tab"
+                                        [attr.data-bs-target]="'#listingDetails'+i" type="button" role="tab"
+                                        [attr.aria-controls]="'listingDetails'+i" aria-selected="true">Listing
+                                        Details</button>
                                 </li>
                                 <li class="nav-item my-listing-item" role="presentation">
-                                    <button class="nav-link " id="myOffers-tab1" data-bs-toggle="tab"
-                                        data-bs-target="#myOffers1" type="button" role="tab" aria-controls="myOffers1"
-                                        aria-selected="false">My Offer
+                                    <button class="nav-link " id="myOffers-tab{{i}}" data-bs-toggle="tab"
+                                        [attr.data-bs-target]="'#myOffers'+i" type="button" role="tab"
+                                        [attr.aria-controls]="'myOffers'+i" aria-selected="false">My Offer
                                     </button>
                                 </li>
 
                             </ul>
 
-                            <div class="tab-content" id="myTab1Content">
-                                <div class="tab-pane fade show active " id="listingDetails1" role="tabpanel"
-                                    aria-labelledby="listingDetails-tab1">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active " id="listingDetails{{i}}" role="tabpanel"
+                                    [attr.aria-labelledby]="'listingDetails-tab'+i">
 
                                     <app-listing-details></app-listing-details>
                                 </div>
-                                <div class="tab-pane fade" id="myOffers1" role="tabpanel"
-                                    aria-labelledby="myOffers-tab1">
+                                <div class="tab-pane fade" id="myOffers{{i}}" role="tabpanel"
+                                    [attr.aria-labelledby]="'myOffers-tab'+i">
                                     <app-my-offers></app-my-offers>
                                 </div>
 

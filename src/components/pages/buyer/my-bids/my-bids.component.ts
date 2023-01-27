@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MyOffers } from 'src/components/model/my-offer';
 import { LoginService } from 'src/components/services/login.service';
 import { MyOffersService } from 'src/components/services/my-offers.service';
+import { AddNewListingService } from '../../seller/my-listing/add-new-listing/add-new-listing.service';
 
 @Component({
   selector: 'app-my-bids',
@@ -11,7 +12,7 @@ import { MyOffersService } from 'src/components/services/my-offers.service';
 })
 export class MyBidsComponent implements OnInit {
 
-  offerStatus: string = 'My Offers';
+  offerStatus: string = 'all';
   filterByProject: string = ''
   type = 'Silent- Minimum Ask'
 
@@ -19,114 +20,40 @@ export class MyBidsComponent implements OnInit {
   count: number = 0;
   tableSize: number = 50;
   tableSizes: any = [3, 6, 9, 12];
-  testMyOffer = [
-    {
-      "listingId": 8,
-      "listingName": "test ali1.5",
-      "auctionEnd": "2023-02-21T00:00:00Z",
-      "offerAmount": 23999,
-      "accountName": "Tom Tester - individual",
-      "projectId": "ELA Mobley",
-      "status": "Active",
-      "contact_id": 1,
-      "listedNMA": 1.5,
-      "minimumAsk": 9750.0,
-      "highestBid": 540000,
-      "noOfBids": 0,
-      "auctionType": "Public - Minimum Ask",
-      "buyNowPrice": null,
-      "isHighestOffer": false
-    },
-    {
-      "listingId": 6,
-      "listingName": "TEST - Mobley",
-      "auctionEnd": "2023-01-26T20:47:00Z",
-      "offerAmount": null,
-      "accountName": "Tom Tester - individual",
-      "projectId": "ELA Mobley",
-      "status": "Active",
-      "contact_id": 1,
-      "listedNMA": 1.10068,
-      "minimumAsk": 9000.0,
-      "highestBid": null,
-      "noOfBids": 0,
-      "auctionType": "Public - Minimum Ask",
-      "buyNowPrice": null,
-      "isHighestOffer": false
-    },
-    {
-      "listingId": 5,
-      "listingName": "test Ali",
-      "auctionEnd": "2023-01-27T17:54:00Z",
-      "offerAmount": null,
-      "accountName": "Tom Tester - individual",
-      "projectId": "ELA Mobley",
-      "status": "Active",
-      "contact_id": 1,
-      "listedNMA": 0.8,
-      "minimumAsk": 234444.0,
-      "highestBid": null,
-      "noOfBids": 0,
-      "auctionType": "Public - Minimum Ask",
-      "buyNowPrice": null,
-      "isHighestOffer": false
-    },
-    {
-      "listingId": 4,
-      "listingName": "Partial Liquidation Jan 2023 - Silent Make Me an Offer",
-      "auctionEnd": "2023-01-29T00:00:00Z",
-      "offerAmount": 25000.0,
-      "accountName": "Tom Tester - individual",
-      "projectId": "ELA Miller",
-      "status": "Active",
-      "contact_id": 1,
-      "listedNMA": 2.725,
-      "minimumAsk": 24950.0,
-      "highestBid": 27000.0,
-      "noOfBids": 2,
-      "auctionType": "Silent - Buy Immediately or Make Me an Offer",
-      "buyNowPrice": null,
-      "isHighestOffer": false
-    },
-    {
-      "listingId": 2,
-      "listingName": "Partial Liquidation Jan 2023 - Direct Sale",
-      "auctionEnd": "2023-01-29T00:00:00Z",
-      "offerAmount": 31000.0,
-      "accountName": "Tom Tester - individual",
-      "projectId": "ELA Mobley",
-      "status": "Active",
-      "contact_id": 1,
-      "listedNMA": 2.5,
-      "minimumAsk": 29950.0,
-      "highestBid": 31000.0,
-      "noOfBids": 1,
-      "auctionType": "Direct Sale",
-      "buyNowPrice": null,
-      "isHighestOffer": true
-    }
-  ]
+  testMyOffer = []
   myOffers!: MyOffers[];
+  copymyOffers!: MyOffers[];
+  constraintOptions!: any[]
+  listDetails!: any
 
+  newOffer: any = {
+    id: null,
+    account: null,
+    status: null,
+    constraints: [],
+    comments: "",
+    offerAmount: 0
+  }
 
   offersFilterOptions: any = [
     {
-      value: "My Offers",
+      value: "all",
       label: "My Offers"
     },
     {
-      value: "All Active Listings",
+      value: "Active",
       label: "All Active Listings"
     },
-    {
-      value: "Pending/Escrow",
-      label: "Pending/Escrow"
-    },
-    {
-      value: "Closed Transactions",
-      label: "Closed Transactions"
-    },
+    // {
+    //   value: "Pending/Escrow",
+    //   label: "Pending/Escrow"
+    // },
+    // {
+    //   value: "Closed Transactions",
+    //   label: "Closed Transactions"
+    // },
   ]
+  allActiveProjects: any = []
   offersColumns: Array<String> = [
     "Seller / Project",
     "Auction End",
@@ -137,7 +64,8 @@ export class MyBidsComponent implements OnInit {
     "Highest Offer",
     "My Offer"
   ]
-  constructor(private router: Router, private loginService: LoginService, private myOffersService: MyOffersService) {
+  constructor(private router: Router, private loginService: LoginService,
+    private myOffersService: MyOffersService, private addNewListingService: AddNewListingService) {
 
   }
 
@@ -147,20 +75,23 @@ export class MyBidsComponent implements OnInit {
       return
 
     }
+    this.getAllMyOffers()
+    this.handleConstraint()
   }
 
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
         this.myOffers = response
-        console.log("my offers", response)
+        this.copymyOffers = response
+        this.handleFilterList()
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));
   }
 
   handleChange() {
-    console.log(this.filterByProject)
+    this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale' && item.projectId == this.filterByProject)
   }
 
   onTableDataChange(event: any) {
@@ -170,6 +101,85 @@ export class MyBidsComponent implements OnInit {
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
+  }
+
+  handleLength(array: any) {
+    if (array) {
+      return true
+    }
+    return false
+  }
+
+  handleFilterList() {
+    this.filterByProject = ''
+    this.allActiveProjects = []
+    switch (this.offerStatus) {
+      case 'all':
+        this.myOffers = this.copymyOffers
+        break;
+      case 'Active':
+        this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale')
+        this.allActiveProjects = this.myOffers.reduce((acc: any, offer: any) => {
+          if (!acc.includes(offer.projectId)) {
+            acc.push(offer.projectId)
+          }
+          return acc
+        }, []);
+        break;
+
+      default:
+        return
+    }
+  }
+
+  handleConstraint() {
+
+    this.addNewListingService.handleConstraint().subscribe(
+      (response) => {
+        this.constraintOptions = response?.map(item => {
+          return { ...item, isChecked: false };
+        });
+
+      },
+      (error: any) => {
+
+        console.log("Error getting listing Constraint", error)
+      },
+      () => console.log("Done getting listing Constraint"));
+  }
+
+
+  handleListDetails(id: number, offerId: any) {
+
+    this.myOffersService.getListDetails(id).subscribe(
+      (response) => {
+        this.listDetails = response
+      },
+      (error: any) => {
+
+        console.log("Error getting listing Constraint", error)
+      },
+      () => console.log("Done getting listing Constraint"));
+
+    if (offerId) {
+      this.myOffersService.getofferDetails(id).subscribe(
+        (response) => {
+          this.newOffer = response
+          this.constraintOptions = this.constraintOptions.map((obj: any) => {
+            return {
+              id: obj.id,
+              constraint: obj.constraint,
+              isChecked: this.newOffer.constraints.some((item: any) => item.id === obj.id)
+            }
+          });
+
+        },
+        (error: any) => {
+
+          console.log("Error getting listing Constraint", error)
+        },
+        () => console.log("Done getting listing Constraint"));
+    }
   }
 
 }

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { LoginService } from '../services/login.service';
+import { MyOffersService } from '../services/my-offers.service';
 import { MarketPlaceComponent } from './market-place.component';
 
 @NgModule({
@@ -14,7 +15,7 @@ import { MarketPlaceComponent } from './market-place.component';
         FormsModule,
         CommonModule
     ],
-    providers: [LoginService],
+    providers: [LoginService, MyOffersService],
     exports: [MarketPlaceComponent]
 })
 export class MarketPlaceModule { }

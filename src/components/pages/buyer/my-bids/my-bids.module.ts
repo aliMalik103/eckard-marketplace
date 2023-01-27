@@ -8,6 +8,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ListingDetailsComponent } from './listing-details/listing-details.component';
 import { MyOffersComponent } from './my-offers/my-offers.component';
 import { MyOffersService } from 'src/components/services/my-offers.service';
+import { AddNewListingService } from '../../seller/my-listing/add-new-listing/add-new-listing.service';
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { MyOffersService } from 'src/components/services/my-offers.service';
     NgxPaginationModule
 
   ],
-  providers: [MyOffersService],
+  providers: [MyOffersService,AddNewListingService],
   exports: [MyBidsComponent]
 })
 export class MyBidsModule { }

@@ -1,8 +1,9 @@
-import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { ListingCost, Account, MyListing, Tract, IncomListing, CashConfig } from 'src/components/model/my-listings';
+import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter, OnInit } from '@angular/core';
+import { ListingCost, Account, MyListing, Tract, IncomListing, CashConfig, Project } from 'src/components/model/my-listings';
 import { AddNewListingService } from '../add-new-listing.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { ToastrService } from 'ngx-toastr';
+import { LoginService } from 'src/components/services/login.service';
 
 
 
@@ -12,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./listing-details-tab.component.css'],
 
 })
-export class ListingDetailsTabComponent implements OnChanges {
+export class ListingDetailsTabComponent implements OnInit, OnChanges {
 
   @Input() accountsOptions!: Account[]
   @Input() createNewListing!: MyListing
@@ -21,13 +22,12 @@ export class ListingDetailsTabComponent implements OnChanges {
   @Input() isListEdit!: boolean
   @Output() isValidNMA = new EventEmitter()
 
-  projectsOptions!: any[]
+  projectsOptions: Project[] = []
   incomeListing!: IncomListing
   listingCost!: ListingCost
   cashFlow!: any
   calculateTotalCashFlow: any = 0
   isRecalculate: boolean = false
-
 
 
   basicCashFlow: CashConfig = {
@@ -37,7 +37,8 @@ export class ListingDetailsTabComponent implements OnChanges {
     noOfMonths: 0,
     decline: 0,
     gasPrice: 0,
-    oilPrice: 0
+    oilPrice: 0,
+    contact: null
   }
 
   listingColumns: Array<string> = [
@@ -52,16 +53,18 @@ export class ListingDetailsTabComponent implements OnChanges {
     '',
     'Listed Inc.'
   ]
-  constructor(private addNewListingService: AddNewListingService, private myListingsService: MyListingsService, private toastr: ToastrService,) {
-
+  constructor(private addNewListingService: AddNewListingService,
+    private myListingsService: MyListingsService, private toastr: ToastrService,
+    private loginService: LoginService) {
   }
-
+  ngOnInit(): void {
+    if (this.createNewListing?.account) {
+      this.handleUserProject(this.createNewListing.account)
+    }
+  }
   ngOnChanges(): void {
     if (this.accountsOptions?.length == 1) {
       this.handleUserProject(this.accountsOptions[0].id)
-    }
-    if (this.createNewListing?.account) {
-      this.handleUserProject(this.createNewListing.account)
     }
 
   }
@@ -88,7 +91,6 @@ export class ListingDetailsTabComponent implements OnChanges {
       default:
         return
     }
-    console.log(this.createNewListing)
   }
 
   handleUserProject(id: number) {
@@ -96,30 +98,26 @@ export class ListingDetailsTabComponent implements OnChanges {
     this.myListingsService.handleGetProjects(id).subscribe(
       (response) => {
         if (response.length == 0) {
+          this.toastr.info('No projects associated with this account')
           this.createNewListing.project = ''
           this.myListingsService.userAccountsAndProjects = []
           this.projectsOptions = []
         }
         else {
-
           const uniqueProjects = response?.reduce((acc: any, current: any) => {
             const x = acc.find((item: any) => item.project.id === current.project.id && item.project.projectId === current.project.projectId);
             if (!x) {
               return [...acc, current];
             } else {
-              x.project.totalNma = (parseFloat(x.project.totalNma) + parseFloat(current.project.totalNma)).toFixed(2).toString();
-              x.acquiredNma = (parseFloat(x.acquiredNma) + parseFloat(current.acquiredNma)).toFixed(2).toString();
-              x.project.totalRevenue = (parseFloat(x.project.totalRevenue) + parseFloat(current.project.totalRevenue)).toFixed(2).toString();
               return acc;
             }
           }, []);
 
 
           this.myListingsService.userAccountsAndProjects = uniqueProjects
-          this.projectsOptions = uniqueProjects;
-
+          this.projectsOptions = uniqueProjects.map((item: any) => item.project);
           if (this.projectsOptions.length === 1) {
-            this.createNewListing.project = this.projectsOptions[0].project.id;
+            this.createNewListing.project = this.projectsOptions[0].id;
             this.handleFindTotalNMA()
           }
           else {
@@ -211,12 +209,13 @@ export class ListingDetailsTabComponent implements OnChanges {
   }
 
   handleGetCashConfig() {
-    this.myListingsService.handleGetCashConfig(this.createNewListing.account, this.createNewListing.project).subscribe(
+    this.myListingsService.handleGetCashConfig(this.createNewListing.account, this.createNewListing.project, this.loginService.user.id).subscribe(
       (response: any) => {
         if (response.length > 0) {
           this.basicCashFlow.id = response[0].id
           this.basicCashFlow.account = response[0].account.id
           this.basicCashFlow.project = response[0].project.id
+          this.basicCashFlow.contact = response[0].contact.id
           this.basicCashFlow.decline = response[0].decline
           this.basicCashFlow.gasPrice = response[0].gasPrice
           this.basicCashFlow.oilPrice = response[0].oilPrice
@@ -226,6 +225,7 @@ export class ListingDetailsTabComponent implements OnChanges {
           this.basicCashFlow.id = null
           this.basicCashFlow.account = null
           this.basicCashFlow.project = null
+          this.basicCashFlow.contact = null
           this.basicCashFlow.decline = 0
           this.basicCashFlow.gasPrice = 0
           this.basicCashFlow.oilPrice = 0
@@ -242,6 +242,7 @@ export class ListingDetailsTabComponent implements OnChanges {
   handleSaveAsDefault(value: any) {
     value.account = this.createNewListing.account
     value.project = this.createNewListing.project
+    value.contact = this.loginService.user.id
     if (value.id) {
       this.handleUpdateCashConfig(value)
     }
@@ -286,24 +287,9 @@ export class ListingDetailsTabComponent implements OnChanges {
     )
   }
 
-
   handleCalculateCashFlow() {
     this.isRecalculate = true
-    let gasArray = 0;
-    let oilArray = 0;
-
-    for (let i = 1; i <= this.basicCashFlow.noOfMonths; i++) {
-      gasArray += this.cashFlow.gas * (1 - (this.basicCashFlow.decline * i) / 100);
-      oilArray += this.cashFlow.oil * (1 - (this.basicCashFlow.decline * i) / 100);
-    }
-
-    gasArray *= this.basicCashFlow.gasPrice;
-    oilArray *= this.basicCashFlow.oilPrice;
-    gasArray /= this.cashFlow.totalProjectNma;
-    oilArray /= this.cashFlow.totalProjectNma;
-
-    let totalCashFlow = gasArray + oilArray;
-    this.calculateTotalCashFlow = totalCashFlow * this.createNewListing.nma;
+    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.basicCashFlow, this.cashFlow, this.createNewListing);
   }
 
 

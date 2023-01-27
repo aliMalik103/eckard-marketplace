@@ -2,16 +2,18 @@ export interface MyOffers {
     listingId: number
     listingName: string
     auctionEnd: string
-    offerAmount: any
+    offerAmount: number
+    offer_id: number
     accountName: string
+    acccount_id: number
     projectId: string
+    project_id: number
     status: string
-    contact_id: number
     listedNMA: number
     minimumAsk: number
-    highestBid: any
+    highestBid: number
     noOfBids: number
     auctionType: string
     buyNowPrice: any
-    isHighestOffer: string
+    isHighestOffer: boolean
 }

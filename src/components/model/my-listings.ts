@@ -138,4 +138,5 @@ export interface CashConfig {
     decline: any,
     gasPrice: any,
     oilPrice: any
+    contact:any
 }

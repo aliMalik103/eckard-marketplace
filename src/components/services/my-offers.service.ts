@@ -16,4 +16,12 @@ export class MyOffersService {
     const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/contact/${id}`)
     return res;
   }
+  getListDetails(id: number) {
+    const res = this.http.get(`${environment.API_BASE_URL}/listing/${id}`)
+    return res;
+  }
+  getofferDetails(id: number) {
+    const res = this.http.get(`${environment.API_BASE_URL}/offer/${id}`)
+    return res;
+  }
 }

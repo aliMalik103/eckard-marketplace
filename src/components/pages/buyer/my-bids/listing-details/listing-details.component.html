@@ -1,45 +1,51 @@
-<div class="row mt-4">
-    <div class="col-md-4 col-sm-12">
-        <label for="listednma" class="form-label fw-bold">Listed NMA: <small
-                class=" px-2 text-muted">2.43434</small></label>
+<ng-container *ngIf="listDetails">
+    <div class="row mt-4">
+        <div class="col-md-4 col-sm-12">
+            <label for="listednma" class="form-label fw-bold">Listed NMA: <small
+                    class=" px-2 text-muted">{{listDetails.nma}}</small></label>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <label for="minimumAsk" class="form-label fw-bold">Minimum Ask: <small
+                    class="text-muted px-2">{{listDetails.minimumAsk |
+                    currency:'':'':'.2-2'}} ({{listDetails.minimumAsk / listDetails.nma |
+                    currency:'':'':'.2-2'}}/NMA)</small></label>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <label for="buynow" class="form-label fw-bold">Buy Now: <small
+                    class=" px-2 text-muted">{{listDetails.buyNowPrice |
+                    currency:'':'':'.2-2'}} ({{listDetails.buyNowPrice / listDetails.nma |
+                    currency:'':'':'.2-2'}}/NMA)</small></label>
+        </div>
+    </div>
+    <div class="mt-3 row">
+        <label for="Constraints" class="form-label fw-bold">Constraints / Contingencies</label>
+        <div class="p-0">
+            <ng-container *ngIf="listDetails.constraints.length > 0; else elseBlock">
+                <ul>
+                    <li *ngFor="let item of listDetails.constraints">
+                        {{item.constraint}}
+
+                    </li>
+                </ul>
+            </ng-container>
+            <ng-template #elseBlock>
+                <ul>
+                    <li>
+                        No constraints / contingencies
+
+                    </li>
+                </ul>
+            </ng-template>
+
+        </div>
+    </div>
+    <div class="mt-3 row">
+        <label for="comments" class="form-label fw-bold">Comments</label>
+        <p>{{listDetails.comments}}</p>
+
+
     </div>
 
-    <div class="col-md-4 col-sm-12">
-        <label for="minimumAsk" class="form-label fw-bold">Minimum Ask: <small
-                class="text-muted px-2">243434(12121212/NMA)</small></label>
-    </div>
-
-    <div class="col-md-4 col-sm-12">
-        <label for="buynow" class="form-label fw-bold">Buy Now: <small class=" px-2 text-muted">243434
-                (12121212/NMA)</small></label>
-    </div>
-</div>
-<div class="mt-3 row">
-    <label for="Constraints" class="form-label fw-bold">Constraints / Contingencies</label>
-    <div class="p-0">
-
-        <!-- <div class="form-check" *ngFor="let item of constraintOptions">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
-                [name]="item.constraint" [id]="'constraint'+item.id" [disabled]="!isListDraft">
-            <label class="form-check-label" [for]="'constraint'+item.id">
-                {{item.constraint}}
-            </label>
-        </div> -->
-        <ul>
-            <li>
-                No 1031 Exchange
-
-            </li>
-            <li>
-                No Self-Directed Accounts with 3rd Party Custodian
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="mt-3 row">
-    <label for="comments" class="form-label fw-bold">Comments</label>
-    <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-        featured content or information.</p>
-
-
-</div>
+</ng-container>

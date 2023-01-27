@@ -119,8 +119,8 @@ export class MyListingsService {
     return res;
   }
 
-  handleGetCashConfig(accountId: number, projectId: number) {
-    const res = this.http.get(`${environment.API_BASE_URL}/cash_config/account/${accountId}/project/${projectId}`)
+  handleGetCashConfig(accountId: number, projectId: number, contactId: number) {
+    const res = this.http.get(`${environment.API_BASE_URL}/cash_config/account/${accountId}/project/${projectId}/contact/${contactId}`)
     return res;
   }
 
@@ -133,6 +133,24 @@ export class MyListingsService {
     console.log(body)
     const res = this.http.patch(`${environment.API_BASE_URL}/cash_config/${body.id}`, body)
     return res;
+  }
+
+  handleCalculateCashFlow(basicCashFlow: any, cashFlow: any, createNewListing: any) {
+    let gasArray = 0;
+    let oilArray = 0;
+
+    for (let i = 1; i <= basicCashFlow.noOfMonths; i++) {
+      gasArray += cashFlow.gas * (1 - (basicCashFlow.decline * i) / 100);
+      oilArray += cashFlow.oil * (1 - (basicCashFlow.decline * i) / 100);
+    }
+
+    gasArray *= basicCashFlow.gasPrice;
+    oilArray *= basicCashFlow.oilPrice;
+    gasArray /= cashFlow.totalProjectNma;
+    oilArray /= cashFlow.totalProjectNma;
+
+    let totalCashFlow = gasArray + oilArray;
+    return totalCashFlow * createNewListing.nma;
   }
 
 }

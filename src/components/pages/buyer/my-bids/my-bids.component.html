@@ -15,14 +15,14 @@
 
     <div class="d-flex gap-3 mt-4 mb-3">
         <div>
-            <select class="form-select form-select fw-bold " [(ngModel)]="offerStatus">
+            <select class="form-select form-select fw-bold " [(ngModel)]="offerStatus" (change)="handleFilterList()">
                 <option *ngFor="let list of offersFilterOptions" [value]="list.value"> {{list.label}}</option>
             </select>
         </div>
-        <div *ngIf="offerStatus == 'All Active Listings'">
+        <div *ngIf="offerStatus == 'Active' && allActiveProjects">
             <select class="form-select form-select fw-bold " [(ngModel)]="filterByProject" (change)="handleChange()">
                 <option value="" disabled selected hidden>Filter by Project</option>
-                <option *ngFor="let list of offersFilterOptions" [ngValue]="list.value"> {{list.label}}</option>
+                <option *ngFor="let project of allActiveProjects" [ngValue]="project"> {{project}}</option>
 
             </select>
         </div>
@@ -37,7 +37,7 @@
             </tr>
         </thead>
         <tbody class="my-listing-table-body" id="accordion">
-            <ng-container *ngFor=" let offer of testMyOffer | paginate
+            <ng-container *ngFor=" let offer of myOffers | paginate
             : {
                 itemsPerPage: tableSize,
                 currentPage: page,
@@ -51,10 +51,13 @@
                     <td>
                         {{offer.listedNMA}}
                     </td>
-                    <td>{{offer.auctionType == 'Fix Bid' ? 'N/A' :
+                    <td>{{(offer.auctionType == 'Fix Bid' &&
+                        !offer.auctionType.endsWith('- Buy Immediately or Make Me an Offer')) ? 'N/A' :
                         offer.minimumAsk |
                         currency:'':'':'4.2-2'}}</td>
-                    <td>{{ offer.auctionType != 'Fix Bid' ? "N/A" : offer.buyNowPrice |
+                    <td>{{ (offer.auctionType != 'Fix Bid' &&
+                        !offer.auctionType.endsWith('- Buy Immediately or Make Me an Offer')) ? "N/A" :
+                        offer.buyNowPrice |
                         currency:'':'':'4.2-2'}}</td>
                     <td>{{offer.noOfBids}}</td>
                     <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
@@ -64,7 +67,8 @@
                             [attr.aria-controls]="'collapse'+i" class="offer-td collapsed pe-auto" title="Offer details"
                             [ngClass]="{'highest-offer':(offer.isHighestOffer  &&
                             !offer.auctionType.startsWith('Silent -') && offer.offerAmount) , 'not-highest-offer' :
-                            (!offer.isHighestOffer && !offer.auctionType.startsWith('Silent -') && offer.offerAmount)  }">
+                            (!offer.isHighestOffer  && !offer.auctionType.startsWith('Silent -') && offer.offerAmount)  }"
+                            (click)="handleListDetails(offer.listingId , offer.offer_id)">
 
                             {{!offer.offerAmount ? 'make offer':offer.offerAmount |
                             currency:'':'':'4.2-2'}}
@@ -97,11 +101,14 @@
                                 <div class="tab-pane fade show active " id="listingDetails{{i}}" role="tabpanel"
                                     [attr.aria-labelledby]="'listingDetails-tab'+i">
 
-                                    <app-listing-details></app-listing-details>
+                                    <app-listing-details [listDetails]="listDetails">
+                                    </app-listing-details>
                                 </div>
                                 <div class="tab-pane fade" id="myOffers{{i}}" role="tabpanel"
                                     [attr.aria-labelledby]="'myOffers-tab'+i">
-                                    <app-my-offers></app-my-offers>
+                                    <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="newOffer"
+                                        [offer]="offer">
+                                    </app-my-offers>
                                 </div>
 
 
@@ -114,7 +121,8 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-center">
-        <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+        <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)"
+            *ngIf="handleLength(myOffers)">
         </pagination-controls>
     </div>
 

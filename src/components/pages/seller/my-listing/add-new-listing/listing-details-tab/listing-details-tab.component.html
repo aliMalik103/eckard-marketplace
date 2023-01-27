@@ -27,11 +27,11 @@
                 </div>
 
 
-                <select id="project" class="form-select" [(ngModel)]=" createNewListing.project"
+                <select id="project" class="form-select" [(ngModel)]="createNewListing.project"
                     (ngModelChange)="handleChange('project')" #project="ngModel"
                     [ngClass]="{'border border-danger':project.invalid && (project.dirty || project.touched)}" required
                     [disabled]="!isListDraft">
-                    <option *ngFor="let item of projectsOptions " [value]="item.project.id">{{item.project.projectId}}
+                    <option *ngFor="let item of projectsOptions " [value]="item.id">{{item.projectId}}
                     </option>
                 </select>
                 <span *ngIf="project.invalid && (project.dirty || project.touched ) &&  project.errors"

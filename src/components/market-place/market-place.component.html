@@ -30,7 +30,7 @@
                 <div class="pb-4">
                     <div class="mb-3" [ngClass]="{'isDisabled':!isActiveUser}">
                         <a class="marketplace-items " [routerLink]="['/my-offers']">My offers
-                        </a>(0)
+                        </a>({{totalMyOffers}})
                     </div>
                     <div class="mb-3">
                         <a class="marketplace-items" [routerLink]="['/buyer-transactions']">Pending/Closed Transactions

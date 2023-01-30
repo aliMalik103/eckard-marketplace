@@ -28,7 +28,8 @@ export class MyListingsService {
     minimumAsk: null,
     buyNowPrice: null,
     constraints: [],
-    offer: []
+    offer: [],
+    immediatePrice: null
   }
   isListEdit: boolean = false
   isListDraft: boolean = true
@@ -55,7 +56,9 @@ export class MyListingsService {
       minimumAsk: null,
       buyNowPrice: null,
       constraints: [],
-      offer: []
+      offer: [],
+      immediatePrice: null
+
     }
     this.isListEdit = false
     this.isListDraft = true;
@@ -119,8 +122,8 @@ export class MyListingsService {
     return res;
   }
 
-  handleGetCashConfig(accountId: number, projectId: number, contactId: number) {
-    const res = this.http.get(`${environment.API_BASE_URL}/cash_config/account/${accountId}/project/${projectId}/contact/${contactId}`)
+  handleGetCashConfig(contactId: number) {
+    const res = this.http.get(`${environment.API_BASE_URL}/cash_config/contact/${contactId}`)
     return res;
   }
 
@@ -135,22 +138,26 @@ export class MyListingsService {
     return res;
   }
 
-  handleCalculateCashFlow(basicCashFlow: any, cashFlow: any, createNewListing: any) {
+  handleCalculateCashFlow(basicCashFlow: any, cashFlow: any, listDetails: any) {
     let gasArray = 0;
     let oilArray = 0;
+    let currentGas = cashFlow.gas;
+    let currentOil = cashFlow.oil;
 
     for (let i = 1; i <= basicCashFlow.noOfMonths; i++) {
-      gasArray += cashFlow.gas * (1 - (basicCashFlow.decline * i) / 100);
-      oilArray += cashFlow.oil * (1 - (basicCashFlow.decline * i) / 100);
+      let gasDecline = currentGas * (basicCashFlow.decline / 100);
+      let oilDecline = currentOil * (basicCashFlow.decline / 100);
+      currentGas = currentGas - gasDecline;
+      currentOil = currentOil - oilDecline;
+      gasArray += currentGas;
+      oilArray += currentOil;
     }
 
     gasArray *= basicCashFlow.gasPrice;
     oilArray *= basicCashFlow.oilPrice;
     gasArray /= cashFlow.totalProjectNma;
     oilArray /= cashFlow.totalProjectNma;
-
-    let totalCashFlow = gasArray + oilArray;
-    return totalCashFlow * createNewListing.nma;
+    return (gasArray + oilArray) * listDetails.nma ? (gasArray + oilArray) * listDetails.nma : 0;
   }
 
 }

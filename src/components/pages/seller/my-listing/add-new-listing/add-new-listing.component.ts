@@ -41,8 +41,8 @@ export class AddNewListingComponent implements OnInit {
     minimumAsk: null,
     buyNowPrice: null,
     constraints: [],
-    offer: []
-
+    offer: [],
+    immediatePrice: null
   }
   isValidNma!: boolean
 
@@ -89,6 +89,9 @@ export class AddNewListingComponent implements OnInit {
 
   isValid(obj: any) {
     const requiredFields = ['listing_type', 'listingName', 'listingStart', 'auction_type', 'auctionEnd', 'account', 'project', 'nma', 'minimumAsk'];
+    if (obj.auction_type == 3 || obj.auction_type == 4) {
+      requiredFields.push('immediatePrice')
+    }
     const isValid = requiredFields.every(field => obj[field]);
 
     return isValid;

@@ -136,15 +136,16 @@
             <div class="mt-3 row ">
 
                 <div class=" col-md-6">
-                    <label for="minimumAsk" class="form-label">Minimum Asking Price <span
-                            class="text-danger">*</span></label>
+                    <label for="minimumAsk" class="form-label">{{createNewListing.auction_type == 5 ?
+                        'Fix Price' : 'Minimum Asking Price'}} <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" [(ngModel)]="createNewListing.minimumAsk"
                         (change)="handleChange('minimumAsk')" name="minimumAsk" id="minimumAsk" #minimumAsk="ngModel"
                         [ngClass]="{'border border-danger':minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched)}"
                         required [disabled]="!isListDraft">
                     <span *ngIf="minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched ) &&  minimumAsk.errors"
                         class="text-danger rounded px-4 error-message">
-                        Please enter minimum ask price
+                        {{createNewListing.auction_type == 5 ? 'Please enter Fix Price' :
+                        'Please enter Minimum Asking Price'}}
                     </span>
                 </div>
                 <div class="col-6 d-flex flex-column pt-4"
@@ -174,6 +175,57 @@
 
 
             </div>
+            <ng-container *ngIf="createNewListing.auction_type == 3 || createNewListing.auction_type == 4">
+                <div class="mt-3 row ">
+
+                    <div class=" col-md-6">
+                        <label for="Immediatly" class="form-label"> Buy Immediatly Price <span
+                                class="text-danger">*</span></label>
+                        <p class="font-italic"><small>Transaction will trigger immediatly if a Buyer offers the 'Buy
+                                Immediatly'
+                                price</small></p>
+                        <input type="number" class="form-control" [(ngModel)]="createNewListing.immediatePrice"
+                            (change)="handleChange('immediatePrice')" name="immediatePrice" id="immediatePrice"
+                            #immediatePrice="ngModel"
+                            [ngClass]="{'border border-danger':immediatePrice.invalid && (immediatePrice.dirty || immediatePrice.touched)}"
+                            required [disabled]="!isListDraft">
+                        <span
+                            *ngIf="immediatePrice.invalid && (immediatePrice.dirty || immediatePrice.touched ) &&  immediatePrice.errors"
+                            class="text-danger rounded px-4 error-message">
+
+                            Please enter Buy Immediatly Price
+                        </span>
+                    </div>
+                    <div class="col-6 d-flex flex-column pt-4 m-auto"
+                        *ngIf="listingCost && createNewListing.nma && createNewListing.minimumAsk">
+                        <div class="align-items-center text-secondary">
+                            <small>
+                                {{(createNewListing.immediatePrice/createNewListing.nma) |
+                                currency:'CAD':'symbol-narrow':'.2-2'}} per NMA</small>
+                        </div>
+                        <div class="align-items-center text-secondary">
+                            <small *ngIf="incomeListing">Profit on Exit:
+                                {{ (createNewListing.immediatePrice -
+                                (listingCost.costPerNma*createNewListing.nma)) |
+                                currency:'CAD':'symbol-narrow':'.2-2'}}, Total Profit:
+                                {{(((createNewListing.immediatePrice
+                                -
+                                (listingCost.costPerNma*createNewListing.nma)) +
+                                ((incomeListing.incomeToDate/incomeListing.totalNma)*createNewListing.nma))) |
+                                currency:'CAD':'symbol-narrow':'.2-2'}}
+                                ({{ ((((createNewListing.immediatePrice -
+                                (listingCost.costPerNma*createNewListing.nma)) +
+                                ((incomeListing.incomeToDate/incomeListing.totalNma)*createNewListing.nma)))/(listingCost.costPerNma*createNewListing.nma))
+                                | percent:'.2-2'}} ROI)
+                            </small>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+            </ng-container>
 
             <div class="mt-5 row">
                 <div class="col-12 p-0 d-flex">
@@ -183,7 +235,7 @@
                             <h5 class="accordion-header collapsed p-0 " id="listing-headingOne" data-toggle="collapse"
                                 data-target="#listing-collapseOne" aria-expanded="false"
                                 aria-controls="listing-collapseOne">
-                                Basic CashFlow Calculator
+                                Basic CashFlow Calculator <sup>(using an exponential decline curve)</sup>
 
                                 <strong class="small float-end fw-bold" *ngIf="isRecalculate">
                                     Est. CashFlow: {{calculateTotalCashFlow |
@@ -224,7 +276,6 @@
 
                                             <input type="number" class="form-control"
                                                 aria-label="Expected Output Decline(%)" min="0"
-                                                oninput="validity.valid||(value='');"
                                                 [(ngModel)]="basicCashFlow.decline" id="decline" name="decline">
                                         </div>
                                         <!-- <div class="d-flex justify-content-between mt-1 align-items-center">
@@ -241,8 +292,7 @@
                                             <label for="oilPrice" class="form-label">Oil Price [BBL]
                                             </label>
 
-                                            <input type="number" min="0" oninput="validity.valid||(value='');"
-                                                class="form-control" aria-label="Oil Price"
+                                            <input type="number" min="0" class="form-control" aria-label="Oil Price"
                                                 [(ngModel)]="basicCashFlow.oilPrice" id="oilPrice" name="oilPrice">
                                         </div>
                                         <!-- <div class="d-flex justify-content-between mt-1 align-items-center">
@@ -260,8 +310,7 @@
                                             <label for="gasPrice" class="form-label">Gas Price [MCF]
                                             </label>
 
-                                            <input type="number" min="0" oninput="validity.valid||(value='');"
-                                                class="form-control" aria-label="Gas Price"
+                                            <input type="number" min="0" class="form-control" aria-label="Gas Price"
                                                 [(ngModel)]="basicCashFlow.gasPrice" id="gasPrice" name="gasPrice">
 
                                         </div>

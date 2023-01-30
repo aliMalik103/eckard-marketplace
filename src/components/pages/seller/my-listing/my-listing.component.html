@@ -31,7 +31,8 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col" *ngFor="let item of listingsColumns;" class="text-secondary">{{item}}</th>
+                    <th scope="col" *ngFor="let item of listingsColumns;index as i" class="text-secondary"
+                        [ngClass]="{'text-end': i > 2 }">{{item}}</th>
                 </tr>
             </thead>
             <tbody class="my-listing-table-body">

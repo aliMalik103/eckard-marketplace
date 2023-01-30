@@ -34,7 +34,7 @@ export class MarketPlaceComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        this.totalMyOffers = response ? response.length : 0
+        this.totalMyOffers = response ? response.filter((list) => list.offerAmount).length : 0
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));

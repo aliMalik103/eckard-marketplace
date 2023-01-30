@@ -22,6 +22,8 @@
         <div *ngIf="offerStatus == 'Active' && allActiveProjects">
             <select class="form-select form-select fw-bold " [(ngModel)]="filterByProject" (change)="handleChange()">
                 <option value="" disabled selected hidden>Filter by Project</option>
+                <option value="all">Show All Projects</option>
+
                 <option *ngFor="let project of allActiveProjects" [ngValue]="project"> {{project}}</option>
 
             </select>
@@ -45,7 +47,7 @@
               };
         let i = index">
                 <tr class="text-end text-secondary">
-                    <td class="text-start">{{offer.accountName}} / <span
+                    <td class="text-start">{{offer.accountMpName}} / <span
                             class="pe-auto offer-td">{{offer.projectId}}</span></td>
                     <td class=""> {{offer.auctionEnd | date:'d MMM, y'}}</td>
                     <td>
@@ -107,7 +109,7 @@
                                 <div class="tab-pane fade" id="myOffers{{i}}" role="tabpanel"
                                     [attr.aria-labelledby]="'myOffers-tab'+i">
                                     <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="newOffer"
-                                        [offer]="offer">
+                                        [offer]="offer" [listDetails]="listDetails">
                                     </app-my-offers>
                                 </div>
 

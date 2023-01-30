@@ -12,7 +12,7 @@ import { AddNewListingService } from '../../seller/my-listing/add-new-listing/ad
 })
 export class MyBidsComponent implements OnInit {
 
-  offerStatus: string = 'all';
+  offerStatus: string = 'myOffer';
   filterByProject: string = ''
   type = 'Silent- Minimum Ask'
 
@@ -37,7 +37,7 @@ export class MyBidsComponent implements OnInit {
 
   offersFilterOptions: any = [
     {
-      value: "all",
+      value: "myOffer",
       label: "My Offers"
     },
     {
@@ -91,7 +91,13 @@ export class MyBidsComponent implements OnInit {
   }
 
   handleChange() {
-    this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale' && item.projectId == this.filterByProject)
+    const { filterByProject, offerStatus, copymyOffers } = this;
+    const isAllProjectSelected = filterByProject === 'all';
+
+    this.myOffers = copymyOffers
+      ?.filter(({ status, auctionType, projectId }) =>
+        status === offerStatus && auctionType !== 'Direct Sale' && (isAllProjectSelected || projectId === filterByProject)
+      );
   }
 
   onTableDataChange(event: any) {
@@ -104,7 +110,7 @@ export class MyBidsComponent implements OnInit {
   }
 
   handleLength(array: any) {
-    if (array) {
+    if (array && array.length > 0) {
       return true
     }
     return false
@@ -114,8 +120,8 @@ export class MyBidsComponent implements OnInit {
     this.filterByProject = ''
     this.allActiveProjects = []
     switch (this.offerStatus) {
-      case 'all':
-        this.myOffers = this.copymyOffers
+      case 'myOffer':
+        this.myOffers = this.copymyOffers.filter((item) => item.offerAmount != null)
         break;
       case 'Active':
         this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale')

@@ -94,6 +94,8 @@ export interface MyListing {
     constraints: any[]
     offer: any[]
     id?: any
+    immediatePrice?: any
+
 }
 
 export interface ContactAccount {
@@ -132,8 +134,6 @@ export interface ContactListing {
 }
 export interface CashConfig {
     id?: any,
-    account: any,
-    project: any,
     noOfMonths: any,
     decline: any,
     gasPrice: any,

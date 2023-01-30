@@ -32,12 +32,10 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
 
   basicCashFlow: CashConfig = {
     id: null,
-    account: null,
-    project: null,
-    noOfMonths: 0,
-    decline: 0,
-    gasPrice: 0,
-    oilPrice: 0,
+    noOfMonths: 36,
+    decline: 1.5,
+    gasPrice: 3.5,
+    oilPrice: 75,
     contact: null
   }
 
@@ -87,6 +85,9 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
         break;
       case 'minimumAsk':
         this.createNewListing.minimumAsk = parseFloat(this.createNewListing.minimumAsk);
+        break;
+      case 'immediatePrice':
+        this.createNewListing.immediatePrice = parseFloat(this.createNewListing.immediatePrice);
         break;
       default:
         return
@@ -209,12 +210,10 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   }
 
   handleGetCashConfig() {
-    this.myListingsService.handleGetCashConfig(this.createNewListing.account, this.createNewListing.project, this.loginService.user.id).subscribe(
+    this.myListingsService.handleGetCashConfig(this.loginService.user.id).subscribe(
       (response: any) => {
         if (response.length > 0) {
           this.basicCashFlow.id = response[0].id
-          this.basicCashFlow.account = response[0].account.id
-          this.basicCashFlow.project = response[0].project.id
           this.basicCashFlow.contact = response[0].contact.id
           this.basicCashFlow.decline = response[0].decline
           this.basicCashFlow.gasPrice = response[0].gasPrice
@@ -223,13 +222,11 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
         }
         else {
           this.basicCashFlow.id = null
-          this.basicCashFlow.account = null
-          this.basicCashFlow.project = null
           this.basicCashFlow.contact = null
-          this.basicCashFlow.decline = 0
-          this.basicCashFlow.gasPrice = 0
-          this.basicCashFlow.oilPrice = 0
-          this.basicCashFlow.noOfMonths = 0
+          this.basicCashFlow.decline = 1.5
+          this.basicCashFlow.gasPrice = 3.5
+          this.basicCashFlow.oilPrice = 75
+          this.basicCashFlow.noOfMonths = 36
         }
       },
       (error: any) => {
@@ -240,8 +237,6 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
     )
   }
   handleSaveAsDefault(value: any) {
-    value.account = this.createNewListing.account
-    value.project = this.createNewListing.project
     value.contact = this.loginService.user.id
     if (value.id) {
       this.handleUpdateCashConfig(value)

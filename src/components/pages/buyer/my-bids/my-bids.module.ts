@@ -9,6 +9,9 @@ import { ListingDetailsComponent } from './listing-details/listing-details.compo
 import { MyOffersComponent } from './my-offers/my-offers.component';
 import { MyOffersService } from 'src/components/services/my-offers.service';
 import { AddNewListingService } from '../../seller/my-listing/add-new-listing/add-new-listing.service';
+import { MyListingsService } from 'src/components/services/my-listings.service';
+import { LoginService } from 'src/components/services/login.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @NgModule({
@@ -24,7 +27,7 @@ import { AddNewListingService } from '../../seller/my-listing/add-new-listing/ad
     NgxPaginationModule
 
   ],
-  providers: [MyOffersService,AddNewListingService],
+  providers: [MyOffersService, AddNewListingService, MyListingsService, LoginService, ToastrService],
   exports: [MyBidsComponent]
 })
 export class MyBidsModule { }

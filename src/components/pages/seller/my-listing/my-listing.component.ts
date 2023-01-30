@@ -105,7 +105,9 @@ export class MyListingComponent implements OnInit {
           buyNowPrice: response.buyNowPrice,
           constraints: response.constraints.map((x: any) => parseInt(x.id)),
           offer: response.offer.map((x: any) => parseInt(x.id)),
-          id: response.id
+          id: response.id,
+          immediatePrice: null
+
         }
         if (response.status.status == 'Active') {
           this.myListingsService.isListDraft = false;

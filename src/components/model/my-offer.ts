@@ -15,5 +15,6 @@ export interface MyOffers {
     noOfBids: number
     auctionType: string
     buyNowPrice: any
-    isHighestOffer: boolean
+    isHighestOffer: boolean,
+    accountMpName: string
 }

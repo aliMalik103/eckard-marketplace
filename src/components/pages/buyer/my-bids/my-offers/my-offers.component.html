@@ -40,10 +40,10 @@
             <div class="accordion-item ">
                 <h5 class="accordion-header collapsed p-0 " id="myOffer-headingOne" data-toggle="collapse"
                     data-target="#myOffer-collapseOne" aria-expanded="false" aria-controls="myOffer-collapseOne">
-                    Basic CashFlow Calculator
+                    Basic CashFlow Calculator <sup>(using an exponential decline curve)</sup>
 
-                    <strong class="small float-end fw-bold">
-                        Est. CashFlow: {{'232323' |
+                    <strong class="small float-end fw-bold" *ngIf="isRecalculate">
+                        Est. CashFlow: {{ calculateTotalCashFlow |
                         currency:'CAD':'symbol-narrow':'.2-2'}}</strong>
                 </h5>
                 <div id="myOffer-collapseOne" class="accordion-collapse collapse" aria-labelledby="myOffer-headingOne"
@@ -67,8 +67,7 @@
                                 </label>
 
                                 <input type="number" class="form-control" aria-label="Expected Output Decline(%)"
-                                    min="0" oninput="validity.valid||(value='');" [(ngModel)]="basicCashFlow.decline"
-                                    id="decline" name="decline">
+                                    min="0" [(ngModel)]="basicCashFlow.decline" id="decline" name="decline">
                             </div>
 
                         </div>
@@ -77,9 +76,8 @@
                                 <label for="oilPrice" class="form-label">Oil Price [BBL]
                                 </label>
 
-                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control"
-                                    aria-label="Oil Price" [(ngModel)]="basicCashFlow.oilPrice" id="oilPrice"
-                                    name="oilPrice">
+                                <input type="number" min="0" class="form-control" aria-label="Oil Price"
+                                    [(ngModel)]="basicCashFlow.oilPrice" id="oilPrice" name="oilPrice">
                             </div>
 
                         </div>
@@ -89,9 +87,8 @@
                                 <label for="gasPrice" class="form-label">Gas Price [MCF]
                                 </label>
 
-                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control"
-                                    aria-label="Gas Price" [(ngModel)]="basicCashFlow.gasPrice" id="gasPrice"
-                                    name="gasPrice">
+                                <input type="number" min="0" class="form-control" aria-label="Gas Price"
+                                    [(ngModel)]="basicCashFlow.gasPrice" id="gasPrice" name="gasPrice">
 
                             </div>
 
@@ -99,7 +96,8 @@
 
                         <div class=" m-auto col pt-3">
                             <span for="default"
-                                class="form-label d-inline-block text-primary pe-auto border-bottom border-primary">
+                                class="form-label d-inline-block text-primary pe-auto border-bottom border-primary"
+                                (click)="handleSaveAsDefault(basicCashFlow)">
                                 Save as Default
                             </span>
                         </div>
@@ -112,7 +110,8 @@
 
 
         <div class="col">
-            <span for="recalculate" class="form-label d-inline-block text-primary pe-auto border-bottom border-primary">
+            <span for="recalculate" class="form-label d-inline-block text-primary pe-auto border-bottom border-primary"
+                (click)="handleCalculateCashFlow()">
                 Re/Calculate
             </span>
         </div>

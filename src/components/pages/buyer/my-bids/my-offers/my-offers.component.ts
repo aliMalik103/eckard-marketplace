@@ -198,10 +198,8 @@ export class MyOffersComponent implements OnInit {
   }
 
   handleCancelOffer(obj: any) {
-    const request = {
-      listing_id: this.listDetails.id
-    }
-    this.myOffersService.handleDeleteOffer(obj.id, request).subscribe(
+    
+    this.myOffersService.handleDeleteOffer(obj.id, this.listDetails.id).subscribe(
       (response) => {
         if (response) {
           this.updateOffers.emit()

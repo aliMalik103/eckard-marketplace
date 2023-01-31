@@ -106,17 +106,19 @@ export class MyListingsService {
   }
 
   createNewListing(newList: MyListing): Observable<MyListing> {
-    newList.auctionEnd = moment.utc(newList.auctionEnd)
-    newList.listingStart = moment.utc(newList.listingStart)
-    const res = this.http.post<MyListing>(`${environment.API_BASE_URL}/listing/`, newList)
-    return res
+    const startLocalTime = moment(newList.listingStart);
+    const endLocalTime = moment(newList.auctionEnd);
+    newList.auctionEnd = endLocalTime.utc().format();
+    newList.listingStart = startLocalTime.utc().format();
+    return this.http.post<MyListing>(`${environment.API_BASE_URL}/listing/`, newList)
   }
 
   updateListing(updateList: MyListing): Observable<MyListing> {
-    updateList.auctionEnd = moment.utc(updateList.auctionEnd)
-    updateList.listingStart = moment.utc(updateList.listingStart)
-    const res = this.http.patch<MyListing>(`${environment.API_BASE_URL}/listing/${updateList.id}/`, updateList)
-    return res
+    const startLocalTime = moment(updateList.listingStart);
+    const endLocalTime = moment(updateList.auctionEnd);
+    updateList.auctionEnd = endLocalTime.utc().format();
+    updateList.listingStart = startLocalTime.utc().format();
+    return this.http.patch<MyListing>(`${environment.API_BASE_URL}/listing/${updateList.id}/`, updateList);
   }
 
   handleGetUserAccounts(id: number): Observable<Account[]> {

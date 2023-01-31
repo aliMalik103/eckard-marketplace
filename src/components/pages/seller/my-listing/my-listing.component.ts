@@ -106,7 +106,7 @@ export class MyListingComponent implements OnInit {
           constraints: response.constraints.map((x: any) => parseInt(x.id)),
           offer: response.offer.map((x: any) => parseInt(x.id)),
           id: response.id,
-          immediatePrice: null
+          immediatePrice: response.immediatePrice
 
         }
         if (response.status.status == 'Active') {

@@ -15,6 +15,7 @@ export interface MyListings {
     directSaleToken: string
     constraints: any[]
     offer: any[]
+    immediatePrice: any
 }
 
 export interface ListingType {

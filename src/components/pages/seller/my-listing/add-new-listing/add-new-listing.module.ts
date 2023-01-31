@@ -10,6 +10,8 @@ import { AddNewListingService } from './add-new-listing.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/components/services/login.service';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 
 @NgModule({
     declarations: [
@@ -22,6 +24,7 @@ import { LoginService } from 'src/components/services/login.service';
         AppRoutingModule,
         FormsModule,
         CommonModule,
+        CurrencyMaskModule
 
     ],
     providers: [AddNewListingService, MyListingsService, ToastrService, LoginService, CurrencyPipe],

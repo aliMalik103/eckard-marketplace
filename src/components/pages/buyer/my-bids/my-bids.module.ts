@@ -12,6 +12,8 @@ import { AddNewListingService } from '../../seller/my-listing/add-new-listing/ad
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { LoginService } from 'src/components/services/login.service';
 import { ToastrService } from 'ngx-toastr';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 
 
 @NgModule({
@@ -24,7 +26,8 @@ import { ToastrService } from 'ngx-toastr';
     AppRoutingModule,
     FormsModule,
     BrowserModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    CurrencyMaskModule
 
   ],
   providers: [MyOffersService, AddNewListingService, MyListingsService, LoginService, ToastrService],

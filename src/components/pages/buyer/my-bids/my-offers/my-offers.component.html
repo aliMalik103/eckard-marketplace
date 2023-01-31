@@ -21,8 +21,9 @@
 
         <div class="form-group  mb-2">
             <label for="myoffer" class="col-form-label fw-bold">My Offer: </label>
-            <input type="number" [(ngModel)]="newOffer.offerAmount" class="mx-2 form-control" id="offerAmount"
-                name="offerAmount" oninput="validity.valid||(value='');" min="0">
+            <input [(ngModel)]="newOffer.offerAmount" class="mx-2 form-control" id="offerAmount" name="offerAmount"
+                currencyMask
+                [options]="{ prefix: '$', thousands: ',',precision: 0, align:'left', allowNegative: false}">
             <small class="text-muted">({{newOffer.offerAmount / offer.listedNMA| currency:'':'':'.2-2' }}/NMA)</small>
         </div>
         <div class="d-flex gap-3">

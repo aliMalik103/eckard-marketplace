@@ -138,8 +138,10 @@
                 <div class=" col-md-6">
                     <label for="minimumAsk" class="form-label">{{createNewListing.auction_type == 5 ?
                         'Fix Price' : 'Minimum Asking Price'}} <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" [(ngModel)]="createNewListing.minimumAsk"
-                        (change)="handleChange('minimumAsk')" name="minimumAsk" id="minimumAsk" #minimumAsk="ngModel"
+                    <input class="form-control " currencyMask
+                        [options]="{ prefix: '$', thousands: ',',precision: !isListDraft ? 2 : 0, align:'left', allowNegative: false}"
+                        [(ngModel)]="createNewListing.minimumAsk" (change)="handleChange('minimumAsk')"
+                        name="minimumAsk" id="minimumAsk" #minimumAsk="ngModel"
                         [ngClass]="{'border border-danger':minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched)}"
                         required [disabled]="!isListDraft">
                     <span *ngIf="minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched ) &&  minimumAsk.errors"
@@ -185,11 +187,12 @@
                                 'Buy
                                 Immediatly'
                                 price</small></p>
-                        <input type="number" class="form-control" [(ngModel)]="createNewListing.immediatePrice"
+                        <input class="form-control text-start" [(ngModel)]="createNewListing.immediatePrice"
                             (change)="handleChange('immediatePrice')" name="immediatePrice" id="immediatePrice"
                             #immediatePrice="ngModel"
                             [ngClass]="{'border border-danger':immediatePrice.invalid && (immediatePrice.dirty || immediatePrice.touched)}"
-                            required [disabled]="!isListDraft">
+                            required [disabled]="!isListDraft" currencyMask
+                            [options]="{ prefix: '$', thousands: ',', precision: !isListDraft ? 2 : 0, align:'left', allowNegative: false}">
                         <span
                             *ngIf="immediatePrice.invalid && (immediatePrice.dirty || immediatePrice.touched ) &&  immediatePrice.errors"
                             class="text-danger rounded px-4 error-message">

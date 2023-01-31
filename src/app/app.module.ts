@@ -14,6 +14,7 @@ import { NavbarModule } from 'src/components/navbar/navbar.module';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 
 
@@ -42,7 +43,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       tapToDismiss: true
     }), // ToastrModule added
     NgxPaginationModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    CurrencyMaskModule
 
   ],
   providers: [AddNewListingService],

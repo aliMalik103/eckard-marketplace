@@ -1,8 +1,10 @@
-
-
 .accordion-header {
     cursor: pointer;
 
+}
+
+.est-cashflow {
+    font-size: 1.1rem;
 }
 
 .accordion-header::before {
@@ -30,4 +32,3 @@
     border-bottom: 2px solid #0a2b3c;
     color: #0a2b3c;
 }
-

@@ -181,7 +181,8 @@
                     <div class=" col-md-6">
                         <label for="Immediatly" class="form-label"> Buy Immediatly Price <span
                                 class="text-danger">*</span></label>
-                        <p class="font-italic"><small>Transaction will trigger immediatly if a Buyer offers the 'Buy
+                        <p class="font-italic my-0"><small>Transaction will trigger immediatly if a Buyer offers the
+                                'Buy
                                 Immediatly'
                                 price</small></p>
                         <input type="number" class="form-control" [(ngModel)]="createNewListing.immediatePrice"
@@ -196,8 +197,8 @@
                             Please enter Buy Immediatly Price
                         </span>
                     </div>
-                    <div class="col-6 d-flex flex-column pt-4 m-auto"
-                        *ngIf="listingCost && createNewListing.nma && createNewListing.minimumAsk">
+                    <div class="col-6 d-flex flex-column pt-5 m-auto"
+                        *ngIf="listingCost && createNewListing.nma && createNewListing.immediatePrice">
                         <div class="align-items-center text-secondary">
                             <small>
                                 {{(createNewListing.immediatePrice/createNewListing.nma) |
@@ -230,20 +231,24 @@
             <div class="mt-5 row">
                 <div class="col-12 p-0 d-flex">
 
-                    <div class="accordion accordion-flush col-10" id="listingAccordion">
-                        <div class="accordion-item ">
-                            <h5 class="accordion-header collapsed p-0 " id="listing-headingOne" data-toggle="collapse"
-                                data-target="#listing-collapseOne" aria-expanded="false"
+                    <div class="accordion accordion-flush col-10 pt-1" id="listingAccordion">
+                        <div class="accordion-item">
+                            <h5 class="accordion-header collapsed p-0 est-cashflow " id="listing-headingOne"
+                                data-toggle="collapse" data-target="#listing-collapseOne" aria-expanded="false"
                                 aria-controls="listing-collapseOne">
-                                Basic CashFlow Calculator <sup>(using an exponential decline curve)</sup>
+                                Basic CashFlow Calculator<sup>*)</sup>
 
-                                <strong class="small float-end fw-bold" *ngIf="isRecalculate">
+                                <strong class="small float-end fw-bold est-cashflow" *ngIf="isRecalculate">
                                     Est. CashFlow: {{calculateTotalCashFlow |
                                     currency:'CAD':'symbol-narrow':'.2-2'}}</strong>
                             </h5>
-                            <div id="listing-collapseOne" class="accordion-collapse collapse"
+                            <div id="listing-collapseOne" class="accordion-collapse collapse pt-2"
                                 aria-labelledby="listing-headingOne" data-parent="#listingAccordion">
-                                <div class="accordion-body  d-flex px-0  w-100">
+                                <small class="px-3">*) using exponential decline curve with editable
+                                    parameters below
+                                </small>
+                                <div class="accordion-body  d-flex px-0 pt-4 w-100">
+
                                     <div class="d-flex flex-column col">
                                         <div>
                                             <label for="noOfMonths" class="form-label"># of
@@ -342,11 +347,11 @@
 
 
                     <div class="col">
-                        <span for="recalculate"
-                            class="form-label d-inline-block text-primary pe-auto border-bottom border-primary"
+                        <strong for="recalculate"
+                            class=" small est-cashflow  d-inline-block text-primary pe-auto border-bottom border-primary"
                             (click)="handleCalculateCashFlow()">
                             Re/Calculate
-                        </span>
+                        </strong>
                     </div>
 
                 </div>

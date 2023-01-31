@@ -23,11 +23,14 @@
             <label for="myoffer" class="col-form-label fw-bold">My Offer: </label>
             <input type="number" [(ngModel)]="newOffer.offerAmount" class="mx-2 form-control" id="offerAmount"
                 name="offerAmount" oninput="validity.valid||(value='');" min="0">
-            <small class="text-muted">({{newOffer.offerAmount /offer.listedNMA| currency:'':'':'.2-2' }}/NMA)</small>
+            <small class="text-muted">({{newOffer.offerAmount / offer.listedNMA| currency:'':'':'.2-2' }}/NMA)</small>
         </div>
         <div class="d-flex gap-3">
-            <button type="submit" class="btn btn-warning text-white fw-bold mb-2">SUBMIT OFFER</button>
-            <button type="submit" class="btn btn-danger mb-2 fw-bold">CANCEL OFFER</button>
+            <button type="submit" class="btn btn-warning text-white fw-bold mb-2" (click)="handleSubmitOffer(newOffer)"
+                [disabled]="newOffer.offerAmount <= 0">SUBMIT OFFER</button>
+            <button type="submit" class="btn btn-danger mb-2 fw-bold" [disabled]="!newOffer.id"
+                (click)="handleCancelOffer(newOffer)">CANCEL
+                OFFER</button>
         </div>
 
     </div>
@@ -36,19 +39,22 @@
 <div class="mt-5 row">
     <div class="col-12 p-0 d-flex">
 
-        <div class="accordion accordion-flush col-10" id="myOfferAccordion">
+        <div class="accordion accordion-flush col-10 pt-1" id="myOfferAccordion">
             <div class="accordion-item ">
-                <h5 class="accordion-header collapsed p-0 " id="myOffer-headingOne" data-toggle="collapse"
+                <h5 class="accordion-header collapsed p-0 est-cashflow " id="myOffer-headingOne" data-toggle="collapse"
                     data-target="#myOffer-collapseOne" aria-expanded="false" aria-controls="myOffer-collapseOne">
-                    Basic CashFlow Calculator <sup>(using an exponential decline curve)</sup>
+                    Basic CashFlow Calculator <sup>*)</sup>
 
-                    <strong class="small float-end fw-bold" *ngIf="isRecalculate">
+                    <strong class="small float-end fw-bold est-cashflow" *ngIf="isRecalculate">
                         Est. CashFlow: {{ calculateTotalCashFlow |
                         currency:'CAD':'symbol-narrow':'.2-2'}}</strong>
                 </h5>
-                <div id="myOffer-collapseOne" class="accordion-collapse collapse" aria-labelledby="myOffer-headingOne"
-                    data-parent="#myOfferAccordion">
-                    <div class="accordion-body  d-flex px-0  w-100">
+                <div id="myOffer-collapseOne" class="accordion-collapse collapse pt-2"
+                    aria-labelledby="myOffer-headingOne" data-parent="#myOfferAccordion">
+                    <small class="px-3">*) using exponential decline curve with editable
+                        parameters below
+                    </small>
+                    <div class="accordion-body  d-flex px-0 pt-4 w-100">
                         <div class="d-flex flex-column col">
                             <div>
                                 <label for="noOfMonths" class="form-label"># of
@@ -110,10 +116,11 @@
 
 
         <div class="col">
-            <span for="recalculate" class="form-label d-inline-block text-primary pe-auto border-bottom border-primary"
+            <strong for="recalculate"
+                class=" small est-cashflow  d-inline-block text-primary pe-auto border-bottom border-primary"
                 (click)="handleCalculateCashFlow()">
                 Re/Calculate
-            </span>
+            </strong>
         </div>
 
     </div>

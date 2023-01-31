@@ -16,12 +16,24 @@ export class MyOffersService {
     const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/contact/${id}`)
     return res;
   }
-  getListDetails(id: number) {
-    const res = this.http.get(`${environment.API_BASE_URL}/listing/${id}`)
-    return res;
-  }
   getofferDetails(id: number) {
     const res = this.http.get(`${environment.API_BASE_URL}/offer/${id}`)
     return res;
   }
+
+  handleCreateNewOffer(body: any) {
+    const res = this.http.post(`${environment.API_BASE_URL}/offer/`, body)
+    return res
+  }
+
+  handleUpdateOffer(id: any, body: any) {
+    const res = this.http.patch(`${environment.API_BASE_URL}/offer/${id}/`, body)
+    return res
+  }
+
+  handleDeleteOffer(id: any, body: any) {
+    const res = this.http.delete(`${environment.API_BASE_URL}/offer/${id}/`, body)
+    return res
+  }
+
 }

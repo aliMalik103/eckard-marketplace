@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ContactAccount, MyListing, MyListings, ListingCost } from '../model/my-listings';
 import * as moment from 'moment'
+import { tap, map, catchError } from 'rxjs/operators';
+
 
 
 @Injectable({
@@ -78,21 +80,41 @@ export class MyListingsService {
 
 
   getAllMyListings(id: number): Observable<ContactListing[]> {
-    const res = this.http.get<ContactListing[]>(`${environment.API_BASE_URL}/listing/contact/${id}`)
+    const res = this.http.get<ContactListing[]>(`${environment.API_BASE_URL}/listing/contact/${id}`).pipe(
+      map(lists => lists?.map(list => ({
+        ...list,
+        auctionEnd: moment.utc(list.auctionEnd).local().format().slice(0, 16),
+      })))
+    )
     return res;
   }
 
   getMyList(id: number): Observable<MyListings> {
-    const res = this.http.get<MyListings>(`${environment.API_BASE_URL}/listing/${id}`)
+    const res = this.http.get<MyListings>(`${environment.API_BASE_URL}/listing/${id}`).pipe(
+      map(list => {
+        return {
+          ...list,
+          auctionEnd: moment.utc(list.auctionEnd).local().format().slice(0, 16),
+          listingStart: moment.utc(list.listingStart).local().format().slice(0, 16)
+        }
+
+      }
+
+      )
+    )
     return res;
   }
 
   createNewListing(newList: MyListing): Observable<MyListing> {
+    newList.auctionEnd = moment.utc(newList.auctionEnd)
+    newList.listingStart = moment.utc(newList.listingStart)
     const res = this.http.post<MyListing>(`${environment.API_BASE_URL}/listing/`, newList)
     return res
   }
 
   updateListing(updateList: MyListing): Observable<MyListing> {
+    updateList.auctionEnd = moment.utc(updateList.auctionEnd)
+    updateList.listingStart = moment.utc(updateList.listingStart)
     const res = this.http.patch<MyListing>(`${environment.API_BASE_URL}/listing/${updateList.id}/`, updateList)
     return res
   }

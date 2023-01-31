@@ -18,3 +18,16 @@ export interface MyOffers {
     isHighestOffer: boolean,
     accountMpName: string
 }
+
+export interface OfferDetails {
+    offer: Offer
+    listing_id: number
+}
+
+export interface Offer {
+    offerAmount: number
+    status: any
+    contact: any
+    constraints: any[]
+    comments: string
+}

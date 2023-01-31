@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MyOffers } from 'src/components/model/my-offer';
 import { LoginService } from 'src/components/services/login.service';
+import { MyListingsService } from 'src/components/services/my-listings.service';
 import { MyOffersService } from 'src/components/services/my-offers.service';
 import { AddNewListingService } from '../../seller/my-listing/add-new-listing/add-new-listing.service';
 
@@ -64,7 +65,7 @@ export class MyBidsComponent implements OnInit {
     "Highest Offer",
     "My Offer"
   ]
-  constructor(private router: Router, private loginService: LoginService,
+  constructor(private router: Router, private loginService: LoginService, private myListingsService: MyListingsService,
     private myOffersService: MyOffersService, private addNewListingService: AddNewListingService) {
 
   }
@@ -121,11 +122,11 @@ export class MyBidsComponent implements OnInit {
     this.allActiveProjects = []
     switch (this.offerStatus) {
       case 'myOffer':
-        this.myOffers = this.copymyOffers.filter((item) => item.offerAmount != null)
+        this.myOffers = this.copymyOffers?.filter((item) => item.offerAmount != null)
         break;
       case 'Active':
         this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale')
-        this.allActiveProjects = this.myOffers.reduce((acc: any, offer: any) => {
+        this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
           if (!acc.includes(offer.projectId)) {
             acc.push(offer.projectId)
           }
@@ -157,7 +158,7 @@ export class MyBidsComponent implements OnInit {
 
   handleListDetails(id: number, offerId: any) {
 
-    this.myOffersService.getListDetails(id).subscribe(
+    this.myListingsService.getMyList(id).subscribe(
       (response) => {
         this.listDetails = response
       },
@@ -168,14 +169,14 @@ export class MyBidsComponent implements OnInit {
       () => console.log("Done getting listing Constraint"));
 
     if (offerId) {
-      this.myOffersService.getofferDetails(id).subscribe(
+      this.myOffersService.getofferDetails(offerId).subscribe(
         (response) => {
           this.newOffer = response
-          this.constraintOptions = this.constraintOptions.map((obj: any) => {
+          this.constraintOptions = this.constraintOptions?.map((obj: any) => {
             return {
               id: obj.id,
               constraint: obj.constraint,
-              isChecked: this.newOffer.constraints.some((item: any) => item.id === obj.id)
+              isChecked: this.newOffer.constraints?.some((item: any) => item.id === obj.id)
             }
           });
 
@@ -186,6 +187,10 @@ export class MyBidsComponent implements OnInit {
         },
         () => console.log("Done getting listing Constraint"));
     }
+  }
+
+  handleUpdateOffers() {
+    this.getAllMyOffers()
   }
 
 }

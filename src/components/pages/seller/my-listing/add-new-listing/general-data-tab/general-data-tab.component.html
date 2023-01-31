@@ -36,7 +36,7 @@
         <div class="form-check" *ngFor="let item of constraintOptions">
             <input class="form-check-input" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
                 [name]="item.constraint" [id]="'constraint'+item.id" [disabled]="!isListDraft">
-            <label class="form-check-label " [ngClass]="{'text-dark ': !isListDraft }" [for]="'constraint'+item.id">
+            <label [for]="'constraint'+item.id">
                 {{item.constraint}}
             </label>
         </div>

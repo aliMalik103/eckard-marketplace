@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ListingDetailsComponent implements OnInit {
 
   @Input() listDetails: any
+  @Input() offer: any
 
 
   ngOnInit(): void {

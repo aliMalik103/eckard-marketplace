@@ -99,6 +99,7 @@ export class AddNewListingComponent implements OnInit {
 
   handleStatus(id: number) {
     this.createNewListing.status = id
+    this.createNewListing.buyNowPrice = this.createNewListing.auction_type == 5 ? this.createNewListing.minimumAsk : this.createNewListing.buyNowPrice
     if (this.isListEdit) {
       this.myListingsService.updateListing(this.createNewListing).subscribe(
         (response) => {

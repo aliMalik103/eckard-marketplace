@@ -1,7 +1,7 @@
 import { Offer } from './../../../../model/my-offer';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { CashConfig } from 'src/components/model/my-listings';
+import { CashConfig, Status } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { MyOffersService } from 'src/components/services/my-offers.service';
@@ -17,6 +17,8 @@ export class MyOffersComponent implements OnInit {
   @Input() offer: any
   @Input() listDetails: any
   @Output() updateOffers = new EventEmitter()
+  @Input() statusOptions!: Status[]
+  @Input() index!: any
 
   cashFlow!: any
   isRecalculate: boolean = false
@@ -147,16 +149,29 @@ export class MyOffersComponent implements OnInit {
 
   }
 
-  handleSubmitOffer(obj: any) {
-    const request = {
+  handleSubmitOffer(obj: any, offer: any) {
+    let offerId
+    let activeItem
+    let isacceptedOffer = false
+    if (offer.auctionType == 'Fix Price') {
+      activeItem = this.statusOptions?.find((item) => item.status == "Accepted")
+      offerId = activeItem ? activeItem.id : null;
+      isacceptedOffer = true
+    } else {
+      activeItem = this.statusOptions?.find((item) => item.status == "Active")
+      offerId = activeItem ? activeItem.id : null;
+    }
+    
+    let request = {
       offer: {
         offerAmount: obj.offerAmount,
-        status: obj.id ? obj.status.id : this.listDetails.status.id,
+        status: obj.id ? obj.status.id : offerId,
         constraints: obj.constraints?.map((item: any) => item.id),
         comments: obj.comments,
         contact: obj.id ? obj.contact.id : this.loginService.user.id
       },
-      listing_id: this.listDetails.id
+      listing_id: this.listDetails.id,
+      acceptedOffer: isacceptedOffer
     }
     obj.id
       ? this.handleUpdateOffer(obj.id, request)
@@ -198,12 +213,23 @@ export class MyOffersComponent implements OnInit {
   }
 
   handleCancelOffer(obj: any) {
-    
-    this.myOffersService.handleDeleteOffer(obj.id, this.listDetails.id).subscribe(
+    const canceledItem = this.statusOptions?.find((item) => item.status == "Cancelled")
+    const cancelId = canceledItem ? canceledItem.id : null;
+    const request = {
+      offer: {
+        offerAmount: obj.offerAmount,
+        status: cancelId,
+        constraints: obj.constraints?.map((item: any) => item.id),
+        comments: obj.comments,
+        contact: obj.id ? obj.contact.id : this.loginService.user.id
+      },
+      listing_id: this.listDetails.id
+    }
+    this.myOffersService.handleCancelOffer(obj.id, request).subscribe(
       (response) => {
         if (response) {
           this.updateOffers.emit()
-          this.toastr.success('Offer Cancel Successfully');
+          this.toastr.success('Offer Cancelled Successfully');
         }
       },
       (error: any) => {

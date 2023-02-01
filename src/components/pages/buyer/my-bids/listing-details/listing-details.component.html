@@ -1,6 +1,19 @@
 <ng-container *ngIf="listDetails">
     <div class="row mt-4">
         <div class="col-md-4 col-sm-12">
+            <label for="listednma" class="form-label fw-bold">Auction Type: <small class=" px-2">
+                    <ng-container
+                        *ngIf="offer.auctionType.startsWith('Public -') || offer.auctionType.startsWith('Silent -') ; else elseAuctionType">
+                        {{offer.auctionType.slice(8)}}
+                    </ng-container>
+                    <ng-template #elseAuctionType>
+                        {{offer.auctionType}}
+                    </ng-template>
+                </small></label>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4 col-sm-12">
             <label for="listednma" class="form-label fw-bold">Listed NMA: <small
                     class=" px-2 text-muted">{{listDetails.nma}}</small></label>
         </div>

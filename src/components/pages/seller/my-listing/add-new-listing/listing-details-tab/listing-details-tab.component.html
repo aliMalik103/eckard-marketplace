@@ -137,7 +137,9 @@
 
                 <div class=" col-md-6">
                     <label for="minimumAsk" class="form-label">{{createNewListing.auction_type == 5 ?
-                        'Fix Price' : 'Minimum Asking Price'}} <span class="text-danger">*</span></label>
+                        'Fix Price' :
+                        (createNewListing.auction_type == 6 ? 'Direct Sale Price' : 'Minimum Asking Price')}} <span
+                            class="text-danger">*</span></label>
                     <input class="form-control " currencyMask
                         [options]="{ prefix: '$', thousands: ',',precision: !isListDraft ? 2 : 0, align:'left', allowNegative: false}"
                         [(ngModel)]="createNewListing.minimumAsk" (change)="handleChange('minimumAsk')"
@@ -147,7 +149,8 @@
                     <span *ngIf="minimumAsk.invalid && (minimumAsk.dirty || minimumAsk.touched ) &&  minimumAsk.errors"
                         class="text-danger rounded px-4 error-message">
                         {{createNewListing.auction_type == 5 ? 'Please enter Fix Price' :
-                        'Please enter Minimum Asking Price'}}
+                        (createNewListing.auction_type == 6 ? 'Please enter Direct Sale Price' :
+                        'Please enter Minimum Asking Price')}}
                     </span>
                 </div>
                 <div class="col-6 d-flex flex-column pt-4"
@@ -176,6 +179,14 @@
                 </div>
 
 
+            </div>
+            <div class="mt-3 row " *ngIf="createNewListing.auction_type == 6">
+                <div class=" col-md-6">
+                    <label for="minimumAsk" class="form-label">Direct Sale URL</label>
+                    <p class="px-2 pe-auto"> http://52.24.239.223/direct-sale/ab27d9dc-3e3e-4fab-b5ba-9615446791c6
+                    </p>
+
+                </div>
             </div>
             <ng-container *ngIf="createNewListing.auction_type == 3 || createNewListing.auction_type == 4">
                 <div class="mt-3 row ">

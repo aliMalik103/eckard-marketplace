@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Status } from 'src/components/model/my-listings';
 import { MyOffers } from 'src/components/model/my-offer';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
@@ -16,6 +17,8 @@ export class MyBidsComponent implements OnInit {
   offerStatus: string = 'myOffer';
   filterByProject: string = ''
   type = 'Silent- Minimum Ask'
+  statusOptions!: Status[]
+
 
   page: number = 1;
   count: number = 0;
@@ -29,7 +32,7 @@ export class MyBidsComponent implements OnInit {
 
   newOffer: any = {
     id: null,
-    account: null,
+    contact: null,
     status: null,
     constraints: [],
     comments: "",
@@ -78,6 +81,7 @@ export class MyBidsComponent implements OnInit {
     }
     this.getAllMyOffers()
     this.handleConstraint()
+    this.handleGetStatus()
   }
 
   getAllMyOffers() {
@@ -161,6 +165,14 @@ export class MyBidsComponent implements OnInit {
     this.myListingsService.getMyList(id).subscribe(
       (response) => {
         this.listDetails = response
+        if (!offerId) {
+          this.newOffer.offerAmount = response.minimumAsk
+          this.newOffer.id = null
+          this.newOffer.contact = null
+          this.newOffer.status = null
+          this.newOffer.constraints = []
+          this.newOffer.comments = ""
+        }
       },
       (error: any) => {
 
@@ -191,6 +203,18 @@ export class MyBidsComponent implements OnInit {
 
   handleUpdateOffers() {
     this.getAllMyOffers()
+  }
+
+  handleGetStatus() {
+    this.addNewListingService.handleGetStatus().subscribe(
+      (response) => {
+        this.statusOptions = response
+      },
+      (error: any) => {
+
+        console.log("Error getting listing status", error)
+      },
+      () => console.log("Done getting listing status "));
   }
 
 }

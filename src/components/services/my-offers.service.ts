@@ -31,13 +31,8 @@ export class MyOffersService {
     return res
   }
 
-  handleDeleteOffer(id: any, listingId: any) {
-    const httpOptions = {
-      body: {
-        listing_id: listingId
-      }
-    };
-    const res = this.http.delete(`${environment.API_BASE_URL}/offer/${id}/`,httpOptions)
+  handleCancelOffer(id: any, body: any) {
+    const res = this.http.patch(`${environment.API_BASE_URL}/offer/${id}/`, body)
     return res
   }
 

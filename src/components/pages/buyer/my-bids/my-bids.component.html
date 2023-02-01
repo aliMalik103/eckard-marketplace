@@ -53,14 +53,8 @@
                     <td>
                         {{offer.listedNMA}}
                     </td>
-                    <td>{{(offer.auctionType == 'Fix Bid' &&
-                        !offer.auctionType.endsWith('- Buy Immediately or Make Me an Offer')) ? 'N/A' :
-                        offer.minimumAsk |
-                        currency:'':'':'4.2-2'}}</td>
-                    <td>{{ (offer.auctionType != 'Fix Bid' &&
-                        !offer.auctionType.endsWith('- Buy Immediately or Make Me an Offer')) ? "N/A" :
-                        offer.buyNowPrice |
-                        currency:'':'':'4.2-2'}}</td>
+                    <td>{{offer.minimumAsk | currency:'':'':'4.2-2'}}</td>
+                    <td>{{offer.auctionType != 'Fix Price' ? "N/A" : offer.buyNowPrice | currency:'':'':'4.2-2'}}</td>
                     <td>{{offer.noOfBids}}</td>
                     <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
                         currency:'':'':'4.2-2'}}</td>
@@ -103,14 +97,14 @@
                                 <div class="tab-pane fade show active " id="listingDetails{{i}}" role="tabpanel"
                                     [attr.aria-labelledby]="'listingDetails-tab'+i">
 
-                                    <app-listing-details [listDetails]="listDetails">
+                                    <app-listing-details [listDetails]="listDetails" [offer]="offer">
                                     </app-listing-details>
                                 </div>
                                 <div class="tab-pane fade" id="myOffers{{i}}" role="tabpanel"
                                     [attr.aria-labelledby]="'myOffers-tab'+i">
                                     <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="newOffer"
-                                        [offer]="offer" [listDetails]="listDetails"
-                                        (updateOffers)="handleUpdateOffers()">
+                                        [offer]="offer" [listDetails]="listDetails" [statusOptions]="statusOptions"
+                                        (updateOffers)="handleUpdateOffers()" [index]="i">
                                     </app-my-offers>
                                 </div>
 

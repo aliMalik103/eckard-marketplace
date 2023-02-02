@@ -23,9 +23,12 @@ export class MyOffersComponent implements OnInit {
   cashFlow!: any
   isRecalculate: boolean = false
   calculateTotalCashFlow: any = 0
+  offerId!: any
+  activeItem!: any
+  isacceptedOffer = false
 
   constructor(private myListingsService: MyListingsService, private myOffersService: MyOffersService,
-    private loginService: LoginService, private toastr: ToastrService,) {
+    private loginService: LoginService, private toastr: ToastrService) {
 
   }
 
@@ -149,33 +152,76 @@ export class MyOffersComponent implements OnInit {
 
   }
 
+  handleChange(offer: any) {
+    let immediatePrice = parseFloat(this.listDetails.immediatePrice);
+    if (offer.auctionType.endsWith('Buy Immediately or Make Me an Offer') || offer.auctionType.endsWith('Minimum Ask')) {
+      if (this.newOffer.offerAmount > (immediatePrice + (immediatePrice * 0.15))) {
+        this.newOffer.offerAmount = immediatePrice
+        this.toastr.info('Your offer price is too high!');
+        return;
+      }
+
+    }
+
+  }
+
+  handleMessage(offer: any) {
+
+    let immediatePrice = parseFloat(this.listDetails.immediatePrice);
+    this.offerId = null;
+    this.activeItem = null;
+    this.isacceptedOffer = false;
+    if (offer.auctionType == 'Fix Price' || offer.auctionType == 'Direct Sale') {
+      this.activeItem = this.statusOptions?.find((item) => item.status == "Accepted")
+      this.offerId = this.activeItem ? this.activeItem.id : null;
+      this.isacceptedOffer = true
+    }
+
+    else if (offer.auctionType.endsWith('Minimum Ask') || offer.auctionType.endsWith('Buy Immediately or Make Me an Offer')) {
+      this.activeItem = this.statusOptions?.find((item) => item.status === "Active");
+      if (this.newOffer.offerAmount >= immediatePrice && this.newOffer.offerAmount < (immediatePrice + (immediatePrice * 0.15))) {
+        this.activeItem = this.statusOptions?.find((item) => item.status === "Accepted");
+        this.isacceptedOffer = true;
+      }
+      this.offerId = this.activeItem ? this.activeItem.id : null;
+    }
+
+  }
+
   handleSubmitOffer(obj: any, offer: any) {
-    let offerId
-    let activeItem
-    let isacceptedOffer = false
-    if (offer.auctionType == 'Fix Price') {
-      activeItem = this.statusOptions?.find((item) => item.status == "Accepted")
-      offerId = activeItem ? activeItem.id : null;
-      isacceptedOffer = true
-    } else {
-      activeItem = this.statusOptions?.find((item) => item.status == "Active")
-      offerId = activeItem ? activeItem.id : null;
-    }
-    
-    let request = {
-      offer: {
-        offerAmount: obj.offerAmount,
-        status: obj.id ? obj.status.id : offerId,
-        constraints: obj.constraints?.map((item: any) => item.id),
-        comments: obj.comments,
-        contact: obj.id ? obj.contact.id : this.loginService.user.id
+    this.myOffersService.handleCheckListStatus(this.listDetails.id).subscribe(
+      (response) => {
+        if (response.length == 0) {
+          let request = {
+            offer: {
+              offerAmount: obj.offerAmount,
+              status: obj.id ? obj.status.id : this.offerId,
+              constraints: obj.constraints?.map((item: any) => item.id),
+              comments: obj.comments,
+              contact: obj.id ? obj.contact.id : this.loginService.user.id
+            },
+            listing_id: this.listDetails.id,
+            acceptedOffer: this.isacceptedOffer
+          }
+          obj.id
+            ? this.handleUpdateOffer(obj.id, request)
+            : this.handleCreateNewOffer(request);
+        }
+        else {
+          this.updateOffers.emit()
+          this.toastr.info('Offer Already Accepted!');
+
+        }
+
       },
-      listing_id: this.listDetails.id,
-      acceptedOffer: isacceptedOffer
-    }
-    obj.id
-      ? this.handleUpdateOffer(obj.id, request)
-      : this.handleCreateNewOffer(request);
+      (error: any) => {
+
+        console.log("Error getting get handleCheckListStatus", error)
+      },
+      () => console.log("Done getting get handleCheckListStatus"));
+
+
+
 
   }
 
@@ -225,7 +271,7 @@ export class MyOffersComponent implements OnInit {
       },
       
       listing_id: this.listDetails.id,
-      acceptedOffer:false
+      acceptedOffer: false
     }
     this.myOffersService.handleCancelOffer(obj.id, request).subscribe(
       (response) => {

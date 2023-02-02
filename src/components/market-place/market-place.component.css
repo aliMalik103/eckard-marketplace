@@ -12,6 +12,11 @@
 .marketplace-items {
     text-decoration: none;
     color: #0a2b3c;
+    margin-left: 0.5rem;
+    border-bottom: none;
+}
+
+.marketplace-items-disclosure{
     border-bottom: 2px solid #0a2b3c;
 
 }

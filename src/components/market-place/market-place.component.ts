@@ -12,6 +12,7 @@ export class MarketPlaceComponent implements OnInit {
   totalMyListings: number = 0;
   totalMyOffers: number = 0;
   isActiveUser: Boolean = false
+  allActiveOffers: number = 0
 
   constructor(private myListingsService: MyListingsService, private loginService: LoginService,
     private myOffersService: MyOffersService) {
@@ -34,7 +35,10 @@ export class MarketPlaceComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        this.totalMyOffers = response ? response.filter((list) => list.offerAmount).length : 0
+        const unique = [...new Map(response.map((item: any) =>
+          [item['listingId'], item])).values()];
+        this.allActiveOffers = unique ? unique.filter((list) => list.status == "Active").length : 0
+        this.totalMyOffers = unique ? unique.filter((list) => list.offerAmount).length : 0
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));

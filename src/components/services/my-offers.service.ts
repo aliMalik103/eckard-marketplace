@@ -15,10 +15,10 @@ export class MyOffersService {
 
   getAllMyOffers(id: number): Observable<MyOffers[]> {
     const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/contact/${id}`).pipe(
-      map((lists:any) => lists?.map((list:any) => ({
+      map((lists: any) => lists?.map((list: any) => ({
         ...list,
-        offerAmount:list.offer_Status=="Cancelled"?null:list.offerAmount,
-        offer_id:list.offer_Status=="Cancelled"?null:list.offer_id,
+        offerAmount: list.offer_Status == "Cancelled" ? null : list.offerAmount,
+        offer_id: list.offer_Status == "Cancelled" ? null : list.offer_id,
         // auctionEnd: moment.utc(list.auctionEnd).local().format().slice(0, 16),
       })))
     )
@@ -43,5 +43,11 @@ export class MyOffersService {
     const res = this.http.patch(`${environment.API_BASE_URL}/offer/${id}/`, body)
     return res
   }
+
+  handleCheckListStatus(id: any) {
+    const res = this.http.get<any[]>(`${environment.API_BASE_URL}/offer/list/${id}/`)
+    return res
+  }
+
 
 }

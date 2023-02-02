@@ -1,0 +1,37 @@
+.breadcrumb-link {
+    border-bottom: 2px solid #0a2b3c;
+    display: inline-flex;
+}
+
+.breadcrumb-container a {
+    text-decoration: none;
+    color: #0a2b3c;
+}
+
+.offer-td {
+    border-bottom: 2px solid #0a2b3c;
+    color: #0a2b3c;
+}
+
+.form-select {
+    background-color: #a9a9a969;
+}
+
+.highest-offer {
+    border-bottom: 2px solid blue;
+    color: blue;
+}
+
+.not-highest-offer {
+    border-bottom: 2px solid darkred;
+    color: darkred;
+}
+
+.my-listing-item .active {
+    border-top: 2px solid orange !important;
+    background: #f8bc076b !important;
+}
+
+.nav-link {
+    color: black;
+}

@@ -1,16 +1,6 @@
 <ng-container *ngIf="listDetails">
-    <div class="row mt-4">
-        <div class="col-md-4 col-sm-12">
-            <label for="listednma" class="form-label fw-bold">Auction Type: <small class=" px-2">
-                    <ng-container
-                        *ngIf="offer.auctionType.startsWith('Public -') || offer.auctionType.startsWith('Silent -') ; else elseAuctionType">
-                        {{offer.auctionType.slice(8)}}
-                    </ng-container>
-                    <ng-template #elseAuctionType>
-                        {{offer.auctionType}}
-                    </ng-template>
-                </small></label>
-        </div>
+    <div>
+        <h5 class="offer-heading">Listing Details</h5>
     </div>
     <div class="row mt-4">
         <div class="col-md-4 col-sm-12">
@@ -32,33 +22,41 @@
                     currency:'':'':'.2-2'}}/NMA)</small></label>
         </div>
     </div>
-    <div class="mt-3 row">
-        <label for="Constraints" class="form-label fw-bold">Constraints / Contingencies</label>
-        <div class="p-0">
-            <ng-container *ngIf="listDetails.constraints.length > 0; else elseBlock">
-                <ul>
-                    <li *ngFor="let item of listDetails.constraints">
-                        {{item.constraint}}
+    <div class="mt-3 d-flex flex-row ">
+        <div class="col gap-2 p-0 d-flex flex-row">
+            <div>
+                <label for="Constraints" class="form-label fw-bold">Constraints: </label>
+            </div>
 
-                    </li>
-                </ul>
-            </ng-container>
-            <ng-template #elseBlock>
-                <ul>
-                    <li>
-                        No constraints / contingencies
+            <div class="p-0">
+                <ng-container *ngIf="listDetails.constraints.length > 0; else elseBlock">
+                    <ul>
+                        <li *ngFor="let item of listDetails.constraints">
+                            {{item.constraint}}
 
-                    </li>
-                </ul>
-            </ng-template>
+                        </li>
+                    </ul>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <ul>
+                        <li>
+                            No constraints / contingencies
+
+                        </li>
+                    </ul>
+                </ng-template>
+
+            </div>
 
         </div>
-    </div>
-    <div class="mt-3 row">
-        <label for="comments" class="form-label fw-bold">Comments</label>
-        <p>{{listDetails.comments}}</p>
-
-
+        <div class="col p-0 gap-2 flex-row d-flex">
+            <div>
+                <label for="comments" class="form-label fw-bold">Comments: </label>
+            </div>
+            <div>
+                <p>{{listDetails.comments}}</p>
+            </div>
+        </div>
     </div>
 
 </ng-container>

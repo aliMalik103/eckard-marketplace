@@ -1,6 +1,7 @@
 export interface MyOffers {
     listingId: number
     listingName: string
+    offer_Status:string
     auctionEnd: string
     offerAmount: number
     offer_id: number

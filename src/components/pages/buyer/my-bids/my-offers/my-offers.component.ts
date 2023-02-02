@@ -223,7 +223,9 @@ export class MyOffersComponent implements OnInit {
         comments: obj.comments,
         contact: obj.id ? obj.contact.id : this.loginService.user.id
       },
-      listing_id: this.listDetails.id
+      
+      listing_id: this.listDetails.id,
+      acceptedOffer:false
     }
     this.myOffersService.handleCancelOffer(obj.id, request).subscribe(
       (response) => {

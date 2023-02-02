@@ -49,7 +49,7 @@
                 {{offer.auctionType == "Fix Price" ? 'BUY NOW' : 'SUBMIT OFFER'}}</button>
             <button type="submit" class="btn btn-danger mb-2 fw-bold" data-bs-toggle="modal"
                 [attr.data-bs-target]="'#exampleModal'+index"
-                *ngIf="(newOffer.id && offer.auctionType != 'Fix Price')">CANCEL
+                *ngIf="(newOffer.id && offer.auctionType != 'Fix Price' && offer.offer_Status != 'Cancelled')">CANCEL
                 OFFER</button>
         </div>
 

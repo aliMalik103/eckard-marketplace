@@ -129,8 +129,9 @@ export class MyBidsComponent implements OnInit {
         this.myOffers = this.copymyOffers?.filter((item) => item.offerAmount != null)
         break;
       case 'Active':
-        this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale')
+        this.myOffers = this.copymyOffers?.filter((item) =>  item.offer_Status != "Accepted" && item.status === this.offerStatus && item.auctionType != 'Direct Sale')
         this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
+         
           if (!acc.includes(offer.projectId)) {
             acc.push(offer.projectId)
           }

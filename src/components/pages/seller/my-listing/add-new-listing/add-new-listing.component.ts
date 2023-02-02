@@ -89,7 +89,7 @@ export class AddNewListingComponent implements OnInit {
 
   isValid(obj: any) {
     const requiredFields = ['listing_type', 'listingName', 'listingStart', 'auction_type', 'auctionEnd', 'account', 'project', 'nma', 'minimumAsk'];
-    if (obj.auction_type == 3 || obj.auction_type == 4) {
+    if ([1, 2, 3, 4].includes(obj.auction_type)) {
       requiredFields.push('immediatePrice')
     }
     const isValid = requiredFields.every(field => obj[field]);

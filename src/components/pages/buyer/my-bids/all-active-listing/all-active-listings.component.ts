@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Status } from 'src/components/model/my-listings';
 import { MyOffers } from 'src/components/model/my-offer';
+import { AddNewListingService } from 'src/components/pages/seller/my-listing/add-new-listing/add-new-listing.service';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { MyOffersService } from 'src/components/services/my-offers.service';
-import { AddNewListingService } from '../../seller/my-listing/add-new-listing/add-new-listing.service';
 
 @Component({
-  selector: 'app-my-bids',
-  templateUrl: './my-bids.component.html',
-  styleUrls: ['./my-bids.component.css']
+  selector: 'app-my-all-active-listings',
+  templateUrl: './all-active-listings.component.html',
+  styleUrls: ['./all-active-listings.component.css']
 })
-export class MyBidsComponent implements OnInit {
+export class AllActiveListingComponent implements OnInit {
 
+  offerStatus: string = 'Active';
   filterByProject: string = ''
   type = 'Silent- Minimum Ask'
   statusOptions!: Status[]
@@ -25,6 +26,7 @@ export class MyBidsComponent implements OnInit {
   tableSizes: any = [3, 6, 9, 12];
   testMyOffer = []
   myOffers!: MyOffers[];
+  copymyOffers!: MyOffers[];
   constraintOptions!: any[]
   listDetails!: any
 
@@ -36,6 +38,21 @@ export class MyBidsComponent implements OnInit {
     comments: "",
     offerAmount: 0
   }
+
+  offersFilterOptions: any = [
+    {
+      value: "Active",
+      label: "All Active Listings"
+    },
+    // {
+    //   value: "Pending/Escrow",
+    //   label: "Pending/Escrow"
+    // },
+    // {
+    //   value: "Closed Transactions",
+    //   label: "Closed Transactions"
+    // },
+  ]
   allActiveProjects: any = []
   offersColumns: Array<String> = [
     "Seller / Project",
@@ -69,10 +86,22 @@ export class MyBidsComponent implements OnInit {
         const unique = [...new Map(response.map((item: any) =>
           [item['listingId'], item])).values()];
 
-        this.myOffers = unique && unique?.filter((item) => item.offerAmount != null)
+        this.myOffers = unique
+        this.copymyOffers = unique
+        this.handleFilterList()
       },
       (error: any) => console.log(error),
-      () => console.log("Done getting my offers"));
+      () => console.log("Done getting my listings"));
+  }
+
+  handleChange() {
+    const { filterByProject, offerStatus, copymyOffers } = this;
+    const isAllProjectSelected = filterByProject === 'all';
+
+    this.myOffers = copymyOffers
+      ?.filter(({ status, auctionType, projectId }) =>
+        status === offerStatus && auctionType !== 'Direct Sale' && (isAllProjectSelected || projectId === filterByProject)
+      );
   }
 
   onTableDataChange(event: any) {
@@ -91,6 +120,24 @@ export class MyBidsComponent implements OnInit {
     return false
   }
 
+  handleFilterList() {
+    this.filterByProject = ''
+    this.allActiveProjects = []
+    switch (this.offerStatus) {
+      case 'Active':
+        this.myOffers = this.copymyOffers?.filter((item) => item.offer_Status != "Accepted" && item.status === this.offerStatus && item.auctionType != 'Direct Sale')
+        this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
+          if (!acc.includes(offer.projectId)) {
+            acc.push(offer.projectId)
+          }
+          return acc
+        }, []);
+        break;
+
+      default:
+        return
+    }
+  }
 
   handleConstraint() {
 

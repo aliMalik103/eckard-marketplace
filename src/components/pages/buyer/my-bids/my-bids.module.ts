@@ -13,6 +13,7 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 import { LoginService } from 'src/components/services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { AllActiveListingComponent } from './all-active-listing/all-active-listings.component';
 
 
 
@@ -20,7 +21,8 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
   declarations: [
     MyBidsComponent,
     ListingDetailsComponent,
-    MyOffersComponent
+    MyOffersComponent,
+    AllActiveListingComponent
   ],
   imports: [
     AppRoutingModule,

@@ -11,6 +11,7 @@ import { SECDisclosureComponent } from 'src/components/pages/informations/sec-di
 import { UserAgreementComponent } from 'src/components/pages/informations/user-agreement/user-agreement.component';
 import { MyListingComponent } from 'src/components/pages/seller/my-listing/my-listing.component';
 import { AuthGuard } from 'src/components/auth/auth.guard';
+import { AllActiveListingComponent } from 'src/components/pages/buyer/my-bids/all-active-listing/all-active-listings.component';
 
 
 
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: "", component: LoginComponent },
   { path: "market-place", component: MarketPlaceComponent, canActivate: [AuthGuard] },
   { path: "my-offers", component: MyBidsComponent, canActivate: [AuthGuard] },
+  { path: "all-active-listing", component: AllActiveListingComponent, canActivate: [AuthGuard] },
   { path: "buyer-transactions", component: BuyerTransactionsComponent, canActivate: [AuthGuard] },
   { path: "buyer-notifications", component: BuyerNotificationsComponent, canActivate: [AuthGuard] },
   { path: "my-listing", component: MyListingComponent, canActivate: [AuthGuard] },

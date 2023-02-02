@@ -1,7 +1,7 @@
 export interface MyOffers {
     listingId: number
     listingName: string
-    offer_Status:string
+    offer_Status: string
     auctionEnd: string
     offerAmount: number
     offer_id: number
@@ -17,7 +17,8 @@ export interface MyOffers {
     auctionType: string
     buyNowPrice: any
     isHighestOffer: boolean,
-    accountMpName: string
+    accountMpName: string,
+    immediatePrice?: any
 }
 
 export interface OfferDetails {

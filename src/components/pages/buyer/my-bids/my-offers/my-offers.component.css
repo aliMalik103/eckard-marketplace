@@ -5,6 +5,9 @@
 .est-cashflow {
     font-size: 1.1rem;
 }
+.offer-heading{
+    color: navy;
+}
 .accordion-header::before {
     display: inline-block;
     margin-left: 0.255em;

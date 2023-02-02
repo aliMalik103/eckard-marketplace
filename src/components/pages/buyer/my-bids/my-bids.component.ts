@@ -87,8 +87,11 @@ export class MyBidsComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        this.myOffers = response
-        this.copymyOffers = response
+       const unique= [...new Map(response.map((item:any) =>
+          [item['listingId'], item])).values()];
+
+        this.myOffers = unique
+        this.copymyOffers = unique
         this.handleFilterList()
       },
       (error: any) => console.log(error),
@@ -131,7 +134,10 @@ export class MyBidsComponent implements OnInit {
       case 'Active':
         this.myOffers = this.copymyOffers?.filter((item) =>  item.offer_Status != "Accepted" && item.status === this.offerStatus && item.auctionType != 'Direct Sale')
         this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
-         
+            
+           
+
+
           if (!acc.includes(offer.projectId)) {
             acc.push(offer.projectId)
           }

@@ -125,7 +125,7 @@ export class AllActiveListingComponent implements OnInit {
     this.allActiveProjects = []
     switch (this.offerStatus) {
       case 'Active':
-        this.myOffers = this.copymyOffers?.filter((item) => item.offer_Status != "Accepted" && item.status === this.offerStatus && item.auctionType != 'Direct Sale')
+        this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale')
         this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
           if (!acc.includes(offer.projectId)) {
             acc.push(offer.projectId)
@@ -141,7 +141,7 @@ export class AllActiveListingComponent implements OnInit {
 
   handleConstraint() {
 
-    this.addNewListingService.handleConstraint().subscribe(
+    this.addNewListingService.handleConstraint('buyConstraint').subscribe(
       (response) => {
         this.constraintOptions = response?.map(item => {
           return { ...item, isChecked: false };
@@ -184,6 +184,7 @@ export class AllActiveListingComponent implements OnInit {
             return {
               id: obj.id,
               constraint: obj.constraint,
+              constraintLabel: obj.constraintLabel,
               isChecked: this.newOffer.constraints?.some((item: any) => item.id === obj.id)
             }
           });

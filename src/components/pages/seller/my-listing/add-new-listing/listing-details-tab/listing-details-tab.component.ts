@@ -86,8 +86,8 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
       case 'minimumAsk':
         this.createNewListing.minimumAsk = parseFloat(this.createNewListing.minimumAsk);
         break;
-      case 'immediatePrice':
-        this.createNewListing.immediatePrice = parseFloat(this.createNewListing.immediatePrice);
+      case 'buyNowPrice':
+        this.createNewListing.buyNowPrice = parseFloat(this.createNewListing.buyNowPrice);
         break;
       default:
         return
@@ -184,6 +184,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
     this.myListingsService.handleGetIncomeListing(this.createNewListing.account, this.createNewListing.project).subscribe(
       (response) => {
         this.incomeListing = response
+        this.createNewListing.nma = this.createNewListing.nma || this.incomeListing.availableNma;
         if (this.incomeListing) {
           this.isValidNMA.emit(this.incomeListing.availableNma < parseFloat(this.createNewListing.nma))
         }

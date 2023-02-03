@@ -16,11 +16,6 @@
 
     <div class="d-flex gap-3 mt-4 mb-3">
         <div>
-            <select class="form-select form-select fw-bold " [(ngModel)]="offerStatus" (change)="handleFilterList()">
-                <option *ngFor="let list of offersFilterOptions" [value]="list.value"> {{list.label}}</option>
-            </select>
-        </div>
-        <div>
             <select class="form-select form-select fw-bold " [(ngModel)]="filterByProject" (change)="handleChange()">
                 <option value="" disabled selected hidden>Filter by Project</option>
                 <option value="all">Show All Projects</option>
@@ -55,7 +50,9 @@
                         {{offer.listedNMA}}
                     </td>
                     <td>{{offer.minimumAsk | currency:'':'':'4.2-2'}}</td>
-                    <td>{{offer.auctionType != 'Fix Price' ? "N/A" : offer.buyNowPrice | currency:'':'':'4.2-2'}}</td>
+                    <td>{{offer.auctionType != 'Fix Price' &&
+                        !offer.auctionType.endsWith('Buy Now or Make an Offer') ? "N/A" : offer.buyNowPrice |
+                        currency:'':'':'4.2-2'}}</td>
                     <td>{{offer.noOfBids}}</td>
                     <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
                         currency:'':'':'4.2-2'}}</td>

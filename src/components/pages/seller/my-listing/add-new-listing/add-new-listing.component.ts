@@ -32,7 +32,7 @@ export class AddNewListingComponent implements OnInit {
     status: null,
     listingName: '',
     listingStart: null,
-    auction_type: '',
+    auction_type: null,
     auctionEnd: '',
     comments: '',
     account: null,
@@ -42,7 +42,6 @@ export class AddNewListingComponent implements OnInit {
     buyNowPrice: null,
     constraints: [],
     offer: [],
-    immediatePrice: null
   }
   isValidNma!: boolean
 
@@ -89,8 +88,8 @@ export class AddNewListingComponent implements OnInit {
 
   isValid(obj: any) {
     const requiredFields = ['listing_type', 'listingName', 'listingStart', 'auction_type', 'auctionEnd', 'account', 'project', 'nma', 'minimumAsk'];
-    if ([1, 2, 3, 4].includes(obj.auction_type)) {
-      requiredFields.push('immediatePrice')
+    if (this.createNewListing?.auction_type?.auctionType?.endsWith('- Buy Now or Make an Offer')) {
+      requiredFields.push('buyNowPrice')
     }
     const isValid = requiredFields.every(field => obj[field]);
 
@@ -99,7 +98,7 @@ export class AddNewListingComponent implements OnInit {
 
   handleStatus(id: number) {
     this.createNewListing.status = id
-    this.createNewListing.buyNowPrice = this.createNewListing.auction_type == 5 ? this.createNewListing.minimumAsk : this.createNewListing.buyNowPrice
+    this.createNewListing.buyNowPrice = (this.createNewListing.auction_type.auctionType.endsWith('Buy Now or Make an Offer')) ? this.createNewListing.buyNowPrice : this.createNewListing.minimumAsk
     if (this.isListEdit) {
       this.myListingsService.updateListing(this.createNewListing).subscribe(
         (response) => {
@@ -176,7 +175,7 @@ export class AddNewListingComponent implements OnInit {
 
   handleConstraint() {
 
-    this.addNewListingService.handleConstraint().subscribe(
+    this.addNewListingService.handleConstraint('sellConstraint').subscribe(
       (response) => {
         this.constraintOptions = response?.map(item => {
           if (this.createNewListing?.constraints?.includes(item.id)) {
@@ -192,30 +191,6 @@ export class AddNewListingComponent implements OnInit {
       },
       () => console.log("Done getting listing Constraint"));
   }
-
-  // handleGetAllProjects() {
-  //   this.addNewListingService.handleGetAllProjects().subscribe(
-  //     (response) => {
-  //       this.projectsOptions = response
-  //     },
-  //     (error: any) => {
-
-  //       console.log("error", error)
-  //     },
-  //     () => console.log("Done getting handleGetAllProjects "));
-  // }
-
-  // handleGetAllAccounts() {
-  //   this.addNewListingService.handleGetAllAccounts().subscribe(
-  //     (response) => {
-  //       this.accountsOptions = response
-  //     },
-  //     (error: any) => {
-
-  //       console.log("error", error)
-  //     },
-  //     () => console.log("Done getting List Type"));
-  // }
 
   handleGetStatus() {
     this.addNewListingService.handleGetStatus().subscribe(

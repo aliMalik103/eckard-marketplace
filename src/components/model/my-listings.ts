@@ -15,12 +15,12 @@ export interface MyListings {
     directSaleToken: string
     constraints: any[]
     offer: any[]
-    immediatePrice: any
 }
 
 export interface ListingType {
     id: number
     listingType: string
+    listingTypeLabel?: any
 }
 
 export interface Status {
@@ -59,11 +59,14 @@ export interface Project {
 export interface AuctionType {
     id: number
     auctionType: string
+    auctionLabel?: any
 }
 
 export interface Constraint {
     id: number
     constraint: string
+    constraintLabel: string
+    constraintType: string
 }
 
 export interface Tract {
@@ -95,7 +98,6 @@ export interface MyListing {
     constraints: any[]
     offer: any[]
     id?: any
-    immediatePrice?: any
 
 }
 
@@ -139,5 +141,5 @@ export interface CashConfig {
     decline: any,
     gasPrice: any,
     oilPrice: any
-    contact:any
+    contact: any
 }

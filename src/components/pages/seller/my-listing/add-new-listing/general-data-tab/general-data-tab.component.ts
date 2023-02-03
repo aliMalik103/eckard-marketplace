@@ -11,18 +11,14 @@ export class GeneralDataTabComponent implements OnInit {
   @Input() auctionTypeOptions!: AuctionType[]
   @Input() constraintOptions!: any[]
   @Input() createNewListing!: MyListing
-  @Input() isListDraft!:boolean
+  @Input() isListDraft!: boolean
 
 
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     console.log("constraints constructer", this.constraintOptions)
-  }
-
-  handleChange() {
-    this.createNewListing.auction_type = parseInt(this.createNewListing.auction_type);
   }
 
   changeSelection() {
@@ -34,6 +30,10 @@ export class GeneralDataTabComponent implements OnInit {
       .filter(value => value.isChecked)
       .map(value => value.id);
     console.log(this.createNewListing)
+  }
+
+  auctionTypeComparator(a: any, b: any) {
+    return (a && b) ? a.id === b.id : false;
   }
 
 }

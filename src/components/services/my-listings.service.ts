@@ -21,7 +21,7 @@ export class MyListingsService {
     status: null,
     listingName: '',
     listingStart: null,
-    auction_type: '',
+    auction_type: null,
     auctionEnd: '',
     comments: '',
     account: null,
@@ -31,7 +31,6 @@ export class MyListingsService {
     buyNowPrice: null,
     constraints: [],
     offer: [],
-    immediatePrice: null
   }
   isListEdit: boolean = false
   isListDraft: boolean = true
@@ -49,7 +48,7 @@ export class MyListingsService {
       status: null,
       listingName: '',
       listingStart: null,
-      auction_type: '',
+      auction_type: null,
       auctionEnd: '',
       comments: '',
       account: null,
@@ -59,7 +58,6 @@ export class MyListingsService {
       buyNowPrice: null,
       constraints: [],
       offer: [],
-      immediatePrice: null
 
     }
     this.isListEdit = false
@@ -110,6 +108,7 @@ export class MyListingsService {
     const endLocalTime = moment(newList.auctionEnd);
     newList.auctionEnd = endLocalTime.utc().format();
     newList.listingStart = startLocalTime.utc().format();
+    newList.auction_type = newList.auction_type.id
     return this.http.post<MyListing>(`${environment.API_BASE_URL}/listing/`, newList)
   }
 
@@ -118,6 +117,7 @@ export class MyListingsService {
     const endLocalTime = moment(updateList.auctionEnd);
     updateList.auctionEnd = endLocalTime.utc().format();
     updateList.listingStart = startLocalTime.utc().format();
+    updateList.auction_type = updateList.auction_type.id
     return this.http.patch<MyListing>(`${environment.API_BASE_URL}/listing/${updateList.id}/`, updateList);
   }
 

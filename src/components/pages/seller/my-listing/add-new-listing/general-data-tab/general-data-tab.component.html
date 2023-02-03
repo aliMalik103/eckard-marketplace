@@ -2,11 +2,11 @@
 
     <div class="col-md-6">
         <label for="auctionType" class="form-label">Auction Type <span class="text-danger">*</span></label>
-        <select id="auctionType" class="form-select" [(ngModel)]="createNewListing.auction_type"
-            (ngModelChange)="handleChange()" #auctionType="ngModel"
+        <select id="auctionType" class="form-select" [compareWith]="auctionTypeComparator" [(ngModel)]="createNewListing.auction_type" #auctionType="ngModel"
             [ngClass]="{'border border-danger':auctionType.invalid && (auctionType.dirty || auctionType.touched)}"
             required [disabled]="!isListDraft">
-            <option *ngFor="let item of auctionTypeOptions" [value]="item.id">{{item.auctionType}}
+            <option *ngFor="let item of auctionTypeOptions" [ngValue]="item">
+                {{item.auctionLabel}}
             </option>
         </select>
         <span *ngIf="auctionType.invalid && (auctionType.dirty || auctionType.touched ) &&  auctionType.errors"
@@ -37,7 +37,7 @@
             <input class="form-check-input" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
                 [name]="item.constraint" [id]="'constraint'+item.id" [disabled]="!isListDraft">
             <label [for]="'constraint'+item.id">
-                {{item.constraint}}
+                {{item.constraintLabel}}
             </label>
         </div>
     </div>

@@ -35,7 +35,6 @@ export class MyOffersComponent implements OnInit {
   ngOnInit(): void {
     this.handleGetCashFlow()
     this.handleGetCashConfig()
-
   }
 
 
@@ -153,11 +152,11 @@ export class MyOffersComponent implements OnInit {
   }
 
   handleChange(offer: any) {
-    let immediatePrice = parseFloat(this.listDetails.immediatePrice);
-    if (offer.auctionType.endsWith('Buy Immediately or Make Me an Offer') || offer.auctionType.endsWith('Minimum Ask')) {
-      if (this.newOffer.offerAmount > (immediatePrice + (immediatePrice * 0.15))) {
-        this.newOffer.offerAmount = immediatePrice
-        this.toastr.info('Your offer price is too high!');
+    let buyNowPrice = parseFloat(this.listDetails.buyNowPrice);
+    if (offer.auctionType.endsWith('Buy Now or Make an Offer')) {
+      if (this.newOffer.offerAmount > (buyNowPrice + (buyNowPrice * 0.15))) {
+        this.newOffer.offerAmount = buyNowPrice
+        this.toastr.info('Excessive offer, kindly reconsider!');
         return;
       }
 
@@ -167,28 +166,36 @@ export class MyOffersComponent implements OnInit {
 
   handleMessage(offer: any) {
 
-    let immediatePrice = parseFloat(this.listDetails.immediatePrice);
+    let buyNowPrice = parseFloat(this.listDetails.buyNowPrice);
     this.offerId = null;
     this.activeItem = null;
     this.isacceptedOffer = false;
+    this.activeItem = this.statusOptions?.find((item) => item.status === "Active");
+
     if (offer.auctionType == 'Fix Price' || offer.auctionType == 'Direct Sale') {
       this.activeItem = this.statusOptions?.find((item) => item.status == "Accepted")
       this.offerId = this.activeItem ? this.activeItem.id : null;
       this.isacceptedOffer = true
     }
 
-    else if (offer.auctionType.endsWith('Minimum Ask') || offer.auctionType.endsWith('Buy Immediately or Make Me an Offer')) {
-      this.activeItem = this.statusOptions?.find((item) => item.status === "Active");
-      if (this.newOffer.offerAmount >= immediatePrice && this.newOffer.offerAmount < (immediatePrice + (immediatePrice * 0.15))) {
+    else if (offer.auctionType.endsWith('Buy Now or Make an Offer')) {
+      if (this.newOffer.offerAmount >= buyNowPrice && this.newOffer.offerAmount < (buyNowPrice + (buyNowPrice * 0.15))) {
         this.activeItem = this.statusOptions?.find((item) => item.status === "Accepted");
         this.isacceptedOffer = true;
       }
-      this.offerId = this.activeItem ? this.activeItem.id : null;
     }
-
+    else if (offer.auctionType.endsWith('Minimum Ask')) {
+      buyNowPrice = buyNowPrice || offer.minimumAsk
+      if (this.newOffer.offerAmount >= buyNowPrice) {
+        this.activeItem = this.statusOptions?.find((item) => item.status === "Accepted");
+        this.isacceptedOffer = true;
+      }
+    }
+    this.offerId = this.activeItem ? this.activeItem.id : null;
   }
 
   handleSubmitOffer(obj: any, offer: any) {
+
     this.myOffersService.handleCheckListStatus(this.listDetails.id).subscribe(
       (response) => {
         if (response.length == 0) {
@@ -219,10 +226,6 @@ export class MyOffersComponent implements OnInit {
         console.log("Error getting get handleCheckListStatus", error)
       },
       () => console.log("Done getting get handleCheckListStatus"));
-
-
-
-
   }
 
   handleCreateNewOffer(body: any) {
@@ -269,7 +272,7 @@ export class MyOffersComponent implements OnInit {
         comments: obj.comments,
         contact: obj.id ? obj.contact.id : this.loginService.user.id
       },
-      
+
       listing_id: this.listDetails.id,
       acceptedOffer: false
     }

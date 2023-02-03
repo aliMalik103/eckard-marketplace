@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Status } from 'src/components/model/my-listings';
+import { Constraint, Status } from 'src/components/model/my-listings';
 import { MyOffers } from 'src/components/model/my-offer';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
@@ -25,7 +25,7 @@ export class MyBidsComponent implements OnInit {
   tableSizes: any = [3, 6, 9, 12];
   testMyOffer = []
   myOffers!: MyOffers[];
-  constraintOptions!: any[]
+  constraintOptions!: any
   listDetails!: any
 
   newOffer: any = {
@@ -58,8 +58,8 @@ export class MyBidsComponent implements OnInit {
       return
 
     }
-    this.getAllMyOffers()
     this.handleConstraint()
+    this.getAllMyOffers()
     this.handleGetStatus()
   }
 
@@ -70,6 +70,7 @@ export class MyBidsComponent implements OnInit {
           [item['listingId'], item])).values()];
 
         this.myOffers = unique && unique?.filter((item) => item.offerAmount != null)
+
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my offers"));
@@ -94,12 +95,11 @@ export class MyBidsComponent implements OnInit {
 
   handleConstraint() {
 
-    this.addNewListingService.handleConstraint().subscribe(
+    this.addNewListingService.handleConstraint('buyConstraint').subscribe(
       (response) => {
         this.constraintOptions = response?.map(item => {
           return { ...item, isChecked: false };
         });
-
       },
       (error: any) => {
 
@@ -137,6 +137,7 @@ export class MyBidsComponent implements OnInit {
             return {
               id: obj.id,
               constraint: obj.constraint,
+              constraintLabel: obj.constraintLabel,
               isChecked: this.newOffer.constraints?.some((item: any) => item.id === obj.id)
             }
           });

@@ -36,7 +36,8 @@
                         {{offer.listedNMA}}
                     </td>
                     <td>{{offer.minimumAsk | currency:'':'':'4.2-2'}}</td>
-                    <td>{{offer.auctionType != 'Fix Price' ? "N/A" : offer.buyNowPrice | currency:'':'':'4.2-2'}}</td>
+                    <td>{{offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer') ?
+                        "N/A" : offer.buyNowPrice | currency:'':'':'4.2-2'}}</td>
                     <td>{{offer.noOfBids}}</td>
                     <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
                         currency:'':'':'4.2-2'}}</td>
@@ -56,7 +57,7 @@
                 </tr>
                 <tr id="collapse{{i}}" class=" collapse fade" [attr.aria-labelledby]="'heading'+i"
                     data-parent="#accordion">
-                    <td colspan="8 ">
+                    <td colspan="8">
 
                         <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
 

@@ -18,7 +18,6 @@ export interface MyOffers {
     buyNowPrice: any
     isHighestOffer: boolean,
     accountMpName: string,
-    immediatePrice?: any
 }
 
 export interface OfferDetails {

@@ -12,7 +12,7 @@ export class ListingDetailsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(' List Details', this.listDetails);
+    console.log(' ');
   }
 
 }

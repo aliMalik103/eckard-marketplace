@@ -134,6 +134,8 @@ export interface ContactListing {
     minimumAsk: number
     highestBid: any
     "# Bids": number
+    isAuctionEnd: any
+    isListingStart: any
 }
 export interface CashConfig {
     id?: any,

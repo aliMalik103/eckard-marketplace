@@ -26,6 +26,8 @@ export class AddNewListingComponent implements OnInit {
   tracts!: Tract[]
   isListEdit!: boolean
   isListDraft!: boolean
+  showOffers!:boolean
+
 
   createNewListing: MyListing = {
     listing_type: null,
@@ -53,6 +55,7 @@ export class AddNewListingComponent implements OnInit {
 
     this.createNewListing = this.myListingsService.newListing
     this.isListEdit = this.myListingsService.isListEdit
+    this.showOffers = this.myListingsService.showOffers
     this.isListDraft = this.myListingsService.isListDraft
     this.listingId = this.createNewListing.listingName
   }

@@ -49,5 +49,15 @@ export class MyOffersService {
     return res
   }
 
+  handleOfferDealMessages() {
+    const res = this.http.get<any[]>(`${environment.API_BASE_URL}/key_value/`)
+    return res
+  }
+
+  handlePendingOfferTrancastions(id: any) {
+    const res = this.http.get<any[]>(`${environment.API_BASE_URL}/offer/contact/${id}/pending_offer`)
+    return res;
+  }
+
 
 }

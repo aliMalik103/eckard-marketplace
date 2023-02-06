@@ -26,6 +26,8 @@ export class MyOffersComponent implements OnInit {
   offerId!: any
   activeItem!: any
   isacceptedOffer = false
+  offerConfirmMessages: any
+  offerDisclaimer!: any
 
   constructor(private myListingsService: MyListingsService, private myOffersService: MyOffersService,
     private loginService: LoginService, private toastr: ToastrService) {
@@ -35,9 +37,8 @@ export class MyOffersComponent implements OnInit {
   ngOnInit(): void {
     this.handleGetCashFlow()
     this.handleGetCashConfig()
+    this.handleOfferDealMessages()
   }
-
-
 
   basicCashFlow: CashConfig = {
     id: null,
@@ -154,7 +155,7 @@ export class MyOffersComponent implements OnInit {
   handleChange(offer: any) {
     let buyNowPrice = parseFloat(this.listDetails.buyNowPrice);
     if (offer.auctionType.endsWith('Buy Now or Make an Offer')) {
-      if (this.newOffer.offerAmount > (buyNowPrice + (buyNowPrice * 0.15))) {
+      if (this.newOffer.offerAmount > buyNowPrice) {
         this.newOffer.offerAmount = buyNowPrice
         this.toastr.info('Excessive offer, kindly reconsider!');
         return;
@@ -179,17 +180,19 @@ export class MyOffersComponent implements OnInit {
     }
 
     else if (offer.auctionType.endsWith('Buy Now or Make an Offer')) {
-      if (this.newOffer.offerAmount >= buyNowPrice && this.newOffer.offerAmount < (buyNowPrice + (buyNowPrice * 0.15))) {
-        this.activeItem = this.statusOptions?.find((item) => item.status === "Accepted");
-        this.isacceptedOffer = true;
-      }
-    }
-    else if (offer.auctionType.endsWith('Minimum Ask')) {
-      buyNowPrice = buyNowPrice || offer.minimumAsk
       if (this.newOffer.offerAmount >= buyNowPrice) {
         this.activeItem = this.statusOptions?.find((item) => item.status === "Accepted");
         this.isacceptedOffer = true;
       }
+    }
+    if (this.isacceptedOffer) {
+      let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Buying Disclaimer")
+      this.offerDisclaimer = message[0]
+    }
+    else {
+      let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Buying Offer Disclaimer")
+      this.offerDisclaimer = message[0]
+
     }
     this.offerId = this.activeItem ? this.activeItem.id : null;
   }
@@ -260,35 +263,70 @@ export class MyOffersComponent implements OnInit {
       () => console.log("Done getting Offer .")
     )
   }
+  handleCancelMessage() {
+    let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Cancel Offer Disclaimer")
+    this.offerDisclaimer = message[0]
+  }
 
   handleCancelOffer(obj: any) {
     const canceledItem = this.statusOptions?.find((item) => item.status == "Cancelled")
     const cancelId = canceledItem ? canceledItem.id : null;
-    const request = {
-      offer: {
-        offerAmount: obj.offerAmount,
-        status: cancelId,
-        constraints: obj.constraints?.map((item: any) => item.id),
-        comments: obj.comments,
-        contact: obj.id ? obj.contact.id : this.loginService.user.id
-      },
-
-      listing_id: this.listDetails.id,
-      acceptedOffer: false
-    }
-    this.myOffersService.handleCancelOffer(obj.id, request).subscribe(
+    this.myOffersService.handleCheckListStatus(this.listDetails.id).subscribe(
       (response) => {
-        if (response) {
+        if (response.length == 0) {
+          const request = {
+            offer: {
+              offerAmount: obj.offerAmount,
+              status: cancelId,
+              constraints: obj.constraints?.map((item: any) => item.id),
+              comments: obj.comments,
+              contact: obj.id ? obj.contact.id : this.loginService.user.id
+            },
+
+            listing_id: this.listDetails.id,
+            acceptedOffer: false
+          }
+          this.myOffersService.handleCancelOffer(obj.id, request).subscribe(
+            (response) => {
+              if (response) {
+                this.updateOffers.emit()
+                this.toastr.success('Offer Cancelled Successfully');
+              }
+            },
+            (error: any) => {
+              this.toastr.error('Offer Not Found!');
+              console.error("Error getting Offer : ", error);
+            },
+            () => console.log("Done getting Offer .")
+          )
+        }
+        else {
           this.updateOffers.emit()
-          this.toastr.success('Offer Cancelled Successfully');
+          this.toastr.info('Offer Already Accepted!');
         }
       },
       (error: any) => {
-        this.toastr.error('Offer Not Found!');
+        this.toastr.error('Offer Not Create!');
+
+        console.error("Error getting Offer : ", error);
+      },
+      () => console.log("Done getting Offer .")
+    )
+
+
+  }
+
+  handleOfferDealMessages() {
+    this.myOffersService.handleOfferDealMessages().subscribe(
+      (response) => {
+        this.offerConfirmMessages = response
+      },
+      (error: any) => {
         console.error("Error getting Offer : ", error);
       },
       () => console.log("Done getting Offer .")
     )
   }
+
 
 }

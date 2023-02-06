@@ -4,50 +4,52 @@
     </div>
     <div class="d-flex flex-row mt-4 ">
         <div class="col gap-2 p-0 ">
-            <label for="Seller" class="form-label fw-bold">Seller: <small
-                    class=" px-2 text-muted">{{offer.accountMpName}}</small></label>
+            <label for="Seller" class="form-label fw-bold">Seller: </label>
+            <span class=" px-2 text-muted">{{offer.accountMpName}}</span>
         </div>
 
         <div class="col gap-2 p-0 ">
-            <label for="Project" class="form-label fw-bold">Project: <small
-                    class=" px-2 text-muted">{{offer.projectId}}</small></label>
+            <label for="Project" class="form-label fw-bold">Project: </label>
+            <span class=" px-2 text-muted">{{offer.projectId}}</span>
         </div>
         <div class="col gap-2 p-0 ">
-            <label for="AuctionType" class="form-label fw-bold ">Auction Type: <small class=" px-2 text-muted ">
-                    <ng-container
-                        *ngIf="offer.auctionType.startsWith('Public -') || offer.auctionType.startsWith('Silent -') ; else elseAuctionType">
-                        {{offer.auctionType.slice(8)}}
-                    </ng-container>
-                    <ng-template #elseAuctionType>
-                        {{offer.auctionType}}
-                    </ng-template>
-                </small></label>
+            <label for="AuctionType" class="form-label fw-bold ">Auction Type: </label>
+            <span class=" px-2 text-muted ">
+                <ng-container
+                    *ngIf="offer.auctionType.startsWith('Public -') || offer.auctionType.startsWith('Silent -') ; else elseAuctionType">
+                    {{offer.auctionType.slice(8)}}
+                </ng-container>
+                <ng-template #elseAuctionType>
+                    {{offer.auctionType}}
+                </ng-template>
+            </span>
         </div>
 
     </div>
 
     <div class="d-flex flex-row mt-4 ">
         <div class="col gap-2 p-0 ">
-            <label for="listednma" class="form-label fw-bold">Listed NMA: <small
-                    class=" px-2 text-muted">{{listDetails.nma}}</small></label>
+            <label for="listednma" class="form-label fw-bold">Listed NMA:</label>
+            <span class=" px-2 text-muted">{{listDetails.nma}}</span>
         </div>
 
         <div class="col gap-2 p-0 ">
-            <label for="minimumAsk" class="form-label fw-bold">Minimum Ask: <small
-                    class="text-muted px-2">{{listDetails.minimumAsk |
-                    currency:'':'':'.2-2'}} ({{listDetails.minimumAsk / listDetails.nma |
-                    currency:'':'':'.2-2'}}/NMA)</small></label>
+            <label for="minimumAsk" class="form-label fw-bold">Minimum Ask: </label>
+            <span class="text-muted px-2">{{listDetails.minimumAsk |
+                currency:'':'':'.2-2'}} ({{listDetails.minimumAsk / listDetails.nma |
+                currency:'':'':'.2-2'}}/NMA)</span>
         </div>
         <div class="col gap-2 p-0 ">
-            <label for="buynow" class="form-label fw-bold">Buy Now: <small class=" px-2 text-muted"
-                    *ngIf="!(offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer')); else elseBuyNow">{{listDetails.buyNowPrice
-                    |
-                    currency:'':'':'.2-2'}} ({{listDetails.buyNowPrice / listDetails.nma |
-                    currency:'':'':'.2-2'}}/NMA)</small>
-                <ng-template #elseBuyNow>
-                    <small class=" px-2 text-muted">N/A</small>
-                </ng-template>
+            <label for="buynow" class="form-label fw-bold">Buy Now:
             </label>
+            <span class=" px-2 text-muted"
+                *ngIf="!(offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer')); else elseBuyNow">{{listDetails.buyNowPrice
+                |
+                currency:'':'':'.2-2'}} ({{listDetails.buyNowPrice / listDetails.nma |
+                currency:'':'':'.2-2'}}/NMA)</span>
+            <ng-template #elseBuyNow>
+                <span class=" px-2 text-muted">N/A</span>
+            </ng-template>
         </div>
 
     </div>

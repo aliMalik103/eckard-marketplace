@@ -28,6 +28,7 @@ export class MyBidsComponent implements OnInit {
   constraintOptions!: any
   listDetails!: any
 
+
   newOffer: any = {
     id: null,
     contact: null,
@@ -66,10 +67,8 @@ export class MyBidsComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        const unique = [...new Map(response.map((item: any) =>
-          [item['listingId'], item])).values()];
+        this.myOffers = response?.filter((item: any) => item.offerAmount != null && (item.status == "Active" || item.status == "Accepted") && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
 
-        this.myOffers = unique && unique?.filter((item) => item.offerAmount != null)
 
       },
       (error: any) => console.log(error),

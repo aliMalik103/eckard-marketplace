@@ -1,0 +1,76 @@
+<div class="row mt-4">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th scope="col" class="text-secondary" *ngFor="let offerHeadning of offersTableHead; index as i">
+                    {{offerHeadning}}
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let offer of offers | paginate
+            : {
+                itemsPerPage: tableSize,
+                currentPage: page,
+                totalItems: count
+              };
+        let i = index">
+                <td class="text-secondary">{{offer.mpName[0]}}</td>
+                <td class="text-secondary"> {{offer.offerAmount |
+                    currency:'':'':'.2-2'}}</td>
+                <td>
+                    <ng-container *ngIf="offer.status.status == 'Active' && ListingDetails.status != 9">
+                        <span for="accept" data-bs-target="#staticBackdrop" data-bs-toggle="modal"
+                            (click)="handleSellMessage(offer)"
+                            class="form-label d-inline-block border-bottom border-primary text-primary pe-auto  border-primary">
+                            accept
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="offer.status.status == 'Accepted' && ListingDetails.status == 9">
+                        <span class="text-secondary">Accepted</span>
+                    </ng-container>
+                    <ng-container *ngIf="offer.status.status == 'Active' && ListingDetails.status == 9">
+                        <span class="text-secondary">No Action</span>
+                    </ng-container>
+                </td>
+                <td class="text-secondary">
+                    <p *ngFor="let constraint of offer.constraints">
+                        {{constraint.constraintLabel}}</p>
+                </td>
+                <td class="text-secondary">{{offer.comments}}</td>
+
+            </tr>
+
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+        </pagination-controls>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel" [innerHTML]="offerDisclaimer?.value1"> </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" [innerHTML]="offerDisclaimer?.value2">
+                </div>
+                <div class="modal-footer">
+                    <div class="mr-auto ">
+
+                        <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
+                            (click)="handleSubmitOffer()">ACCEPT</button>
+                        <button type="button" data-bs-dismiss="modal"
+                            class="btn btn-danger ml-2 fw-bold">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>

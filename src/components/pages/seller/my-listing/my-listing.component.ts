@@ -52,6 +52,7 @@ export class MyListingComponent implements OnInit {
   count: number = 0;
   tableSize: number = 50;
   tableSizes: any = [3, 6, 9, 12];
+  isShowOffers: boolean = false
 
 
   constructor(private myListingsService: MyListingsService, private router: Router, private loginService: LoginService) {
@@ -69,17 +70,26 @@ export class MyListingComponent implements OnInit {
   }
 
   handleFilterList() {
-    this.myListings = this.copyListings?.filter((item) => item.status === this.listStatus)
+    console.log(this.copyListings)
+    if (this.listStatus == 'Active') {
+      this.myListings = this.copyListings?.filter((item) => item.status === this.listStatus && !item.isAuctionEnd && !item.isListingStart)
+    }
+    else {
+
+      this.myListings = this.copyListings?.filter((item) => item.status != "Accepted" && (item.isAuctionEnd || item.isListingStart))
+
+    }
   }
 
   handleToggel() {
     this.showAllListing = !this.showAllListing;
+    this.isShowOffers = false
     this.getAllMyListings()
 
   }
 
   handleResetNewList() {
-
+    this.isShowOffers = false
     this.myListingsService.handleResetSetNewList()
     this.showAllListing = false
 
@@ -104,7 +114,7 @@ export class MyListingComponent implements OnInit {
           minimumAsk: response.minimumAsk,
           buyNowPrice: response.buyNowPrice,
           constraints: response.constraints.map((x: any) => parseInt(x.id)),
-          offer: response.offer.map((x: any) => parseInt(x.id)),
+          offer: response.offer,
           id: response.id
         }
         if (response.status.status == 'Active') {
@@ -117,6 +127,12 @@ export class MyListingComponent implements OnInit {
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));
 
+  }
+
+  handleOffers(value: any) {
+    this.isShowOffers = !this.isShowOffers
+    this.handleEdit(value)
+    this.myListingsService.showOffers = true;
   }
 
   getAllMyListings() {

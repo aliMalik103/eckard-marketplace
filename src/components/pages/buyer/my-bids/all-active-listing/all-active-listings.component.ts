@@ -83,11 +83,9 @@ export class AllActiveListingComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        const unique = [...new Map(response.map((item: any) =>
-          [item['listingId'], item])).values()];
-
-        this.myOffers = unique
-        this.copymyOffers = unique
+ 
+        this.myOffers = response
+        this.copymyOffers = response
         this.handleFilterList()
       },
       (error: any) => console.log(error),
@@ -125,7 +123,7 @@ export class AllActiveListingComponent implements OnInit {
     this.allActiveProjects = []
     switch (this.offerStatus) {
       case 'Active':
-        this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.auctionType != 'Direct Sale')
+        this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
         this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
           if (!acc.includes(offer.projectId)) {
             acc.push(offer.projectId)

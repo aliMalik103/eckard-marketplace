@@ -33,6 +33,7 @@ export class MyListingsService {
     offer: [],
   }
   isListEdit: boolean = false
+  showOffers: boolean = false
   isListDraft: boolean = true
   userAccountsAndProjects!: any[]
 
@@ -62,6 +63,7 @@ export class MyListingsService {
     }
     this.isListEdit = false
     this.isListDraft = true;
+    this.showOffers = false
     this.handleSetDate()
 
 
@@ -159,6 +161,11 @@ export class MyListingsService {
   handleUpdateCashConfig(body: any) {
     console.log(body)
     const res = this.http.patch(`${environment.API_BASE_URL}/cash_config/${body.id}`, body)
+    return res;
+  }
+
+  handlePendingListsTrancastions(id: any) {
+    const res = this.http.get<any[]>(`${environment.API_BASE_URL}/listing/contact/${id}/pending_list`)
     return res;
   }
 

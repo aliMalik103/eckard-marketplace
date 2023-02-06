@@ -93,14 +93,21 @@
                     <div class="tab-pane fade " id="addTracts" role="tabpanel" aria-labelledby="addTracts-tab"
                         *ngIf="false">
 
-                        <app-add-tracts-tab [accountsOptions]="accountsOptions" [createNewListing]="createNewListing"
-                            [isListDraft]="isListDraft">
+                        <app-add-tracts-tab [createNewListing]="createNewListing" [isListDraft]="isListDraft">
                         </app-add-tracts-tab>
                     </div>
 
                 </div>
 
             </div>
+            <ng-container *ngIf="showOffers">
+
+                <div class="row p-4">
+                    <all-offers-tab [ListingDetails]="createNewListing" [statusOptions]="statusOptions"
+                        (handleSubmit)="handleGoBack()"></all-offers-tab>
+                </div>
+            </ng-container>
+
 
             <div class="d-flex justify-content-between p-4 col-8 col-sm-10">
                 <div class="d-flex " *ngIf="(isValid(createNewListing) && !isValidNma) || (isListEdit && !isListDraft)">

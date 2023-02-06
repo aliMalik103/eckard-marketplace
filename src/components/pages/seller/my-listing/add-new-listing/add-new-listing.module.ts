@@ -11,6 +11,8 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/components/services/login.service';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { AllOffersTabComponent } from './all-offers-tab/all-offers-tab.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -18,13 +20,16 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
         AddNewListingComponent,
         GeneralDataTabComponent,
         ListingDetailsTabComponent,
-        AddTractsTabComponent
+        AddTractsTabComponent,
+        AllOffersTabComponent
     ],
     imports: [
         AppRoutingModule,
         FormsModule,
         CommonModule,
-        CurrencyMaskModule
+        CurrencyMaskModule,
+        NgxPaginationModule
+
 
     ],
     providers: [AddNewListingService, MyListingsService, ToastrService, LoginService, CurrencyPipe],

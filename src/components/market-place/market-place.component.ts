@@ -32,7 +32,8 @@ export class MarketPlaceComponent implements OnInit {
   getAllMyListings() {
     this.myListingsService.getAllMyListings(this.loginService.user.id).subscribe(
       (response) => {
-        this.totalMyListings = response ? response.length : 0
+        let allListis = response?.filter((item: any)=> item.status === "Active" && !item.isAuctionEnd && !item.isListingStart)
+        this.totalMyListings = allListis ? allListis.length : 0
       },
       (error: any) => console.log(error),
       () => console.log("Done getting my listings"));
@@ -40,10 +41,9 @@ export class MarketPlaceComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-
-        let activeOffers = response?.filter((item: any) => item.status === "Active" && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStar)
+        let activeOffers = response?.filter((item: any) => item.status === "Active" && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
         this.allActiveOffers = activeOffers ? activeOffers.length : 0
-        let myOffers = response?.filter((item: any) => item.offerAmount != null && (item.status == "Active" || item.status == "Accepted" ) && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
+        let myOffers = response?.filter((item: any) => item.offerAmount != null && item.status == "Active" && item.offer_Status == "Active" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
         this.totalMyOffers = myOffers ? myOffers.length : 0
 
       },

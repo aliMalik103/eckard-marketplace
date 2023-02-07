@@ -70,11 +70,9 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "proxyConfig":"proxy.config.json",
               "browserTarget": "eckard-marketplace:build:production"
             },
             "development": {
-              "proxyConfig":"proxy.config.json",
               "browserTarget": "eckard-marketplace:build:development"
             }
           },

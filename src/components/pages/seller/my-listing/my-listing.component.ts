@@ -75,8 +75,9 @@ export class MyListingComponent implements OnInit {
     }
     else {
 
-      this.myListings = this.copyListings?.filter((item) => item.status != "Accepted" && (!item.isAuctionEnd || item.isListingStart))
-
+      let futureActive = this.copyListings?.filter((item) => item.status == "Active" && item.isListingStart)
+      let draft = this.copyListings?.filter((item) => item.status == "Draft" && (item.isListingStart || (!item.isListingStart || !item.isAuctionEnd)))
+      this.myListings = [...futureActive,...draft]
     }
   }
 

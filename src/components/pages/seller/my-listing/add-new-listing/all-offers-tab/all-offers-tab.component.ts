@@ -26,7 +26,7 @@ export class AllOffersTabComponent implements OnInit {
   selectedOffer!: any
 
 
-  offersTableHead = ['Buyer', 'Offer Amount', 'Action', 'Constriants', 'Comments']
+  offersTableHead = ['Buyer', 'Offer Amount', 'Action', 'Constraints', 'Comments']
 
 
   constructor(private myOffersService: MyOffersService, private toastr: ToastrService, private router: Router,

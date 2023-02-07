@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Status } from 'src/components/model/my-listings';
 import { MyOffers } from 'src/components/model/my-offer';
 import { AddNewListingService } from 'src/components/pages/seller/my-listing/add-new-listing/add-new-listing.service';
@@ -18,6 +19,8 @@ export class AllActiveListingComponent implements OnInit {
   filterByProject: string = ''
   type = 'Silent- Minimum Ask'
   statusOptions!: Status[]
+  isDirectSaleOffer: boolean = false
+  directSaleId!: any
 
 
   page: number = 1;
@@ -65,7 +68,7 @@ export class AllActiveListingComponent implements OnInit {
     "My Offer"
   ]
   constructor(private router: Router, private loginService: LoginService, private myListingsService: MyListingsService,
-    private myOffersService: MyOffersService, private addNewListingService: AddNewListingService) {
+    private myOffersService: MyOffersService, private addNewListingService: AddNewListingService, private activeRoute: ActivatedRoute, private toastr: ToastrService) {
 
   }
 
@@ -75,6 +78,11 @@ export class AllActiveListingComponent implements OnInit {
       return
 
     }
+    if (this.activeRoute.snapshot?.routeConfig?.path == "direct-sale/:id") {
+      this.isDirectSaleOffer = true
+      this.directSaleId = this.activeRoute.snapshot?.params['id']
+    }
+
     this.getAllMyOffers()
     this.handleConstraint()
     this.handleGetStatus()
@@ -83,13 +91,21 @@ export class AllActiveListingComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
- 
+
         this.myOffers = response
         this.copymyOffers = response
+        if (this.isDirectSaleOffer) {
+          this.myOffers = this.copymyOffers?.filter((item) => item.status == 'Active' && item.auctionType == 'Direct Sale' && item.directSaleToken == this.directSaleId)
+          if (this.myOffers.length == 0) {
+            this.toastr.info('Offer Not Found');
+            this.router.navigate(['/market-place']);
+          }
+          return
+        }
         this.handleFilterList()
       },
       (error: any) => console.log(error),
-      () => console.log("Done getting my listings"));
+      () => console.log("Done getting active listings"));
   }
 
   handleChange() {

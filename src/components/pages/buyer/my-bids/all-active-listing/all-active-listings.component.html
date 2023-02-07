@@ -6,16 +6,26 @@
             <ol class="breadcrumb breadcrumb-link">
                 <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
                 <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/all-active-listing']">All
-                        Active Lists</a>
-                </li>
+                <ng-container *ngIf="isDirectSaleOffer; else directSaleBlock">
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a> Direct Sale</a>
+                    </li>
+
+                </ng-container>
+                <ng-template #directSaleBlock>
+                    <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/all-active-listing']">
+                            All Active Lists </a>
+                    </li>
+
+                </ng-template>
+
             </ol>
         </nav>
 
     </div>
 
     <div class="d-flex gap-3 mt-4 mb-3">
-        <div>
+        <div *ngIf="!isDirectSaleOffer">
             <select class="form-select form-select fw-bold " [(ngModel)]="filterByProject" (change)="handleChange()">
                 <option value="" disabled selected hidden>Filter by Project</option>
                 <option value="all">Show All Projects</option>

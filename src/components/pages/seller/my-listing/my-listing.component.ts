@@ -77,7 +77,7 @@ export class MyListingComponent implements OnInit {
 
       let futureActive = this.copyListings?.filter((item) => item.status == "Active" && item.isListingStart)
       let draft = this.copyListings?.filter((item) => item.status == "Draft" && (item.isListingStart || (!item.isListingStart || !item.isAuctionEnd)))
-      this.myListings = [...futureActive,...draft]
+      this.myListings = [...futureActive, ...draft]
     }
   }
 
@@ -102,7 +102,7 @@ export class MyListingComponent implements OnInit {
         this.myListingsService.isListEdit = true;
         let editList = {
           listing_type: response?.listing_type.id,
-          status: response.status.id,
+          status: response.status,
           listingName: response.listingName,
           listingStart: response.listingStart,
           auction_type: response.auction_type,
@@ -115,7 +115,8 @@ export class MyListingComponent implements OnInit {
           buyNowPrice: response.buyNowPrice,
           constraints: response.constraints.map((x: any) => parseInt(x.id)),
           offer: response.offer,
-          id: response.id
+          id: response.id,
+          directSaleToken: response.directSaleToken
         }
         if (response.status.status == 'Active') {
           this.myListingsService.isListDraft = false;

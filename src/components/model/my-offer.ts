@@ -20,6 +20,7 @@ export interface MyOffers {
     accountMpName: string
     isAuctionEnd: any
     isListingStart: any
+    directSaleToken: any
 }
 
 export interface OfferDetails {

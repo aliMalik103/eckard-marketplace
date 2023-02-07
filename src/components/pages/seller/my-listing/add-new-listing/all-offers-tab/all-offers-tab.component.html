@@ -20,17 +20,20 @@
                 <td class="text-secondary"> {{offer.offerAmount |
                     currency:'':'':'.2-2'}}</td>
                 <td>
-                    <ng-container *ngIf="offer.status.status == 'Active' && ListingDetails.status != 9">
+                    <ng-container
+                        *ngIf="offer.status.status == 'Active' && ListingDetails.status.statusLabel != 'Accepted'">
                         <span for="accept" data-bs-target="#staticBackdrop" data-bs-toggle="modal"
                             (click)="handleSellMessage(offer)"
                             class="form-label d-inline-block border-bottom border-primary text-primary pe-auto  border-primary">
                             accept
                         </span>
                     </ng-container>
-                    <ng-container *ngIf="offer.status.status == 'Accepted' && ListingDetails.status == 9">
+                    <ng-container
+                        *ngIf="offer.status.status == 'Accepted' && ListingDetails.status.statusLabel == 'Accepted'">
                         <span class="text-secondary">Accepted</span>
                     </ng-container>
-                    <ng-container *ngIf="offer.status.status == 'Active' && ListingDetails.status == 9">
+                    <ng-container
+                        *ngIf="offer.status.status == 'Active' && ListingDetails.status.statusLabel == 'Accepted'">
                         <span class="text-secondary">No Action</span>
                     </ng-container>
                 </td>

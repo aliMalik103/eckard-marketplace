@@ -31,6 +31,7 @@ export class MyListingsService {
     buyNowPrice: null,
     constraints: [],
     offer: [],
+    directSaleToken: ''
   }
   isListEdit: boolean = false
   showOffers: boolean = false
@@ -59,6 +60,7 @@ export class MyListingsService {
       buyNowPrice: null,
       constraints: [],
       offer: [],
+      directSaleToken: ''
 
     }
     this.isListEdit = false

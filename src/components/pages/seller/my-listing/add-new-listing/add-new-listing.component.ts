@@ -26,7 +26,7 @@ export class AddNewListingComponent implements OnInit {
   tracts!: Tract[]
   isListEdit!: boolean
   isListDraft!: boolean
-  showOffers!:boolean
+  showOffers!: boolean
 
 
   createNewListing: MyListing = {
@@ -44,6 +44,8 @@ export class AddNewListingComponent implements OnInit {
     buyNowPrice: null,
     constraints: [],
     offer: [],
+    directSaleToken: ''
+
   }
   isValidNma!: boolean
 
@@ -99,13 +101,13 @@ export class AddNewListingComponent implements OnInit {
     return isValid;
   }
 
-  handleStatus(id: number) {
-    this.createNewListing.status = id
+  handleStatus(status: any) {
+    this.createNewListing.status = status.id
+    delete this.createNewListing.directSaleToken
     this.createNewListing.buyNowPrice = (this.createNewListing.auction_type.auctionType.endsWith('Buy Now or Make an Offer')) ? this.createNewListing.buyNowPrice : this.createNewListing.minimumAsk
     if (this.isListEdit) {
       this.myListingsService.updateListing(this.createNewListing).subscribe(
         (response) => {
-          console.log(response)
           this.router.navigate(['/my-listing'])
           this.handleGoBack()
           this.myListingsService.handleResetSetNewList()
@@ -125,7 +127,6 @@ export class AddNewListingComponent implements OnInit {
 
       this.myListingsService.createNewListing(this.createNewListing).subscribe(
         (response) => {
-          console.log(response)
           this.router.navigate(['/my-listing'])
           this.handleGoBack()
           this.myListingsService.handleResetSetNewList()

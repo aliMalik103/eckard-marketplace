@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: "market-place", component: MarketPlaceComponent, canActivate: [AuthGuard] },
   { path: "my-offers", component: MyBidsComponent, canActivate: [AuthGuard] },
   { path: "all-active-listing", component: AllActiveListingComponent, canActivate: [AuthGuard] },
+  { path: "direct-sale/:id", component: AllActiveListingComponent, canActivate: [AuthGuard] },
   { path: "buyer-transactions", component: BuyerTransactionsComponent, canActivate: [AuthGuard] },
   { path: "buyer-notifications", component: BuyerNotificationsComponent, canActivate: [AuthGuard] },
   { path: "my-listing", component: MyListingComponent, canActivate: [AuthGuard] },

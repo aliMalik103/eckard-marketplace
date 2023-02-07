@@ -98,6 +98,7 @@ export interface MyListing {
     constraints: any[]
     offer: any[]
     id?: any
+    directSaleToken: any
 
 }
 

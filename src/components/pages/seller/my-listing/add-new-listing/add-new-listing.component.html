@@ -116,7 +116,7 @@
                             <input type="submit" class="btn text-white"
                                 [value]="item.status == 'Draft' ? 'SAVE DRAFT': (!isListDraft ? 'UPDATE LISTING':'ACTIVATE LISTING') "
                                 [ngClass]="{'mx-2':i>1,'btn-success': item.status == 'Draft' , 'btn-warning': item.status != 'Draft', 'd-none':(!isListDraft && item.status == 'Draft')}"
-                                (click)="handleStatus(item.id)" />
+                                (click)="handleStatus(item)" />
                         </ng-container>
                     </div>
 

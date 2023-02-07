@@ -70,13 +70,12 @@ export class MyListingComponent implements OnInit {
   }
 
   handleFilterList() {
-    console.log(this.copyListings)
     if (this.listStatus == 'Active') {
       this.myListings = this.copyListings?.filter((item) => item.status === this.listStatus && !item.isAuctionEnd && !item.isListingStart)
     }
     else {
 
-      this.myListings = this.copyListings?.filter((item) => item.status != "Accepted" && (item.isAuctionEnd || item.isListingStart))
+      this.myListings = this.copyListings?.filter((item) => item.status != "Accepted" && (!item.isAuctionEnd || item.isListingStart))
 
     }
   }

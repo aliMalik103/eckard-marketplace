@@ -67,8 +67,7 @@ export class MyBidsComponent implements OnInit {
   getAllMyOffers() {
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        this.myOffers = response?.filter((item: any) => item.offerAmount != null && (item.status == "Active" || item.status == "Accepted") && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
-
+        this.myOffers = response?.filter((item: any) => item.offerAmount != null && item.status == "Active" && item.offer_Status =="Active" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
 
       },
       (error: any) => console.log(error),

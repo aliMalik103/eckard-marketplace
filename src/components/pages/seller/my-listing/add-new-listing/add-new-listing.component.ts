@@ -5,6 +5,7 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 import { AddNewListingService } from './add-new-listing.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/components/services/login.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -53,7 +54,7 @@ export class AddNewListingComponent implements OnInit {
     private myListingsService: MyListingsService,
     private router: Router,
     private toastr: ToastrService,
-    private loginService: LoginService) {
+    private loginService: LoginService, private spinner: NgxSpinnerService) {
 
     this.createNewListing = this.myListingsService.newListing
     this.isListEdit = this.myListingsService.isListEdit
@@ -67,8 +68,6 @@ export class AddNewListingComponent implements OnInit {
     this.handleGetListType()
     this.handleAuctionType()
     this.handleConstraint()
-    // this.handleGetAllProjects()
-    // this.handleGetAllAccounts()
     this.handleGetStatus()
     this.handleGetTracts()
   }
@@ -86,6 +85,7 @@ export class AddNewListingComponent implements OnInit {
     }
 
   }
+
   handleValidNMA(event: any) {
     this.isValidNma = event
     return this.isValidNma
@@ -102,60 +102,70 @@ export class AddNewListingComponent implements OnInit {
   }
 
   handleStatus(status: any) {
+    this.spinner.show();
     this.createNewListing.status = status.id
     delete this.createNewListing.directSaleToken
-    this.createNewListing.buyNowPrice = (this.createNewListing.auction_type.auctionType.endsWith('Buy Now or Make an Offer')) ? this.createNewListing.buyNowPrice : this.createNewListing.minimumAsk
+    this.createNewListing.offer = this.createNewListing.offer?.map((x: any) => parseInt(x.id))
+    this.createNewListing.buyNowPrice = (this.createNewListing.auction_type.auctionType?.endsWith('Buy Now or Make an Offer')) ? this.createNewListing.buyNowPrice : this.createNewListing.minimumAsk
+
     if (this.isListEdit) {
-      this.myListingsService.updateListing(this.createNewListing).subscribe(
-        (response) => {
-          this.router.navigate(['/my-listing'])
-          this.handleGoBack()
-          this.myListingsService.handleResetSetNewList()
-          this.toastr.success('List update successfully');
 
-        },
-        (error: any) => {
-          Object.keys(error.error).map(key => {
-            this.toastr.error(error.error[key][0], key);
-          });
+      if (status.statusLabel == 'Cancelled') {
 
-        },
-        () => console.log("Done getting List Type")
-      )
+        this.myListingsService.getMyList(this.createNewListing.id).subscribe(
+          (response: any) => {
+            let listActive = response?.status?.statusLabel === 'Active' || response?.status?.statusLabel === 'Draft'
+            let activeOffer = response?.offer?.filter((item: any) => item?.status?.status != "Cancelled")
+            if (listActive && activeOffer.length == 0) {
+              this.updateListing(this.createNewListing);
+            }
+            else {
+              this.spinner.hide();
+              this.router.navigate(['/my-listing'])
+              this.handleGoBack()
+              this.myListingsService.handleResetSetNewList()
+              this.toastr.warning(' Unable to cancel offer linked to this list. Please revise.');
+            }
+          },
+          (error) => {
+            console.log(error)
+          }
+        )
+      }
+
+      else {
+        this.updateListing(this.createNewListing);
+      }
     }
     else {
-
       this.myListingsService.createNewListing(this.createNewListing).subscribe(
         (response) => {
+          this.spinner.hide();
           this.router.navigate(['/my-listing'])
           this.handleGoBack()
           this.myListingsService.handleResetSetNewList()
           this.toastr.success('New List create successfully');
 
-
         },
         (error: any) => {
+          this.spinner.hide();
+
           Object.keys(error.error).map(key => {
             this.toastr.error(error.error[key][0], key);
           });
-
-
-
-          console.log("this.errorMessages", this.errorMessages)
+          console.log("error create new list", this.errorMessages)
         },
-        () => console.log("Done getting List Type")
+        () => console.log("Done create new List")
       )
     }
   }
 
   handleGetListType() {
-
     this.addNewListingService.handleGetListType().subscribe(
       (response) => {
         this.listingTypeOptions = response
       },
       (error: any) => {
-
         console.log("error", error)
       },
       () => console.log("Done getting List Type"));
@@ -167,10 +177,8 @@ export class AddNewListingComponent implements OnInit {
     this.addNewListingService.handleAuctionType().subscribe(
       (response) => {
         this.auctionTypeOptions = response
-
       },
       (error: any) => {
-
         console.log("Error getting listing Auction Type", error)
       },
       () => console.log("Done getting listing Auction Type"));
@@ -178,7 +186,6 @@ export class AddNewListingComponent implements OnInit {
   }
 
   handleConstraint() {
-
     this.addNewListingService.handleConstraint('sellConstraint').subscribe(
       (response) => {
         this.constraintOptions = response?.map(item => {
@@ -191,21 +198,21 @@ export class AddNewListingComponent implements OnInit {
       },
       (error: any) => {
 
-        console.log("Error getting listing Constraint", error)
+        console.log("Error getting seller Constraint", error)
       },
-      () => console.log("Done getting listing Constraint"));
+      () => console.log("Done getting seller Constraint"));
   }
 
   handleGetStatus() {
     this.addNewListingService.handleGetStatus().subscribe(
       (response) => {
-        this.statusOptions = response.reverse()
+        this.statusOptions = response
       },
       (error: any) => {
 
-        console.log("Error getting listing status", error)
+        console.log("Error getting status", error)
       },
-      () => console.log("Done getting listing status "));
+      () => console.log("Done getting status "));
   }
 
   handleGetTracts() {
@@ -230,12 +237,38 @@ export class AddNewListingComponent implements OnInit {
 
       },
       (error: any) => {
-
-        console.error("Error getting user accounts: ", error);
+        console.error("Error getting accounts: ", error);
       },
-      () => console.log("Done getting user accounts.")
+      () => console.log("Done getting accounts.")
     )
   }
 
+  handleGetOffers(offers: any) {
+    let activeOffers = offers?.filter((item: any) => item?.status?.statusLabel != "Cancelled")
+    if (activeOffers.length > 0) {
+      return false
+    }
+    return true
+
+  }
+
+  updateListing(listing: any) {
+    this.myListingsService.updateListing(listing).subscribe(
+      (response) => {
+        this.spinner.hide();
+        this.router.navigate(['/my-listing']);
+        this.handleGoBack();
+        this.myListingsService.handleResetSetNewList();
+        this.toastr.success('List update successfully');
+      },
+      (error: any) => {
+        this.spinner.hide();
+        Object.keys(error.error).map(key => {
+          this.toastr.error(error.error[key][0], key);
+        });
+      },
+      () => console.log("Done List update")
+    );
+  };
 
 }

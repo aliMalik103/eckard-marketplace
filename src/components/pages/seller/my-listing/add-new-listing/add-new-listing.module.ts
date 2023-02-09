@@ -13,6 +13,7 @@ import { LoginService } from 'src/components/services/login.service';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { AllOffersTabComponent } from './all-offers-tab/all-offers-tab.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -28,7 +29,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
         FormsModule,
         CommonModule,
         CurrencyMaskModule,
-        NgxPaginationModule
+        NgxPaginationModule,
+        NgxSpinnerModule
+
 
 
     ],

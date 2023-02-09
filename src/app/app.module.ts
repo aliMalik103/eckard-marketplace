@@ -15,6 +15,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 
@@ -44,7 +45,8 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
     }), // ToastrModule added
     NgxPaginationModule,
     BrowserAnimationsModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    NgxSpinnerModule
 
   ],
   providers: [AddNewListingService],

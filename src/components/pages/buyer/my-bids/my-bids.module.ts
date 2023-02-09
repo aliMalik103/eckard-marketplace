@@ -14,6 +14,7 @@ import { LoginService } from 'src/components/services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { AllActiveListingComponent } from './all-active-listing/all-active-listings.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 
@@ -29,7 +30,8 @@ import { AllActiveListingComponent } from './all-active-listing/all-active-listi
     FormsModule,
     BrowserModule,
     NgxPaginationModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    NgxSpinnerModule
 
   ],
   providers: [MyOffersService, AddNewListingService, MyListingsService, LoginService, ToastrService],

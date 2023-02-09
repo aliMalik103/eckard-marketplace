@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Status } from 'src/components/model/my-listings';
 import { MyOffers } from 'src/components/model/my-offer';
@@ -68,7 +69,8 @@ export class AllActiveListingComponent implements OnInit {
     "My Offer"
   ]
   constructor(private router: Router, private loginService: LoginService, private myListingsService: MyListingsService,
-    private myOffersService: MyOffersService, private addNewListingService: AddNewListingService, private activeRoute: ActivatedRoute, private toastr: ToastrService) {
+    private myOffersService: MyOffersService, private addNewListingService: AddNewListingService,
+    private activeRoute: ActivatedRoute, private toastr: ToastrService, private spinner: NgxSpinnerService) {
 
   }
 
@@ -89,9 +91,10 @@ export class AllActiveListingComponent implements OnInit {
   }
 
   getAllMyOffers() {
+    this.spinner.show()
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-
+        this.spinner.hide()
         this.myOffers = response
         this.copymyOffers = response
         if (this.isDirectSaleOffer) {
@@ -100,11 +103,18 @@ export class AllActiveListingComponent implements OnInit {
             this.toastr.info('Offer Not Found');
             this.router.navigate(['/market-place']);
           }
+          else {
+            this.handleListDetails(this.myOffers[0]?.listingId, this.myOffers[0]?.offer_id)
+          }
           return
         }
         this.handleFilterList()
       },
-      (error: any) => console.log(error),
+      (error: any) => {
+        this.spinner.hide()
+
+        console.log(error)
+      },
       () => console.log("Done getting active listings"));
   }
 
@@ -160,20 +170,21 @@ export class AllActiveListingComponent implements OnInit {
         this.constraintOptions = response?.map(item => {
           return { ...item, isChecked: false };
         });
-
       },
       (error: any) => {
-
-        console.log("Error getting listing Constraint", error)
+        console.log("Error getting buyer Constraint", error)
       },
-      () => console.log("Done getting listing Constraint"));
+      () => console.log("Done getting buyer Constraint"));
   }
 
 
   handleListDetails(id: number, offerId: any) {
+    this.spinner.show()
 
     this.myListingsService.getMyList(id).subscribe(
       (response) => {
+        this.spinner.hide()
+
         this.listDetails = response
         if (!offerId) {
           this.newOffer.offerAmount = response.minimumAsk
@@ -185,14 +196,17 @@ export class AllActiveListingComponent implements OnInit {
         }
       },
       (error: any) => {
+        this.spinner.hide()
 
-        console.log("Error getting listing Constraint", error)
+        console.log("Error getting list details", error)
       },
-      () => console.log("Done getting listing Constraint"));
+      () => console.log("Done getting list details"));
 
     if (offerId) {
+      this.spinner.show()
       this.myOffersService.getofferDetails(offerId).subscribe(
         (response) => {
+          this.spinner.hide()
           this.newOffer = response
           this.constraintOptions = this.constraintOptions?.map((obj: any) => {
             return {
@@ -202,13 +216,13 @@ export class AllActiveListingComponent implements OnInit {
               isChecked: this.newOffer.constraints?.some((item: any) => item.id === obj.id)
             }
           });
-
         },
         (error: any) => {
+          this.spinner.hide()
 
-          console.log("Error getting listing Constraint", error)
+          console.log("Error getting offer details", error)
         },
-        () => console.log("Done getting listing Constraint"));
+        () => console.log("Done getting offer details"));
     }
   }
 
@@ -222,10 +236,9 @@ export class AllActiveListingComponent implements OnInit {
         this.statusOptions = response
       },
       (error: any) => {
-
-        console.log("Error getting listing status", error)
+        console.log("Error getting status", error)
       },
-      () => console.log("Done getting listing status "));
+      () => console.log("Done getting status "));
   }
 
 }

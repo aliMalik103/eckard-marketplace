@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ContactListing } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
@@ -55,7 +56,8 @@ export class MyListingComponent implements OnInit {
   isShowOffers: boolean = false
 
 
-  constructor(private myListingsService: MyListingsService, private router: Router, private loginService: LoginService) {
+  constructor(private myListingsService: MyListingsService, private router: Router,
+    private loginService: LoginService, private spinner: NgxSpinnerService) {
     this.handleResetNewList()
   }
 
@@ -87,6 +89,11 @@ export class MyListingComponent implements OnInit {
     this.getAllMyListings()
 
   }
+  
+  handleNewList() {
+    this.showAllListing = !this.showAllListing;
+    this.isShowOffers = false
+  }
 
   handleResetNewList() {
     this.isShowOffers = false
@@ -96,7 +103,7 @@ export class MyListingComponent implements OnInit {
   }
 
   handleEdit(value: any) {
-
+    this.spinner.show();
     this.myListingsService.getMyList(value.listingId).subscribe(
       (response) => {
         this.myListingsService.isListEdit = true;
@@ -123,10 +130,14 @@ export class MyListingComponent implements OnInit {
         }
         this.myListingsService.newListing = editList
         this.showAllListing = !this.showAllListing;
+        this.spinner.hide();
 
       },
-      (error: any) => console.log(error),
-      () => console.log("Done getting my listings"));
+      (error: any) => {
+        console.log(error)
+        this.spinner.hide();
+      },
+      () => console.log("Done getting list details"));
 
   }
 
@@ -137,14 +148,19 @@ export class MyListingComponent implements OnInit {
   }
 
   getAllMyListings() {
+    this.spinner.show();
     this.myListingsService.getAllMyListings(this.loginService.user.id).subscribe(
       (response) => {
         this.myListings = response
         this.copyListings = response
         this.handleFilterList()
+        this.spinner.hide();
       },
-      (error: any) => console.log(error),
-      () => console.log("Done getting my listings"));
+      (error: any) => {
+        console.log(error)
+        this.spinner.hide();
+      },
+      () => console.log("Done getting list details"));
   }
 
 

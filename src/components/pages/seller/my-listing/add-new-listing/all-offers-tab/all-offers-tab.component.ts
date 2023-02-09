@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { AuctionType, Constraint, MyListing } from 'src/components/model/my-listings';
 import { MyOffersService } from 'src/components/services/my-offers.service';
@@ -29,7 +30,8 @@ export class AllOffersTabComponent implements OnInit {
   offersTableHead = ['Buyer', 'Offer Amount', 'Action', 'Constraints', 'Comments']
 
 
-  constructor(private myOffersService: MyOffersService, private toastr: ToastrService, private router: Router,
+  constructor(private myOffersService: MyOffersService, private toastr: ToastrService,
+    private router: Router, private spinner: NgxSpinnerService
 
   ) { }
 
@@ -72,6 +74,7 @@ export class AllOffersTabComponent implements OnInit {
   }
 
   handleSubmitOffer() {
+    this.spinner.show()
     let activeItem = this.statusOptions?.find((item: any) => item.status == "Accepted")
     this.myOffersService.handleCheckListStatus(this.ListingDetails.id).subscribe(
       (response) => {
@@ -90,13 +93,15 @@ export class AllOffersTabComponent implements OnInit {
           this.handleUpdateOffer(this.selectedOffer.id, request)
         }
         else {
+          this.spinner.hide()
           this.handleSubmit.emit()
-
+          this.router.navigate(['/my-listing']);
+          this.toastr.success('Offer Already Accepted!');
         }
 
       },
       (error: any) => {
-
+        this.spinner.hide()
         console.log("Error getting get handleCheckListStatus", error)
       },
       () => console.log("Done getting get handleCheckListStatus"));
@@ -105,14 +110,15 @@ export class AllOffersTabComponent implements OnInit {
   handleUpdateOffer(id: any, body: any) {
     this.myOffersService.handleUpdateOffer(id, body).subscribe(
       (response) => {
+        this.spinner.hide()
         if (response) {
           this.handleSubmit.emit()
           this.router.navigate(['/my-listing']);
-
           this.toastr.success('Offer Accepted!');
         }
       },
       (error: any) => {
+        this.spinner.hide()
         this.toastr.error('Offer Not Found!');
         console.error("Error getting Offer : ", error);
       },

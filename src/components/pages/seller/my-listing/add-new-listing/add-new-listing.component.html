@@ -30,7 +30,8 @@
                     <label for="listingName" class="form-label">Listing Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" [(ngModel)]="createNewListing.listingName" id="listingName"
                         name="listingName" required #listingName="ngModel"
-                        [ngClass]="{'border border-danger':listingName.invalid && (listingName.dirty || listingName.touched)}">
+                        [ngClass]="{'border border-danger':listingName.invalid && (listingName.dirty || listingName.touched)}"
+                        [disabled]="showOffers">
                     <span
                         *ngIf="listingName.invalid && (listingName.dirty || listingName.touched ) &&  listingName.errors"
                         class="text-danger rounded px-4 error-message">
@@ -109,13 +110,14 @@
             </ng-container>
 
 
-            <div class="d-flex justify-content-between p-4 col-8 col-sm-10">
+            <div class="d-flex justify-content-between p-4 col-8 col-sm-10" *ngIf="!showOffers">
                 <div class="d-flex " *ngIf="(isValid(createNewListing) && !isValidNma) || (isListEdit && !isListDraft)">
                     <div *ngFor="let item of statusOptions; index as i">
-                        <ng-container *ngIf="item.status == 'Draft' || item.status == 'Active'">
-                            <input type="submit" class="btn text-white"
-                                [value]="item.status == 'Draft' ? 'SAVE DRAFT': (!isListDraft ? 'UPDATE LISTING':'ACTIVATE LISTING') "
-                                [ngClass]="{'mx-2':i>1,'btn-success': item.status == 'Draft' , 'btn-warning': item.status != 'Draft', 'd-none':(!isListDraft && item.status == 'Draft')}"
+                        <ng-container
+                            *ngIf="item.status == 'Draft' || item.status == 'Active' || (item.status == 'Cancelled' && isListEdit && handleGetOffers(createNewListing.offer) )">
+                            <input type="submit" class="btn text-white mx-2"
+                                [value]="item.status == 'Cancelled'  ? 'CANCEL LISTING' : item.status == 'Draft' ? 'SAVE DRAFT': (!isListDraft ? 'UPDATE LISTING':'ACTIVATE LISTING') "
+                                [ngClass]="{'btn-success ': item.status == 'Draft' , 'btn-warning': item.status == 'Active','btn-danger ': item.status == 'Cancelled', 'd-none':(!isListDraft && item.status == 'Draft')}"
                                 (click)="handleStatus(item)" />
                         </ng-container>
                     </div>
@@ -139,3 +141,6 @@
 
 
 </div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.3)" size="medium" color="#fff" type="line-spin-fade" [fullScreen]="true">
+</ngx-spinner>

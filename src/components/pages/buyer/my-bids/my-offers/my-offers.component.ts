@@ -5,6 +5,7 @@ import { CashConfig, Status } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { MyOffersService } from 'src/components/services/my-offers.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-my-offers',
@@ -29,8 +30,10 @@ export class MyOffersComponent implements OnInit {
   offerConfirmMessages: any
   offerDisclaimer!: any
 
-  constructor(private myListingsService: MyListingsService, private myOffersService: MyOffersService,
-    private loginService: LoginService, private toastr: ToastrService) {
+  constructor(private myListingsService: MyListingsService,
+    private myOffersService: MyOffersService,
+    private loginService: LoginService, private toastr: ToastrService,
+    private spinner: NgxSpinnerService) {
 
   }
 
@@ -66,9 +69,9 @@ export class MyOffersComponent implements OnInit {
       },
       (error: any) => {
 
-        console.error("Error getting cashFlow cost : ", error);
+        console.error("Error getting cashFlow  : ", error);
       },
-      () => console.log("Done getting cashFlow  .")
+      () => console.log("Done getting cashFlow  ")
     )
   }
 
@@ -95,13 +98,14 @@ export class MyOffersComponent implements OnInit {
       },
       (error: any) => {
 
-        console.error("Error getting listing cost : ", error);
+        console.error("Error getting cash config details : ", error);
       },
-      () => console.log("Done getting listing cost .")
+      () => console.log("Done getting cash config details .")
     )
   }
 
   handleSaveAsDefault(value: any) {
+    this.spinner.show()
     value.contact = this.loginService.user.id
     if (value.id) {
       this.handleUpdateCashConfig(value)
@@ -116,6 +120,8 @@ export class MyOffersComponent implements OnInit {
   handleCreateCashConfig(body: any) {
     this.myListingsService.handleCreateCashConfig(body).subscribe(
       (response) => {
+        this.spinner.hide()
+
         if (response) {
           this.handleGetCashConfig()
         }
@@ -123,26 +129,30 @@ export class MyOffersComponent implements OnInit {
 
       },
       (error: any) => {
+        this.spinner.hide()
 
-        console.error("Error getting cash Config : ", error);
+        console.error("Error getting create cash Config : ", error);
       },
-      () => console.log("Done getting cash Config .")
+      () => console.log("Done getting create cash Config .")
     )
   }
 
   handleUpdateCashConfig(body: any) {
     this.myListingsService.handleUpdateCashConfig(body).subscribe(
       (response) => {
+        this.spinner.hide()
+
         if (response) {
           this.handleGetCashConfig()
           this.toastr.success('CashFlow Default Values Update Successfully');
         }
       },
       (error: any) => {
+        this.spinner.hide()
 
-        console.error("Error getting cash Config : ", error);
+        console.error("Error getting update cash Config : ", error);
       },
-      () => console.log("Done getting cash Config .")
+      () => console.log("Done getting update cash Config .")
     )
   }
 
@@ -191,76 +201,107 @@ export class MyOffersComponent implements OnInit {
     }
     else {
       let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Buying Offer Disclaimer")
-      this.offerDisclaimer = message[0]
+      this.offerDisclaimer = message && message[0]
 
     }
     this.offerId = this.activeItem ? this.activeItem.id : null;
   }
 
   handleSubmitOffer(obj: any, offer: any) {
+    this.spinner.show()
 
-    this.myOffersService.handleCheckListStatus(this.listDetails.id).subscribe(
-      (response) => {
-        if (response.length == 0) {
-          let request = {
-            offer: {
-              offerAmount: obj.offerAmount,
-              status: obj.id ? obj.status.id : this.offerId,
-              constraints: obj.constraints?.map((item: any) => item.id),
-              comments: obj.comments,
-              contact: obj.id ? obj.contact.id : this.loginService.user.id
-            },
-            listing_id: this.listDetails.id,
-            acceptedOffer: this.isacceptedOffer
-          }
-          obj.id
-            ? this.handleUpdateOffer(obj.id, request)
-            : this.handleCreateNewOffer(request);
+    this.myListingsService.getMyList(this.listDetails.id).subscribe(
+      (response: any) => {
+        let listActive = response.status.statusLabel === 'Cancelled' || response.status.statusLabel === 'Accepted'
+        if (listActive) {
+          this.spinner.hide()
+          this.toastr.info('This list has already been closed, submitting or buying an offer is not possible.');
+          this.updateOffers.emit()
         }
         else {
-          this.updateOffers.emit()
-          this.toastr.info('Offer Already Accepted!');
 
+          this.myOffersService.handleCheckListStatus(this.listDetails.id).subscribe(
+            (response) => {
+              if (response.length == 0) {
+                let request = {
+                  offer: {
+                    offerAmount: obj.offerAmount,
+                    status: obj.id ? obj.status.id : this.offerId,
+                    constraints: obj.constraints?.map((item: any) => item.id),
+                    comments: obj.comments,
+                    contact: obj.id ? obj.contact.id : this.loginService.user.id
+                  },
+                  listing_id: this.listDetails.id,
+                  acceptedOffer: this.isacceptedOffer
+                }
+                obj.id
+                  ? this.handleUpdateOffer(obj.id, request)
+                  : this.handleCreateNewOffer(request);
+              }
+              else {
+                this.spinner.hide()
+                this.updateOffers.emit()
+                this.toastr.info('Offer Already Accepted!');
+
+              }
+
+            },
+            (error: any) => {
+
+              console.log("Error getting list current status ", error)
+            },
+            () => console.log("Done getting list current status "));
         }
 
       },
-      (error: any) => {
+      (error) => {
+        this.spinner.hide()
+        console.log(error)
+      }
+    )
 
-        console.log("Error getting get handleCheckListStatus", error)
-      },
-      () => console.log("Done getting get handleCheckListStatus"));
+
   }
 
   handleCreateNewOffer(body: any) {
+
     this.myOffersService.handleCreateNewOffer(body).subscribe(
       (response) => {
+        this.spinner.hide()
+
         if (response) {
           this.updateOffers.emit()
           this.toastr.success('Offer Submit Successfully');
         }
       },
       (error: any) => {
+        this.spinner.hide()
+
         this.toastr.error('Offer Not Create!');
 
-        console.error("Error getting Offer : ", error);
+        console.error("Error getting make an Offer : ", error);
       },
-      () => console.log("Done getting Offer .")
+      () => console.log("Done getting make an Offer .")
     )
   }
 
   handleUpdateOffer(id: any, body: any) {
     this.myOffersService.handleUpdateOffer(id, body).subscribe(
       (response) => {
+        this.spinner.hide()
+
         if (response) {
           this.updateOffers.emit()
           this.toastr.success('Offer Update Successfully');
         }
       },
       (error: any) => {
+        this.spinner.hide()
+
         this.toastr.error('Offer Not Found!');
-        console.error("Error getting Offer : ", error);
+        console.error("Error getting update Offer : ", error);
       },
-      () => console.log("Done getting Offer .")
+      () => console.log("Done getting update Offer .")
     )
   }
   handleCancelMessage() {
@@ -271,46 +312,73 @@ export class MyOffersComponent implements OnInit {
   handleCancelOffer(obj: any) {
     const canceledItem = this.statusOptions?.find((item) => item.status == "Cancelled")
     const cancelId = canceledItem ? canceledItem.id : null;
-    this.myOffersService.handleCheckListStatus(this.listDetails.id).subscribe(
-      (response) => {
-        if (response.length == 0) {
-          const request = {
-            offer: {
-              offerAmount: obj.offerAmount,
-              status: cancelId,
-              constraints: obj.constraints?.map((item: any) => item.id),
-              comments: obj.comments,
-              contact: obj.id ? obj.contact.id : this.loginService.user.id
-            },
+    this.spinner.show()
+    this.myListingsService.getMyList(this.listDetails.id).subscribe(
+      (response: any) => {
 
-            listing_id: this.listDetails.id,
-            acceptedOffer: false
-          }
-          this.myOffersService.handleCancelOffer(obj.id, request).subscribe(
+        let listActive = response.status.statusLabel === 'Cancelled' || response.status.statusLabel === 'Accepted'
+        if (listActive) {
+          this.spinner.hide()
+          this.toastr.info('Unable to cancel offer as the list is already closed.');
+          this.updateOffers.emit()
+          return
+        }
+        else {
+          this.myOffersService.handleCheckListStatus(this.listDetails.id).subscribe(
             (response) => {
-              if (response) {
+              if (response.length == 0) {
+                const request = {
+                  offer: {
+                    offerAmount: obj.offerAmount,
+                    status: cancelId,
+                    constraints: obj.constraints?.map((item: any) => item.id),
+                    comments: obj.comments,
+                    contact: obj.id ? obj.contact.id : this.loginService.user.id
+                  },
+
+                  listing_id: this.listDetails.id,
+                  acceptedOffer: false
+                }
+                this.myOffersService.handleCancelOffer(obj.id, request).subscribe(
+                  (response) => {
+                    this.spinner.hide()
+                    if (response) {
+                      this.updateOffers.emit()
+                      this.toastr.success('Offer Cancelled Successfully');
+                    }
+                  },
+                  (error: any) => {
+                    this.spinner.hide()
+                    this.toastr.error('Offer Not Found!');
+                    console.error("Error getting Offer cancel : ", error);
+                  },
+                  () => console.log("Done getting Offer cancel .")
+                )
+              }
+              else {
+                this.spinner.hide()
                 this.updateOffers.emit()
-                this.toastr.success('Offer Cancelled Successfully');
+                this.toastr.info('Unable to cancel offer as the list is already closed !');
               }
             },
             (error: any) => {
-              this.toastr.error('Offer Not Found!');
-              console.error("Error getting Offer : ", error);
-            },
-            () => console.log("Done getting Offer .")
-          )
-        }
-        else {
-          this.updateOffers.emit()
-          this.toastr.info('Offer Already Accepted!');
-        }
-      },
-      (error: any) => {
-        this.toastr.error('Offer Not Create!');
+              this.spinner.hide()
 
-        console.error("Error getting Offer : ", error);
+              this.toastr.error('List not Found!');
+
+              console.error("Error getting check list current status : ", error);
+            },
+            () => console.log("Done getting check list current status .")
+          )
+
+        }
+
       },
-      () => console.log("Done getting Offer .")
+      (error) => {
+        this.spinner.hide()
+
+        console.log(error)
+      }
     )
 
 
@@ -322,9 +390,9 @@ export class MyOffersComponent implements OnInit {
         this.offerConfirmMessages = response
       },
       (error: any) => {
-        console.error("Error getting Offer : ", error);
+        console.error("Error getting Offer Disclaimer: ", error);
       },
-      () => console.log("Done getting Offer .")
+      () => console.log("Done getting Offer Disclaimer.")
     )
   }
 

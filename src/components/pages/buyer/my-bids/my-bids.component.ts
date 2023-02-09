@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Constraint, Status } from 'src/components/model/my-listings';
 import { MyOffers } from 'src/components/model/my-offer';
 import { LoginService } from 'src/components/services/login.service';
@@ -49,7 +50,7 @@ export class MyBidsComponent implements OnInit {
     "My Offer"
   ]
   constructor(private router: Router, private loginService: LoginService, private myListingsService: MyListingsService,
-    private myOffersService: MyOffersService, private addNewListingService: AddNewListingService) {
+    private myOffersService: MyOffersService, private addNewListingService: AddNewListingService, private spinner: NgxSpinnerService) {
 
   }
 
@@ -65,13 +66,19 @@ export class MyBidsComponent implements OnInit {
   }
 
   getAllMyOffers() {
+    this.spinner.show()
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        this.myOffers = response?.filter((item: any) => item.offerAmount != null && item.status == "Active" && item.offer_Status =="Active" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
+        this.spinner.hide()
 
+        this.myOffers = response?.filter((item: any) => item.offerAmount != null && item.status == "Active" && item.offer_Status == "Active" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
       },
-      (error: any) => console.log(error),
-      () => console.log("Done getting my offers"));
+      (error: any) => {
+        this.spinner.hide()
+
+        console.log(error)
+      },
+      () => console.log("Done getting all my active offers"));
   }
 
   onTableDataChange(event: any) {
@@ -101,16 +108,18 @@ export class MyBidsComponent implements OnInit {
       },
       (error: any) => {
 
-        console.log("Error getting listing Constraint", error)
+        console.log("Error getting buyer Constraint", error)
       },
-      () => console.log("Done getting listing Constraint"));
+      () => console.log("Done getting buyer Constraint"));
   }
 
 
   handleListDetails(id: number, offerId: any) {
+    this.spinner.show()
 
     this.myListingsService.getMyList(id).subscribe(
       (response) => {
+        this.spinner.hide()
         this.listDetails = response
         if (!offerId) {
           this.newOffer.offerAmount = response.minimumAsk
@@ -122,14 +131,19 @@ export class MyBidsComponent implements OnInit {
         }
       },
       (error: any) => {
+        this.spinner.hide()
 
-        console.log("Error getting listing Constraint", error)
+        console.log("Error getting list details", error)
       },
-      () => console.log("Done getting listing Constraint"));
+      () => console.log("Done getting list details"));
 
     if (offerId) {
+      this.spinner.show()
+
       this.myOffersService.getofferDetails(offerId).subscribe(
         (response) => {
+          this.spinner.hide()
+
           this.newOffer = response
           this.constraintOptions = this.constraintOptions?.map((obj: any) => {
             return {
@@ -142,10 +156,11 @@ export class MyBidsComponent implements OnInit {
 
         },
         (error: any) => {
+          this.spinner.hide()
 
-          console.log("Error getting listing Constraint", error)
+          console.log("Error getting offer details", error)
         },
-        () => console.log("Done getting listing Constraint"));
+        () => console.log("Done getting offer details"));
     }
   }
 
@@ -159,10 +174,9 @@ export class MyBidsComponent implements OnInit {
         this.statusOptions = response
       },
       (error: any) => {
-
-        console.log("Error getting listing status", error)
+        console.log("Error getting  status", error)
       },
-      () => console.log("Done getting listing status "));
+      () => console.log("Done getting  status "));
   }
 
 }

@@ -35,3 +35,11 @@
 .nav-link {
     color: black;
 }
+
+.list-type-heading {
+    color: rgb(11, 11, 85);
+}
+
+.list-underline {
+    border-bottom: 2px solid rgb(11, 11, 85);
+}

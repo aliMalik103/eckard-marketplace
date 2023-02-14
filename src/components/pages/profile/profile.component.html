@@ -1,0 +1,77 @@
+<div class="container card mt-4 pt-4 h-100">
+    <div class="breadcrumb-container  mb-3">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-link">
+                <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a [routerLink]="['/profile']">Profile</a>
+                </li>
+            </ol>
+        </nav>
+
+    </div>
+    <div class="container rounded bg-white mb-3">
+        <div class="row">
+
+            <div class="col p-0">
+                <div class="py-2">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-2 text-start"><label class="labels ">First Name</label><input
+                                type="text" class="form-control" id="firstName" name="firstName"
+                                [(ngModel)]="profile.firstName" #firstName="ngModel" required
+                                [ngClass]="{'border border-danger':firstName.invalid && (firstName.dirty || firstName.touched)}">
+                            <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched ) &&  firstName.errors"
+                                class="text-danger rounded px-4 error-message">
+                                Please enter First Name
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mt-2  text-start"><label class="labels">Last Name</label><input type="text"
+                                class="form-control" id="lastName" name="lastName" [(ngModel)]="profile.lastName"
+                                #lastName="ngModel" required
+                                [ngClass]="{'border border-danger':lastName.invalid && (lastName.dirty || lastName.touched)}">
+                            <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched ) &&  lastName.errors"
+                                class="text-danger rounded px-4 error-message">
+                                Please enter Last Name
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mt-2 text-start"><label class="labels">Email</label><input type="email"
+                                class="form-control" [(ngModel)]="profile.email" required #email="ngModel" id="email"
+                                name="email"
+                                [ngClass]="{'border border-danger':email.invalid && (email.dirty || email.touched)}"
+                                email>
+                            <div *ngIf="email.invalid && (email.dirty || email.touched ) &&  email.errors"
+                                class="text-danger rounded px-4 error-message">
+                                Please enter valid email
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 text-start mt-2 "><label class="labels ">Account Status</label><input
+                                type="text" class="form-control"
+                                [ngClass]="{'text-success': profile.mpStatus == 'active', 'text-danger':profile.mpStatus !='active'}"
+                                id="mpStatus" name="mpStatus" [(ngModel)]="profile.mpStatus" disabled>
+                        </div>
+                        <div class="col-md-12 text-start mt-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="emailNotificationsCheckbox"
+                                    [(ngModel)]="profile.notification">
+                                <label class="form-check-label" for="emailNotificationsCheckbox">Send email
+                                    notifications</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button"
+                            (click)="handleSubmit()" [disabled]="!profile.firstName || !profile.lastName || !profile.email || (email.invalid)">Save
+                            Profile</button></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

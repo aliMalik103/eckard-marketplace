@@ -53,6 +53,39 @@
                     </span>
                 </div>
             </div>
+            <div class="row p-4">
+                <div class="col-md-6">
+                    <label for="auctionType" class="form-label">Auction Type <span class="text-danger">*</span></label>
+                    <select id="auctionType" name="auctionType" class="form-select"
+                        [compareWith]="auctionTypeComparator" [(ngModel)]="createNewListing.auction_type"
+                        #auctionType="ngModel"
+                        [ngClass]="{'border border-danger':auctionType.invalid && (auctionType.dirty || auctionType.touched)}"
+                        required [disabled]="!isListDraft">
+                        <option *ngFor="let item of auctionTypeOptions" [ngValue]="item">
+                            {{item.auctionLabel}}
+                        </option>
+                    </select>
+                    <span
+                        *ngIf="auctionType.invalid && (auctionType.dirty || auctionType.touched ) &&  auctionType.errors"
+                        class="text-danger rounded px-4 error-message">
+                        Please select valid Auction Type
+                    </span>
+
+
+                </div>
+                <div class="col-md-6">
+                    <label for="auctionEnd" class="form-label">Auction Ends At <span
+                            class="text-danger">*</span></label>
+                    <input type="datetime-local" class="form-control" name="auctionEnd" id="auctionEnd"
+                        [(ngModel)]="createNewListing.auctionEnd" required #auctionEnd="ngModel"
+                        [ngClass]="{'border border-danger':auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched)}"
+                        [disabled]="!isListDraft">
+                    <span *ngIf="auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched ) &&  auctionEnd.errors"
+                        class="text-danger rounded px-4 error-message">
+                        Please enter valid auction End date
+                    </span>
+                </div>
+            </div>
 
             <div class="row p-4">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">

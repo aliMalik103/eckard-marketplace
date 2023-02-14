@@ -271,4 +271,8 @@ export class AddNewListingComponent implements OnInit {
     );
   };
 
+  auctionTypeComparator(a: any, b: any) {
+    return (a && b) ? a.id === b.id : false;
+  }
+
 }

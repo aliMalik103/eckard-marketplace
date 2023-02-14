@@ -42,6 +42,7 @@ export class AllActiveListingComponent implements OnInit {
     comments: "",
     offerAmount: 0
   }
+  activeListing: boolean = true;
 
   offersFilterOptions: any = [
     {
@@ -58,16 +59,40 @@ export class AllActiveListingComponent implements OnInit {
     // },
   ]
   allActiveProjects: any = []
-  offersColumns: Array<String> = [
-    "Seller / Project",
-    "Auction End",
-    "Listed NMA",
-    "Minimum Ask",
-    "Buy Now at",
-    "# Offers",
-    "Highest Offer",
-    "My Offer"
-  ]
+  offersColumns!: any
+  modifiedColumns: any = {
+    "Active Listings": [
+      "Seller / Project",
+      "Auction End",
+      "Listed NMA",
+      "Minimum Ask",
+      "Buy Now at",
+      "# Offers",
+      "Highest Offer",
+      "My Offer"
+    ],
+    "Closed Listings": [
+      "Seller / Project",
+      "Auction End",
+      "Listed NMA",
+      "Minimum Ask",
+      "Buy Now at",
+      "# Offers",
+      "Highest Offer",
+      "Sale Price",
+      "Sale Date"
+    ],
+    "Canceled Listings": [
+      "Seller / Project",
+      "Auction End",
+      "Listed NMA",
+      "Minimum Ask",
+      "Buy Now at",
+      "# Offers",
+      "Highest Offer",
+      "Cancel Date"
+    ]
+  };
   constructor(private router: Router, private loginService: LoginService, private myListingsService: MyListingsService,
     private myOffersService: MyOffersService, private addNewListingService: AddNewListingService,
     private activeRoute: ActivatedRoute, private toastr: ToastrService, private spinner: NgxSpinnerService) {
@@ -85,19 +110,20 @@ export class AllActiveListingComponent implements OnInit {
       this.directSaleId = this.activeRoute.snapshot?.params['id']
     }
 
-    this.getAllMyOffers()
+    this.getAllListings()
     this.handleConstraint()
     this.handleGetStatus()
   }
 
-  getAllMyOffers() {
+  getAllListings() {
     this.spinner.show()
-    this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
+    this.myOffersService.getAllListings(this.loginService.user.id).subscribe(
       (response) => {
         this.spinner.hide()
         this.myOffers = response
         this.copymyOffers = response
         if (this.isDirectSaleOffer) {
+          this.offersColumns = this.modifiedColumns["Active Listings"]
           this.myOffers = this.copymyOffers?.filter((item) => item.status == 'Active' && item.auctionType == 'Direct Sale' && item.directSaleToken == this.directSaleId)
           if (this.myOffers.length == 0) {
             this.toastr.info('Offer Not Found');
@@ -118,14 +144,56 @@ export class AllActiveListingComponent implements OnInit {
       () => console.log("Done getting active listings"));
   }
 
+  getAllClosedListings() {
+    this.spinner.show()
+    this.myOffersService.getAllClosedListings(this.loginService.user.id).subscribe(
+      (response) => {
+        this.spinner.hide()
+        this.myOffers = response
+        this.copymyOffers = response
+        this.handleFilterList()
+      },
+      (error: any) => {
+        this.spinner.hide()
+
+        console.log(error)
+      },
+      () => console.log("Done getting active listings"));
+  }
+
+  getAllCancelledListings() {
+    this.spinner.show()
+    this.myOffersService.getAllCancelledListings(this.loginService.user.id).subscribe(
+      (response) => {
+        this.spinner.hide()
+        this.myOffers = response
+        this.copymyOffers = response
+        this.handleFilterList()
+      },
+      (error: any) => {
+        this.spinner.hide()
+
+        console.log(error)
+      },
+      () => console.log("Done getting active listings"));
+  }
+
   handleChange() {
     const { filterByProject, offerStatus, copymyOffers } = this;
     const isAllProjectSelected = filterByProject === 'all';
 
-    this.myOffers = copymyOffers
-      ?.filter(({ status, auctionType, projectId }) =>
-        status === offerStatus && auctionType !== 'Direct Sale' && (isAllProjectSelected || projectId === filterByProject)
-      );
+    if (offerStatus == 'Active') {
+      this.myOffers = copymyOffers?.filter(({ status, auctionType, projectId }) => status === offerStatus && auctionType !== 'Direct Sale' && (isAllProjectSelected || projectId === filterByProject))
+    }
+    else if (offerStatus == 'Accepted') {
+      this.myOffers = copymyOffers
+        ?.filter(({ status, auctionType, projectId }) => status == offerStatus && auctionType !== 'Direct Sale' && (isAllProjectSelected || projectId === filterByProject))
+    }
+    else if (offerStatus == 'Cancelled') {
+      this.myOffers = copymyOffers
+        ?.filter(({ status, auctionType, projectId }) => status === offerStatus && auctionType !== 'Direct Sale' && (isAllProjectSelected || projectId === filterByProject))
+    }
+
   }
 
   onTableDataChange(event: any) {
@@ -149,18 +217,28 @@ export class AllActiveListingComponent implements OnInit {
     this.allActiveProjects = []
     switch (this.offerStatus) {
       case 'Active':
+        this.offersColumns = this.modifiedColumns["Active Listings"]
         this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
-        this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
-          if (!acc.includes(offer.projectId)) {
-            acc.push(offer.projectId)
-          }
-          return acc
-        }, []);
+        break;
+      case 'Accepted':
+        this.offersColumns = this.modifiedColumns["Closed Listings"]
+        this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.offer_Status != "Cancelled")
+        break;
+      case 'Cancelled':
+        this.offersColumns = this.modifiedColumns["Canceled Listings"]
+        this.myOffers = this.copymyOffers?.filter((item) => item.status === this.offerStatus && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
+
         break;
 
       default:
         return
     }
+    this.allActiveProjects = this.myOffers?.reduce((acc: any, offer: any) => {
+      if (!acc.includes(offer.projectId)) {
+        acc.push(offer.projectId)
+      }
+      return acc
+    }, []);
   }
 
   handleConstraint() {
@@ -227,7 +305,7 @@ export class AllActiveListingComponent implements OnInit {
   }
 
   handleUpdateOffers() {
-    this.getAllMyOffers()
+    this.getAllListings()
   }
 
   handleGetStatus() {
@@ -239,6 +317,24 @@ export class AllActiveListingComponent implements OnInit {
         console.log("Error getting status", error)
       },
       () => console.log("Done getting status "));
+  }
+
+  toggleListing(type: any) {
+    this.offerStatus = type;
+    switch (this.offerStatus) {
+      case 'Active':
+        this.getAllListings()
+        break;
+      case 'Accepted':
+        this.getAllClosedListings()
+        break;
+      case 'Cancelled':
+        this.getAllCancelledListings()
+        break;
+
+      default:
+        return
+    }
   }
 
 }

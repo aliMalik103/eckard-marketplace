@@ -22,7 +22,10 @@
                             {{user.name}}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="nav-link text-black pe-auto text-center" (click)="handleLogOut()" title="Log Out"><i
+                            <a class="nav-link text-black pe-auto mx-2" [routerLink]="['/profile']" title="View Profile"><i
+                                    class="fa fa-user" aria-hidden="true"></i>
+                                Profile</a>
+                            <a class="nav-link text-black pe-auto mx-2" (click)="handleLogOut()" title="Log Out"><i
                                     class="fa fa-sign-out" aria-hidden="true"></i>
                                 Log Out</a>
 

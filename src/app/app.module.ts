@@ -16,6 +16,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ProfileModule } from 'src/components/pages/profile/profile.module';
 
 
 
@@ -46,7 +47,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     NgxPaginationModule,
     BrowserAnimationsModule,
     CurrencyMaskModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    ProfileModule
 
   ],
   providers: [AddNewListingService],

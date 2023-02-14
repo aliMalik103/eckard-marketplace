@@ -1,10 +1,10 @@
 export interface MyOffers {
     listingId: number
     listingName: string
-    offer_Status: string
+    offer_Status?: string
     auctionEnd: string
-    offerAmount: number
-    offer_id: number
+    offerAmount?: number
+    offer_id?: number
     accountName: string
     acccount_id: number
     projectId: string
@@ -21,6 +21,8 @@ export interface MyOffers {
     isAuctionEnd: any
     isListingStart: any
     directSaleToken: any
+    SalePrice?: any
+    SaleDate?: any
 }
 
 export interface OfferDetails {

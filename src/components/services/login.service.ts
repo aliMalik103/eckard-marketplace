@@ -49,4 +49,14 @@ export class LoginService {
     this.router.navigate([''])
   }
 
+  profileDetails(id: any): Observable<any> {
+    const res = this.http.get(`${environment.API_BASE_URL}/contact/${id}`)
+    return res;
+  }
+
+  updateProfileDetails(body: any): Observable<any> {
+    const res = this.http.patch(`${environment.API_BASE_URL}/contact/${body.id}/`, body)
+    return res;
+  }
+
 }

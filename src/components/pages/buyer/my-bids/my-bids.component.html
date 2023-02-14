@@ -38,7 +38,7 @@
                     <td>{{offer.minimumAsk | currency:'':'':'4.2-2'}}</td>
                     <td>{{offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer') ?
                         "N/A" : offer.buyNowPrice | currency:'':'':'4.2-2'}}</td>
-                    <td>{{offer.noOfBids}}</td>
+                    <td>{{offer.auctionType.startsWith('Silent -') ? '' : offer.noOfBids}}</td>
                     <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
                         currency:'':'':'4.2-2'}}</td>
                     <td id="heading{{i}}">

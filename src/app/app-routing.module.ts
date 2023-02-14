@@ -12,6 +12,7 @@ import { UserAgreementComponent } from 'src/components/pages/informations/user-a
 import { MyListingComponent } from 'src/components/pages/seller/my-listing/my-listing.component';
 import { AuthGuard } from 'src/components/auth/auth.guard';
 import { AllActiveListingComponent } from 'src/components/pages/buyer/my-bids/all-active-listing/all-active-listings.component';
+import { ProfileComponent } from 'src/components/pages/profile/profile.component';
 
 
 
@@ -20,7 +21,7 @@ const routes: Routes = [
   { path: "", component: LoginComponent },
   { path: "market-place", component: MarketPlaceComponent, canActivate: [AuthGuard] },
   { path: "my-offers", component: MyBidsComponent, canActivate: [AuthGuard] },
-  { path: "all-active-listing", component: AllActiveListingComponent, canActivate: [AuthGuard] },
+  { path: "all-listing", component: AllActiveListingComponent, canActivate: [AuthGuard] },
   { path: "direct-sale/:id", component: AllActiveListingComponent, canActivate: [AuthGuard] },
   { path: "buyer-transactions", component: BuyerTransactionsComponent, canActivate: [AuthGuard] },
   { path: "buyer-notifications", component: BuyerNotificationsComponent, canActivate: [AuthGuard] },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: "seller-notifications", component: SellerNotificationsComponent, canActivate: [AuthGuard] },
   { path: "sec-disclosure", component: SECDisclosureComponent, canActivate: [AuthGuard] },
   { path: "user-agreement", component: UserAgreementComponent, canActivate: [AuthGuard] },
+  { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "market-place", pathMatch: "full" }
 
 ];

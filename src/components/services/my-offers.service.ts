@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MyOffers } from '../model/my-offer';
-import { tap, map, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,44 @@ export class MyOffersService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  getAllListings(id: number): Observable<MyOffers[]> {
+    const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/active_listing/contact/${id}`).pipe(
+      map((lists: any) => lists?.map((list: any) => ({
+        ...list,
+        offerAmount: list?.offer_Status == "Cancelled" ? null : list.offerAmount,
+        offer_id: list?.offer_Status == "Cancelled" ? null : list.offer_id,
+        // auctionEnd: moment.utc(list.auctionEnd).local().format().slice(0, 16),
+      })))
+    )
+    return res;
+  }
+
+  getAllClosedListings(id: number): Observable<MyOffers[]> {
+    const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/closed_listing/contact/${id}`).pipe(
+      map((lists: any) => lists?.map((list: any) => ({
+        ...list,
+        offerAmount: list?.offer_Status == "Cancelled" ? null : list.offerAmount,
+        offer_id: list?.offer_Status == "Cancelled" ? null : list.offer_id,
+        // auctionEnd: moment.utc(list.auctionEnd).local().format().slice(0, 16),
+      })))
+    )
+    return res;
+  }
+
+  getAllCancelledListings(id: number): Observable<MyOffers[]> {
+    const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/cancelled_listing/contact/${id}`).pipe(
+      map((lists: any) => lists?.map((list: any) => ({
+        ...list,
+        offerAmount: list?.offer_Status == "Cancelled" ? null : list.offerAmount,
+        offer_id: list?.offer_Status == "Cancelled" ? null : list.offer_id,
+        // auctionEnd: moment.utc(list.auctionEnd).local().format().slice(0, 16),
+      })))
+    )
+    return res;
+  }
+
   getAllMyOffers(id: number): Observable<MyOffers[]> {
-    const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/contact/${id}`).pipe(
+    const res = this.http.get<MyOffers[]>(`${environment.API_BASE_URL}/offer/myoffers/contact/${id}`).pipe(
       map((lists: any) => lists?.map((list: any) => ({
         ...list,
         offerAmount: list.offer_Status == "Cancelled" ? null : list.offerAmount,

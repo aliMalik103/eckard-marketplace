@@ -13,7 +13,7 @@ export class MarketPlaceComponent implements OnInit {
   totalMyListings: number = 0;
   totalMyOffers: number = 0;
   isActiveUser: Boolean = false
-  allActiveOffers: number = 0
+  allActiveListings: number = 0
   totalPendingList: number = 0
   totalPendingOffer: number = 0
 
@@ -24,6 +24,7 @@ export class MarketPlaceComponent implements OnInit {
     this.getAllMyOffers()
     this.handlePendingListsTrancastions()
     this.handlePendingOfferTrancastions()
+    this.getAllActiveListings()
   }
 
   ngOnInit(): void {
@@ -49,10 +50,24 @@ export class MarketPlaceComponent implements OnInit {
     this.spinner.show();
     this.myOffersService.getAllMyOffers(this.loginService.user.id).subscribe(
       (response) => {
-        let activeOffers = response?.filter((item: any) => item.status === "Active" && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
-        this.allActiveOffers = activeOffers ? activeOffers.length : 0
         let myOffers = response?.filter((item: any) => item.offerAmount != null && item.status == "Active" && item.offer_Status == "Active" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
         this.totalMyOffers = myOffers ? myOffers.length : 0
+        this.spinner.hide();
+
+      },
+      (error: any) => {
+        this.spinner.hide();
+        console.log(error)
+      },
+      () => console.log("Done getting all offers"));
+  }
+  getAllActiveListings() {
+    this.spinner.show();
+    this.myOffersService.getAllListings(this.loginService.user.id).subscribe(
+      (response) => {
+        let activeOffers = response?.filter((item: any) => item.status === "Active" && item.offer_Status != "Cancelled" && item.auctionType != 'Direct Sale' && !item.isAuctionEnd && !item.isListingStart)
+        this.allActiveListings = activeOffers ? activeOffers.length : 0
+        
         this.spinner.hide();
 
       },

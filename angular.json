@@ -10,7 +10,6 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
-       
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
@@ -20,7 +19,7 @@
             "allowedCommonJsDependencies": [
               "lodash",
               "moment"
-           ],
+            ],
             "polyfills": [
               "zone.js"
             ],
@@ -33,7 +32,8 @@
               "src/styles.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/font-awesome/css/font-awesome.css",
-              "./node_modules/ngx-toastr/toastr.css"
+              "./node_modules/ngx-toastr/toastr.css",
+              "./node_modules/ngx-spinner/animations/line-spin-fade.css"
             ],
             "scripts": [
               "./node_modules/bootstrap/dist/js/bootstrap.min.js",
@@ -68,7 +68,6 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-       
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {

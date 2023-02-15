@@ -67,13 +67,13 @@
                     <td>
                         {{offer.listedNMA}}
                     </td>
-                    <td>{{offer.minimumAsk | currency:'':'':'4.2-2'}}</td>
+                    <td>{{offer.minimumAsk | currency:'':'':'.2-2'}}</td>
                     <td>{{offer.auctionType != 'Fix Price' &&
                         !offer.auctionType.endsWith('Buy Now or Make an Offer') ? "N/A" : offer.buyNowPrice |
-                        currency:'':'':'4.2-2'}}</td>
+                        currency:'':'':'.2-2'}}</td>
                     <td>{{offer.auctionType.startsWith('Silent -') ? '' : offer.noOfBids}}</td>
                     <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
-                        currency:'':'':'4.2-2'}}</td>
+                        currency:'':'':'.2-2'}}</td>
                     <ng-container *ngIf="offerStatus == 'Active'">
 
                         <td id="heading{{i}}">
@@ -86,7 +86,7 @@
                                 (click)="handleListDetails(offer.listingId , offer.offer_id)">
 
                                 {{!offer.offerAmount ? 'make offer':offer.offerAmount |
-                                currency:'':'':'4.2-2'}}
+                                currency:'':'':'.2-2'}}
                             </span>
                         </td>
                     </ng-container>

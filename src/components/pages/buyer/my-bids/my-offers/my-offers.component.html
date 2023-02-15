@@ -6,7 +6,8 @@
     <label for="constraints" class="form-label w-25 fw-bold">Constraints / Contingencies</label>
 
     <div class="form-check form-check-inline" *ngFor="let item of constraintOptions">
-        <input class="form-check-input mt-1" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()" [disabled]="(offer.offer_Status == 'Accepted')" [name]="item.constraint" [id]="'constraint'+item.id">
+        <input class="form-check-input mt-1" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
+            [disabled]="(offer.offer_Status == 'Accepted')" [name]="item.constraint" [id]="'constraint'+item.id">
         <label>
             {{item.buyLabel}}
         </label>
@@ -16,7 +17,8 @@
 
 <div class="mt-3 row">
     <label for="comments" class="form-label fw-bold">Comments</label>
-    <textarea class="form-control" [(ngModel)]="newOffer.comments" id="comments" name="comments" rows="3" [disabled]="(offer.offer_Status == 'Accepted')"></textarea>
+    <textarea class="form-control" [(ngModel)]="newOffer.comments" id="comments" name="comments" rows="3"
+        [disabled]="(offer.offer_Status == 'Accepted')"></textarea>
 </div>
 
 <div class="row mt-3">
@@ -24,7 +26,10 @@
 
         <div class="form-group  mb-2">
             <label for="myoffer" class="col-form-label fw-bold">My Offer </label>
-            <input [(ngModel)]="newOffer.offerAmount" (ngModelChange)="handleChange(offer)" class="mx-2 form-control" id="offerAmount" name="offerAmount" currencyMask [options]="{ prefix: '$', thousands: ',',precision: 0, align:'left', allowNegative: false}" [disabled]="offer.auctionType == 'Fix Price' || offer.auctionType == 'Direct Sale'"
+            <input [(ngModel)]="newOffer.offerAmount" (ngModelChange)="handleChange(offer)" class="mx-2 form-control"
+                id="offerAmount" name="offerAmount" currencyMask
+                [options]="{ prefix: '$', thousands: ',',precision: 0, align:'left', allowNegative: false}"
+                [disabled]="offer.auctionType == 'Fix Price' || offer.auctionType == 'Direct Sale'"
                 [ngClass]="{'border border-danger': newOffer.offerAmount < offer.minimumAsk}">
             <small class="text-muted">{{(newOffer.offerAmount / offer.listedNMA) | currency:'':'':'.2-2'
                 }}/NMA</small>
@@ -50,15 +55,37 @@
                     Est. CashFlow: {{ calculateTotalCashFlow |
                     currency:'CAD':'symbol-narrow':'.2-2'}}</strong>
             </h5>
-            <div id="myOffer-collapseOne" class="accordion-collapse collapse  pt-2" aria-labelledby="myOffer-headingOne" data-parent="#myOfferAccordion">
+            <div id="myOffer-collapseOne" class="accordion-collapse collapse  pt-2" aria-labelledby="myOffer-headingOne"
+                data-parent="#myOfferAccordion">
+                <div class="d-flex px-4 gap-4 pt-4 col-12 w-100">
+                    <div class="d-inline-block pe-auto  mr-2 fw-bold">
+                        <span [ngClass]="{'cashFlow-type-heading':cashFlowStatus =='Conservative'}"
+                            (click)="toggleCashFlow('Conservative')">More
+                            Conservative</span>
+                    </div>
+                    <div class="d-inline-block pe-auto  ml-2 fw-bold">
+                        <span [ngClass]="{'cashFlow-type-heading':cashFlowStatus =='Standard'}"
+                            (click)="toggleCashFlow('Standard')">Standard</span>
+                    </div>
+                    <div class="d-inline-block pe-auto   ml-2 fw-bold">
+                        <span [ngClass]="{'cashFlow-type-heading': cashFlowStatus=='Assertive'}"
+                            (click)="toggleCashFlow('Assertive')">More
+                            Assertive</span>
+                    </div>
+                    <div class="d-inline-block pe-auto   ml-2 fw-bold">
+                        <span [ngClass]="{'cashFlow-type-heading':cashFlowStatus =='Defaults'}"
+                            (click)="toggleCashFlow('Defaults')">Defaults</span>
+                    </div>
+                </div>
 
                 <div class="accordion-body  d-flex px-0 pt-4 col-12 w-100">
                     <div class="d-flex flex-column col">
                         <div>
-                            <label for="noOfMonths" class="form-label"># of
+                            <label for="months" class="form-label"># of
                                 Months</label>
 
-                            <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control" aria-label="# of Months" [(ngModel)]="basicCashFlow.noOfMonths" id="noOfMonths" name="noOfMonths">
+                            <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control"
+                                aria-label="# of Months" [(ngModel)]="basicCashFlow.months" id="months" name="months">
                         </div>
 
                     </div>
@@ -68,26 +95,29 @@
                             <label for="expectedOutputDecline" class="form-label">Exp. Decline[%]
                             </label>
 
-                            <input type="number" class="form-control" aria-label="Expected Output Decline(%)" min="0" [(ngModel)]="basicCashFlow.decline" id="decline" name="decline">
+                            <input type="number" class="form-control" aria-label="Expected Output Decline(%)" min="0"
+                                [(ngModel)]="basicCashFlow.decline" id="decline" name="decline">
                         </div>
 
                     </div>
                     <div class="d-flex flex-column col">
                         <div>
-                            <label for="oilPrice" class="form-label">Oil Price [BBL]
+                            <label for="oil" class="form-label">Oil Price [BBL]
                             </label>
 
-                            <input type="number" min="0" class="form-control" aria-label="Oil Price" [(ngModel)]="basicCashFlow.oilPrice" id="oilPrice" name="oilPrice">
+                            <input type="number" min="0" class="form-control" aria-label="Oil Price"
+                                [(ngModel)]="basicCashFlow.oil" id="oil" name="oil">
                         </div>
 
                     </div>
                     <div class="d-flex flex-column col">
                         <div>
 
-                            <label for="gasPrice" class="form-label">Gas Price [MCF]
+                            <label for="gas" class="form-label">Gas Price [MCF]
                             </label>
 
-                            <input type="number" min="0" class="form-control" aria-label="Gas Price" [(ngModel)]="basicCashFlow.gasPrice" id="gasPrice" name="gasPrice">
+                            <input type="number" min="0" class="form-control" aria-label="Gas Price"
+                                [(ngModel)]="basicCashFlow.gas" id="gas" name="gas">
 
                         </div>
 
@@ -99,12 +129,14 @@
 
                 <div class=" d-flex flex-row gap-3 px-4 float-end">
                     <div class="">
-                        <span for="default" class="form-label d-inline-block text-primary pe-auto  border-primary" (click)="handleSaveAsDefault(basicCashFlow)">
+                        <span for="default" class="form-label d-inline-block text-primary pe-auto  border-primary"
+                            (click)="handleSaveAsDefault(basicCashFlow)">
                             Save as default
                         </span>
                     </div>
                     <div class="">
-                        <span for="recalculate" class=" form-label  d-inline-block text-primary pe-auto  border-primary" (click)="handleCalculateCashFlow()">
+                        <span for="recalculate" class=" form-label  d-inline-block text-primary pe-auto  border-primary"
+                            (click)="handleCalculateCashFlow()">
                             Re-calculate
                         </span>
                     </div>
@@ -119,15 +151,20 @@
 </div>
 
 <div class="d-flex gap-3 mt-5">
-    <button type="submit" class="btn btn-warning text-white fw-bold mb-2" *ngIf="(offer.offer_Status != 'Accepted' && listDetails.status.status != 'Accepted')" [disabled]="(newOffer.offerAmount < offer.minimumAsk)" data-bs-toggle="modal" [attr.data-bs-target]="'#staticBackdrop'+index"
-        (click)="handleMessage(offer)">
+    <button type="submit" class="btn btn-warning text-white fw-bold mb-2"
+        *ngIf="(offer.offer_Status != 'Accepted' && listDetails.status.status != 'Accepted')"
+        [disabled]="(newOffer.offerAmount < offer.minimumAsk)" data-bs-toggle="modal"
+        [attr.data-bs-target]="'#staticBackdrop'+index" (click)="handleMessage(offer)">
         {{offer.auctionType == "Fix Price" || offer.auctionType == 'Direct Sale' ||
         (offer.auctionType.endsWith('Buy Now or Make an Offer') && newOffer.offerAmount >= offer.buyNowPrice)? 'BUY NOW'
         :
         'SUBMIT OFFER'}}</button>
-    <button type="submit" class="btn btn-danger mb-2 fw-bold" data-bs-toggle="modal" [attr.data-bs-target]="'#exampleModal'+index" (click)="handleCancelMessage()" *ngIf="(newOffer.id && (offer.offer_Status != 'Accepted') && offer.auctionType != 'Fix Price' && offer.auctionType != 'Direct Sale' && offer.offer_Status != 'Cancelled' &&  listDetails.status.status != 'Accepted')">CANCEL
+    <button type="submit" class="btn btn-danger mb-2 fw-bold" data-bs-toggle="modal"
+        [attr.data-bs-target]="'#exampleModal'+index" (click)="handleCancelMessage()"
+        *ngIf="(newOffer.id && (offer.offer_Status != 'Accepted') && offer.auctionType != 'Fix Price' && offer.auctionType != 'Direct Sale' && offer.offer_Status != 'Cancelled' &&  listDetails.status.status != 'Accepted')">CANCEL
         OFFER</button>
-    <button type="submit" class="btn btn-outline-dark cancel-button  mb-2 fw-bold" data-toggle="collapse" [attr.data-target]="'#collapse'+index" aria-expanded="false" [attr.aria-controls]="'collapse'+index">
+    <button type="submit" class="btn btn-outline-dark cancel-button  mb-2 fw-bold" data-toggle="collapse"
+        [attr.data-target]="'#collapse'+index" aria-expanded="false" [attr.aria-controls]="'collapse'+index">
         Close Panel
     </button>
 
@@ -135,10 +172,11 @@
 
 <!-- Button trigger modal -->
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop{{index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop{{index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
-            <div class="modal-header"  *ngIf="!blockOffer">
+            <div class="modal-header" *ngIf="!blockOffer">
                 <h5 class="modal-title" id="staticBackdropLabel" [innerHTML]="offerDisclaimer?.value1"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -148,16 +186,18 @@
                 <div class="modal-body">The Buying process is blocked due to incompatible Constraints/Contingencies
                 </div>
                 <div class="modal-footer">
-                  <div class="mr-auto ">
-  
-                      <button type="button" data-bs-dismiss="modal" class="btn btn-danger ml-2 fw-bold">CANCEL</button>
-                  </div>
-              </div>
+                    <div class="mr-auto ">
+
+                        <button type="button" data-bs-dismiss="modal"
+                            class="btn btn-danger ml-2 fw-bold">CANCEL</button>
+                    </div>
+                </div>
             </ng-template>
             <div class="modal-footer" *ngIf="!blockOffer">
                 <div class="mr-auto ">
 
-                    <button type="button" (click)="handleSubmitOffer(newOffer, offer)" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal">ACCEPT</button>
+                    <button type="button" (click)="handleSubmitOffer(newOffer, offer)"
+                        class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal">ACCEPT</button>
                     <button type="button" data-bs-dismiss="modal" class="btn btn-danger ml-2 fw-bold">CANCEL</button>
                 </div>
             </div>
@@ -165,7 +205,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="exampleModal{{index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal{{index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -178,7 +219,8 @@
             <div class="modal-footer">
                 <div class="mr-auto ">
 
-                    <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal" (click)="handleCancelOffer(newOffer)">YES</button>
+                    <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
+                        (click)="handleCancelOffer(newOffer)">YES</button>
                     <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal">NO</button>
                 </div>
             </div>

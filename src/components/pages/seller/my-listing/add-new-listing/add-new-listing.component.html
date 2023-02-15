@@ -121,7 +121,8 @@
                     <div class="tab-pane fade" id="listingDetails" role="tabpanel" aria-labelledby="listingDetails-tab">
                         <app-listing-details-tab [createNewListing]="createNewListing"
                             [accountsOptions]="accountsOptions" [tracts]="tracts" [isListDraft]="isListDraft"
-                            (isValidNMA)="handleValidNMA($event)" [isListEdit]="isListEdit">
+                            (isValidNMA)="handleValidNMA($event)" [isListEdit]="isListEdit"
+                            [offerConfirmMessages]="offerConfirmMessages">
                         </app-listing-details-tab>
                     </div>
                     <div class="tab-pane fade " id="addTracts" role="tabpanel" aria-labelledby="addTracts-tab"
@@ -151,7 +152,35 @@
                             <input type="submit" class="btn text-white mx-2"
                                 [value]="item.status == 'Cancelled'  ? 'CANCEL LISTING' : item.status == 'Draft' ? 'SAVE DRAFT': (!isListDraft ? 'UPDATE LISTING':'ACTIVATE LISTING') "
                                 [ngClass]="{'btn-success ': item.status == 'Draft' , 'btn-warning': item.status == 'Active','btn-danger ': item.status == 'Cancelled', 'd-none':(!isListDraft && item.status == 'Draft')}"
-                                (click)="handleStatus(item)" />
+                                (click)=" handleMessage($event)" data-bs-toggle="modal"
+                                [attr.data-bs-target]="'#exampleModal'+i" />
+                        </ng-container>
+                        <ng-container>
+                            <div class="modal fade" id="exampleModal{{i}}" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">{{listMessage.heading}}
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body"> {{listMessage.message}}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="mr-auto ">
+
+                                                <button type="button" class="btn btn-warning text-white mr-2 fw-bold"
+                                                    data-bs-dismiss="modal" (click)="handleStatus(item)">YES</button>
+                                                <button type="button" class="btn btn-danger ml-2 fw-bold"
+                                                    data-bs-dismiss="modal">NO</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </ng-container>
                     </div>
 

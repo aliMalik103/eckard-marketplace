@@ -13,7 +13,8 @@ import { LoginService } from 'src/components/services/login.service';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { AllOffersTabComponent } from './all-offers-tab/all-offers-tab.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { MyOffersService } from 'src/components/services/my-offers.service';
 
 
 @NgModule({
@@ -32,10 +33,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
         NgxPaginationModule,
         NgxSpinnerModule
 
-
-
     ],
-    providers: [AddNewListingService, MyListingsService, ToastrService, LoginService, CurrencyPipe],
+    providers: [AddNewListingService,MyOffersService, MyListingsService, ToastrService, LoginService, CurrencyPipe, NgxSpinnerService],
     exports: [AddNewListingComponent]
 })
 export class AddNewListingModule {

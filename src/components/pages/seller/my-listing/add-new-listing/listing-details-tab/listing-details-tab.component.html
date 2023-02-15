@@ -262,15 +262,35 @@
                         <div id="listing-collapseOne" class="accordion-collapse collapse pt-2"
                             aria-labelledby="listing-headingOne" data-parent="#listingAccordion">
 
+                            <div class="d-flex px-4 gap-4 pt-4 col-12 w-100">
+                                <div class="d-inline-block pe-auto  mr-2 fw-bold">
+                                    <span [ngClass]="{'cashFlow-type-heading':cashFlowStatus =='Conservative'}"
+                                        (click)="toggleCashFlow('Conservative')">More
+                                        Conservative</span>
+                                </div>
+                                <div class="d-inline-block pe-auto  ml-2 fw-bold">
+                                    <span [ngClass]="{'cashFlow-type-heading':cashFlowStatus =='Standard'}"
+                                        (click)="toggleCashFlow('Standard')">Standard</span>
+                                </div>
+                                <div class="d-inline-block pe-auto   ml-2 fw-bold">
+                                    <span [ngClass]="{'cashFlow-type-heading': cashFlowStatus=='Assertive'}"
+                                        (click)="toggleCashFlow('Assertive')">More
+                                        Assertive</span>
+                                </div>
+                                <div class="d-inline-block pe-auto   ml-2 fw-bold">
+                                    <span [ngClass]="{'cashFlow-type-heading':cashFlowStatus =='Defaults'}"
+                                        (click)="toggleCashFlow('Defaults')">Defaults</span>
+                                </div>
+                            </div>
                             <div class="accordion-body  d-flex px-0 pt-4 col-12 w-100">
                                 <div class="d-flex flex-column col">
                                     <div>
-                                        <label for="noOfMonths" class="form-label"># of
+                                        <label for="months" class="form-label"># of
                                             Months</label>
 
                                         <input type="number" min="0" oninput="validity.valid||(value='');"
                                             class="form-control" aria-label="# of Months"
-                                            [(ngModel)]="basicCashFlow.noOfMonths" id="noOfMonths" name="noOfMonths">
+                                            [(ngModel)]="basicCashFlow.months" id="months" name="months">
                                     </div>
 
                                 </div>
@@ -288,22 +308,22 @@
                                 </div>
                                 <div class="d-flex flex-column col">
                                     <div>
-                                        <label for="oilPrice" class="form-label">Oil Price [BBL]
+                                        <label for="oil" class="form-label">Oil Price [BBL]
                                         </label>
 
                                         <input type="number" min="0" class="form-control" aria-label="Oil Price"
-                                            [(ngModel)]="basicCashFlow.oilPrice" id="oilPrice" name="oilPrice">
+                                            [(ngModel)]="basicCashFlow.oil" id="oil" name="oil">
                                     </div>
 
                                 </div>
                                 <div class="d-flex flex-column col">
                                     <div>
 
-                                        <label for="gasPrice" class="form-label">Gas Price [MCF]
+                                        <label for="gas" class="form-label">Gas Price [MCF]
                                         </label>
 
                                         <input type="number" min="0" class="form-control" aria-label="Gas Price"
-                                            [(ngModel)]="basicCashFlow.gasPrice" id="gasPrice" name="gasPrice">
+                                            [(ngModel)]="basicCashFlow.gas" id="gas" name="gas">
 
                                     </div>
 

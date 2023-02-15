@@ -121,13 +121,13 @@ export class AddNewListingComponent implements OnInit {
 
   handleMessage(event: any) {
     switch (event.target.value) {
-      case 'DSAVE DRAFT':
+      case 'SAVE DRAFT':
         this.listMessage.heading = 'Listing Saved';
         this.listMessage.message = 'Are you sure you want to save listing as draft?'
         break;
       case 'ACTIVATE LISTING':
         this.listMessage.heading = 'Listing Saved';
-        this.listMessage.message = 'Are you sure you want to save listing as draft?'
+        this.listMessage.message = 'Are you sure you want to save listing as active?'
         break;
       case 'UPDATE LISTING':
         this.listMessage.heading = 'Listing Updated';
@@ -167,7 +167,7 @@ export class AddNewListingComponent implements OnInit {
               (item: any) => item?.status?.status != 'Cancelled'
             )
             if (listActive && activeOffer.length == 0) {
-              this.updateListing(this.createNewListing , status.statusLabel == 'Cancelled')
+              this.updateListing(this.createNewListing, status.statusLabel == 'Cancelled')
             } else {
               this.spinner.hide()
               this.router.navigate(['/my-listing'])

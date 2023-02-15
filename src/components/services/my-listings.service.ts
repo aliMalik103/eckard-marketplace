@@ -156,12 +156,30 @@ export class MyListingsService {
   }
 
   handleCreateCashConfig(body: any) {
+    body = {
+      contact: body.contact,
+      json_fields: {
+        months: body.months,
+        decline: body.decline,
+        oil: body.oil,
+        gas: body.gas
+      }
+    }
     const res = this.http.post(`${environment.API_BASE_URL}/cash_config/`, body)
     return res;
   }
 
   handleUpdateCashConfig(body: any) {
-    console.log(body)
+    body = {
+      contact: body.contact,
+      id: body.id,
+      json_fields: {
+        months: body.months,
+        decline: body.decline,
+        oil: body.oil,
+        gas: body.gas
+      }
+    }
     const res = this.http.patch(`${environment.API_BASE_URL}/cash_config/${body.id}`, body)
     return res;
   }

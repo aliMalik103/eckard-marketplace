@@ -1,20 +1,14 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
-import { Router } from '@angular/router'
-import {
-  ListingType,
-  AuctionType,
-  Project,
-  Account,
-  Status,
-  Tract,
-  MyListing,
-  ContactAccount
-} from 'src/components/model/my-listings'
-import { MyListingsService } from 'src/components/services/my-listings.service'
-import { AddNewListingService } from './add-new-listing.service'
-import { ToastrService } from 'ngx-toastr'
-import { LoginService } from 'src/components/services/login.service'
-import { NgxSpinnerService } from 'ngx-spinner'
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { ListingType, AuctionType, Project, Account, Status, Tract, MyListing, ContactAccount } from 'src/components/model/my-listings';
+import { MyListingsService } from 'src/components/services/my-listings.service';
+import { AddNewListingService } from './add-new-listing.service';
+import { ToastrService } from 'ngx-toastr';
+import { LoginService } from 'src/components/services/login.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MyOffersService } from 'src/components/services/my-offers.service';
+
+
 
 @Component({
   selector: 'app-add-new-listing',
@@ -35,6 +29,7 @@ export class AddNewListingComponent implements OnInit {
   isListEdit!: boolean
   isListDraft!: boolean
   showOffers!: boolean
+  offerConfirmMessages: any
 
   createNewListing: MyListing = {
     listing_type: null,
@@ -54,15 +49,17 @@ export class AddNewListingComponent implements OnInit {
     directSaleToken: ''
   }
   isValidNma!: boolean
-
-  constructor (
+  listMessage = {
+    heading: '',
+    message: ''
+  }
+  constructor(
     private addNewListingService: AddNewListingService,
     private myListingsService: MyListingsService,
     private router: Router,
-    private toastr: ToastrService,
-    private loginService: LoginService,
-    private spinner: NgxSpinnerService
-  ) {
+    private toastr: ToastrService, private myOffersService: MyOffersService,
+    private loginService: LoginService, private spinner: NgxSpinnerService) {
+
     this.createNewListing = this.myListingsService.newListing
     this.isListEdit = this.myListingsService.isListEdit
     this.showOffers = this.myListingsService.showOffers
@@ -70,33 +67,35 @@ export class AddNewListingComponent implements OnInit {
     this.listingId = this.createNewListing.listingName
   }
 
-  ngOnInit (): void {
+  ngOnInit(): void {
     this.handleGetUserAccounts()
     this.handleGetListType()
     this.handleAuctionType()
     this.handleConstraint()
     this.handleGetStatus()
     this.handleGetTracts()
+    this.handleOfferDealMessages()
+
   }
 
-  handleGoBack () {
+  handleGoBack() {
     this.onGoBack.emit()
     this.myListingsService.handleResetSetNewList()
   }
 
-  handleProjectType (value: number) {
+  handleProjectType(value: number) {
     this.createNewListing.listing_type = value
     if (value == 2) {
       this.toastr.info('Still work in progress')
     }
   }
 
-  handleValidNMA (event: any) {
+  handleValidNMA(event: any) {
     this.isValidNma = event
     return this.isValidNma
   }
 
-  isValid (obj: any) {
+  isValid(obj: any) {
     const requiredFields = [
       'listing_type',
       'listingName',
@@ -120,7 +119,30 @@ export class AddNewListingComponent implements OnInit {
     return isValid
   }
 
-  handleStatus (status: any) {
+  handleMessage(event: any) {
+    switch (event.target.value) {
+      case 'DSAVE DRAFT':
+        this.listMessage.heading = 'Listing Saved';
+        this.listMessage.message = 'Are you sure you want to save listing as draft?'
+        break;
+      case 'ACTIVATE LISTING':
+        this.listMessage.heading = 'Listing Saved';
+        this.listMessage.message = 'Are you sure you want to save listing as draft?'
+        break;
+      case 'UPDATE LISTING':
+        this.listMessage.heading = 'Listing Updated';
+        this.listMessage.message = 'Are you sure you want to update the listing?'
+        break;
+      case 'CANCEL LISTING':
+        this.listMessage.heading = 'Cancel Listing';
+        this.listMessage.message = 'Are you sure you want to cancel the listing?'
+        break;
+
+      default:
+        return
+    }
+  }
+  handleStatus(status: any) {
     this.spinner.show()
     this.createNewListing.status = status.id
     delete this.createNewListing.directSaleToken
@@ -145,7 +167,7 @@ export class AddNewListingComponent implements OnInit {
               (item: any) => item?.status?.status != 'Cancelled'
             )
             if (listActive && activeOffer.length == 0) {
-              this.updateListing(this.createNewListing)
+              this.updateListing(this.createNewListing , status.statusLabel == 'Cancelled')
             } else {
               this.spinner.hide()
               this.router.navigate(['/my-listing'])
@@ -185,7 +207,7 @@ export class AddNewListingComponent implements OnInit {
     }
   }
 
-  handleGetListType () {
+  handleGetListType() {
     this.addNewListingService.handleGetListType().subscribe(
       response => {
         this.listingTypeOptions = response
@@ -197,7 +219,7 @@ export class AddNewListingComponent implements OnInit {
     )
   }
 
-  handleAuctionType () {
+  handleAuctionType() {
     this.addNewListingService.handleAuctionType().subscribe(
       response => {
         this.auctionTypeOptions = response
@@ -209,11 +231,11 @@ export class AddNewListingComponent implements OnInit {
     )
   }
 
-  handleConstraint () {
+  handleConstraint() {
     this.addNewListingService.handleConstraint().subscribe(
       response => {
-        const sellOptions:any=[];
-       response?.map(item => {
+        const sellOptions: any = [];
+        response?.map(item => {
           if (item.sellLabel) {
             if (this.createNewListing?.constraints?.includes(item.id)) {
               sellOptions.push({ ...item, isChecked: true })
@@ -222,7 +244,7 @@ export class AddNewListingComponent implements OnInit {
             }
           }
         })
-        this.constraintOptions=sellOptions;
+        this.constraintOptions = sellOptions;
       },
       (error: any) => {
         console.log('Error getting seller Constraint', error)
@@ -231,7 +253,7 @@ export class AddNewListingComponent implements OnInit {
     )
   }
 
-  handleGetStatus () {
+  handleGetStatus() {
     this.addNewListingService.handleGetStatus().subscribe(
       response => {
         this.statusOptions = response
@@ -243,7 +265,7 @@ export class AddNewListingComponent implements OnInit {
     )
   }
 
-  handleGetTracts () {
+  handleGetTracts() {
     this.addNewListingService.handleGetTracts().subscribe(
       response => {
         this.tracts = response
@@ -255,7 +277,7 @@ export class AddNewListingComponent implements OnInit {
     )
   }
 
-  handleGetUserAccounts () {
+  handleGetUserAccounts() {
     this.myListingsService
       .handleGetUserAccounts(this.loginService.user.id)
       .subscribe(
@@ -272,7 +294,7 @@ export class AddNewListingComponent implements OnInit {
       )
   }
 
-  handleGetOffers (offers: any) {
+  handleGetOffers(offers: any) {
     let activeOffers = offers?.filter(
       (item: any) => item?.status?.statusLabel != 'Cancelled'
     )
@@ -282,14 +304,14 @@ export class AddNewListingComponent implements OnInit {
     return true
   }
 
-  updateListing (listing: any) {
+  updateListing(listing: any, flag = false) {
     this.myListingsService.updateListing(listing).subscribe(
       response => {
         this.spinner.hide()
         this.router.navigate(['/my-listing'])
         this.handleGoBack()
         this.myListingsService.handleResetSetNewList()
-        this.toastr.success('List update successfully')
+        flag ? this.toastr.success('List cancelled successfully') : this.toastr.success('List update successfully')
       },
       (error: any) => {
         this.spinner.hide()
@@ -305,4 +327,15 @@ export class AddNewListingComponent implements OnInit {
     return (a && b) ? a.id === b.id : false;
   }
 
+  handleOfferDealMessages() {
+    this.myOffersService.handleOfferDealMessages().subscribe(
+      (response) => {
+        this.offerConfirmMessages = response
+      },
+      (error: any) => {
+        console.error("Error getting key vlaue  : ", error);
+      },
+      () => console.log("Done getting key vlaue .")
+    )
+  }
 }

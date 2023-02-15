@@ -4,6 +4,7 @@ import { AddNewListingService } from '../add-new-listing.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/components/services/login.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -20,6 +21,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   @Input() tracts!: Tract[]
   @Input() isListDraft!: boolean
   @Input() isListEdit!: boolean
+  @Input() offerConfirmMessages!: any
   @Output() isValidNMA = new EventEmitter()
 
   projectsOptions: Project[] = []
@@ -28,14 +30,15 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   cashFlow!: any
   calculateTotalCashFlow: any = 0
   isRecalculate: boolean = false
+  cashFlowStatus: string = ''
+  isDefaults: boolean = false
 
-
-  basicCashFlow: CashConfig = {
+  basicCashFlow: any = {
     id: null,
-    noOfMonths: 36,
-    decline: 1.5,
-    gasPrice: 3.5,
-    oilPrice: 75,
+    months: null,
+    decline: null,
+    gas: null,
+    oil: null,
     contact: null
   }
 
@@ -53,7 +56,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   ]
   constructor(private addNewListingService: AddNewListingService,
     private myListingsService: MyListingsService, private toastr: ToastrService,
-    private loginService: LoginService) {
+    private loginService: LoginService, private spinner: NgxSpinnerService) {
   }
   ngOnInit(): void {
     if (this.createNewListing?.account) {
@@ -213,21 +216,27 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   handleGetCashConfig() {
     this.myListingsService.handleGetCashConfig(this.loginService.user.id).subscribe(
       (response: any) => {
+
         if (response.length > 0) {
+          this.isDefaults = false
+          this.cashFlowStatus = 'Defaults'
           this.basicCashFlow.id = response[0].id
           this.basicCashFlow.contact = response[0].contact.id
-          this.basicCashFlow.decline = response[0].decline
-          this.basicCashFlow.gasPrice = response[0].gasPrice
-          this.basicCashFlow.oilPrice = response[0].oilPrice
-          this.basicCashFlow.noOfMonths = response[0].noOfMonths
+          this.basicCashFlow.months = response[0].json_fields.months;
+          this.basicCashFlow.decline = response[0].json_fields.decline;
+          this.basicCashFlow.oil = response[0].json_fields.oil;
+          this.basicCashFlow.gas = response[0].json_fields.gas;
+
         }
         else {
-          this.basicCashFlow.id = null
-          this.basicCashFlow.contact = null
-          this.basicCashFlow.decline = 1.5
-          this.basicCashFlow.gasPrice = 3.5
-          this.basicCashFlow.oilPrice = 75
-          this.basicCashFlow.noOfMonths = 36
+          if (this.isDefaults) {
+            this.toastr.info('CashFlow Defaults Value does not exist')
+          }
+          this.isDefaults = false
+
+          this.cashFlowStatus = 'Standard'
+          let standard = this.offerConfirmMessages?.filter((item: any) => item.key.endsWith('Standard'))
+          this.handleBasicCashFlow(standard)
         }
       },
       (error: any) => {
@@ -238,6 +247,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
     )
   }
   handleSaveAsDefault(value: any) {
+    this.spinner.show()
     value.contact = this.loginService.user.id
     if (value.id) {
       this.handleUpdateCashConfig(value)
@@ -252,6 +262,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   handleCreateCashConfig(body: any) {
     this.myListingsService.handleCreateCashConfig(body).subscribe(
       (response) => {
+        this.spinner.hide()
         if (response) {
           this.handleGetCashConfig()
         }
@@ -259,6 +270,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
 
       },
       (error: any) => {
+        this.spinner.hide()
 
         console.error("Error getting cash Config : ", error);
       },
@@ -269,13 +281,14 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   handleUpdateCashConfig(body: any) {
     this.myListingsService.handleUpdateCashConfig(body).subscribe(
       (response) => {
-        console.log("update cash Config", response)
+        this.spinner.hide()
         if (response) {
           this.handleGetCashConfig()
           this.toastr.success('CashFlow default values update successfully');
         }
       },
       (error: any) => {
+        this.spinner.hide()
 
         console.error("Error getting cash Config : ", error);
       },
@@ -289,4 +302,41 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   }
 
 
+  toggleCashFlow(type: any) {
+    this.cashFlowStatus = type
+    switch (this.cashFlowStatus) {
+      case 'Conservative':
+        let conservative = this.offerConfirmMessages?.filter((item: any) => item.key.endsWith('Conservative'))
+        this.handleBasicCashFlow(conservative)
+
+        break;
+      case 'Standard':
+        let standard = this.offerConfirmMessages?.filter((item: any) => item.key.endsWith('Standard'))
+        this.handleBasicCashFlow(standard)
+        break;
+      case 'Assertive':
+        let assertive = this.offerConfirmMessages?.filter((item: any) => item.key.endsWith('Assertive'))
+        this.handleBasicCashFlow(assertive)
+        break;
+      case 'Defaults':
+        this.isDefaults = true
+        this.handleGetCashConfig()
+        break;
+
+      default:
+        return
+    }
+
+  }
+
+  handleBasicCashFlow(obj: any) {
+    const value1Object = obj && obj[0] && JSON.parse(obj[0]?.value1);
+    this.basicCashFlow.id = this.basicCashFlow?.id ? this.basicCashFlow.id : null
+    this.basicCashFlow.contact = this.basicCashFlow?.contact ? this.basicCashFlow.contact : null
+    this.basicCashFlow.months = value1Object?.months;
+    this.basicCashFlow.decline = value1Object?.decline;
+    this.basicCashFlow.oil = value1Object?.oil;
+    this.basicCashFlow.gas = value1Object?.gas;
+
+  }
 }

@@ -72,8 +72,8 @@ export class AddNewListingService implements OnInit {
     return res;
   }
 
-  handleConstraint(): Observable<Constraint[]> {
-    const res = this.http.get<Constraint[]>(`${environment.API_BASE_URL}/constraint`).pipe(
+  handleConstraint(): Observable<any[]> {
+    const res = this.http.get<any[]>(`${environment.API_BASE_URL}/constraint`).pipe(
       tap(response => console.log("constraint type", response))
 
     )

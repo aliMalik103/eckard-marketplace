@@ -29,7 +29,7 @@ export class GeneralDataTabComponent implements OnInit {
     this.createNewListing.constraints = this.constraintOptions
       .filter(value => value.isChecked)
       .map(value => value.id);
-    console.log(this.createNewListing)
+    console.log("BUYER SIDE "+this.createNewListing)
   }
 
   auctionTypeComparator(a: any, b: any) {

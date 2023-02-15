@@ -7,7 +7,7 @@
             <input class="form-check-input" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
                 [name]="item.constraint" [id]="'constraint'+item.id" [disabled]="!isListDraft">
             <label [for]="'constraint'+item.id">
-                {{item.constraintLabel}}
+                {{item.buyLabel}}
             </label>
         </div>
     </div>

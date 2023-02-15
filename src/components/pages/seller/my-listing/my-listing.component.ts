@@ -121,6 +121,7 @@ export class MyListingComponent implements OnInit {
           minimumAsk: response.minimumAsk,
           buyNowPrice: response.buyNowPrice,
           constraints: response.constraints.map((x: any) => parseInt(x.id)),
+          listConstraints: response.constraints,
           offer: response.offer,
           id: response.id,
           directSaleToken: response.directSaleToken

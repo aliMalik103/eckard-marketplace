@@ -65,7 +65,8 @@ export interface AuctionType {
 export interface Constraint {
     id: number
     constraint: string
-    constraintLabel: string
+    buyLabel: string
+    sellLabel:string
     constraintType: string
 }
 

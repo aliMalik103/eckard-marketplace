@@ -22,6 +22,7 @@ export class MyOffersComponent implements OnInit {
   @Input() index!: any
 
   cashFlow!: any
+  blockOffer = false
   isRecalculate: boolean = false
   calculateTotalCashFlow: any = 0
   offerId!: any
@@ -57,9 +58,15 @@ export class MyOffersComponent implements OnInit {
   }
 
   fetchSelectedItems() {
+
     this.newOffer.constraints = this.constraintOptions
       .filter(value => value.isChecked)
       .map(value => value);
+
+
+
+
+    console.log("Listing Details", this.listDetails, this.newOffer.constraints)
   }
 
   handleGetCashFlow() {
@@ -181,7 +188,10 @@ export class MyOffersComponent implements OnInit {
     this.offerId = null;
     this.activeItem = null;
     this.isacceptedOffer = false;
+    this.blockOffer = false;
     this.activeItem = this.statusOptions?.find((item) => item.status === "Active");
+
+
 
     if (offer.auctionType == 'Fix Price' || offer.auctionType == 'Direct Sale') {
       this.activeItem = this.statusOptions?.find((item) => item.status == "Accepted")
@@ -195,7 +205,10 @@ export class MyOffersComponent implements OnInit {
         this.isacceptedOffer = true;
       }
     }
+
     if (this.isacceptedOffer) {
+
+      this.checkOfferBlocked()
       let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Buying Disclaimer")
       this.offerDisclaimer = message[0]
     }
@@ -259,7 +272,26 @@ export class MyOffersComponent implements OnInit {
         console.log(error)
       }
     )
+  }
 
+  checkOfferBlocked() {
+
+    this.listDetails.constraints.map((list: any) => {
+
+      if (list.constraintType == "block") {
+        const offerContraint = this.newOffer.constraints.find((offerContraint: any) => offerContraint.id == list.id);
+        if (offerContraint != undefined) {
+          this.blockOffer = true;
+        }
+      }
+      if (list.constraintType == "required") {
+        const offerContraint = this.newOffer.constraints.find((offerContraint: any) => offerContraint.id == list.id);
+        if (offerContraint == undefined) {
+          this.blockOffer = true;
+        }
+      }
+
+    })
 
   }
 

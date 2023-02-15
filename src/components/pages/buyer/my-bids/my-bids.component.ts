@@ -100,11 +100,15 @@ export class MyBidsComponent implements OnInit {
 
   handleConstraint() {
 
-    this.addNewListingService.handleConstraint('buyConstraint').subscribe(
+    this.addNewListingService.handleConstraint().subscribe(
       (response) => {
-        this.constraintOptions = response?.map(item => {
-          return { ...item, isChecked: false };
+        const buyOptions:any=[];
+        response?.map(item => {
+          if(item.buyLabel){
+          buyOptions.push( { ...item, isChecked: false });
+          }
         });
+        this.constraintOptions=buyOptions;
       },
       (error: any) => {
 
@@ -149,7 +153,7 @@ export class MyBidsComponent implements OnInit {
             return {
               id: obj.id,
               constraint: obj.constraint,
-              constraintLabel: obj.constraintLabel,
+              buyLabel: obj.buyLabel,
               isChecked: this.newOffer.constraints?.some((item: any) => item.id === obj.id)
             }
           });

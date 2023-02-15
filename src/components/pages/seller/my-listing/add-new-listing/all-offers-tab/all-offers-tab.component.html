@@ -38,8 +38,8 @@
                     </ng-container>
                 </td>
                 <td class="text-secondary">
-                    <p *ngFor="let constraint of offer.constraints">
-                        {{constraint.constraintLabel}}</p>
+                    <p *ngFor="let constraint of offer.constraints" [ngClass]="{'text-danger':constraint.block}">
+                       <span  *ngIf="constraint.missing" class="text-danger">Missing </span> {{constraint.buyLabel}}</p>
                 </td>
                 <td class="text-secondary">{{offer.comments}}</td>
 

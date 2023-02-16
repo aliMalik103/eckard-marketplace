@@ -43,7 +43,7 @@
                     <label for="listingStart" class="form-label">Listing Start <span
                             class="text-danger">*</span></label>
                     <input type="datetime-local" class="form-control" [(ngModel)]="createNewListing.listingStart"
-                        (ngModelChange)="handleTimeDuration(true)" name="listingStart" id="listingStart" required
+                        (ngModelChange)="handleTimeDuration()" name="listingStart" id="listingStart" required
                         #listingStart="ngModel"
                         [ngClass]="{'border border-danger':listingStart.invalid && (listingStart.dirty || listingStart.touched)}"
                         [disabled]="!isListDraft">

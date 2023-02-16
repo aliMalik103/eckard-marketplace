@@ -345,11 +345,8 @@ export class AddNewListingComponent implements OnInit {
     )
   }
 
-  handleTimeDuration(flag = false) {
+  handleTimeDuration() {
     const { auctionEnd, listingStart } = this.createNewListing;
-    if(flag){
-      this.createNewListing.project = null
-    }
     const { value1: maxDuration } = this.offerConfirmMessages?.find((item: any) => item.key === 'Maximum Auction Duration');
     const { value1: minDuration } = this.offerConfirmMessages?.find((item: any) => item.key === 'Minimum Auction Duration');
     const durationInHours = moment(auctionEnd).diff(moment(listingStart), 'hours');

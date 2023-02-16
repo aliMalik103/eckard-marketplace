@@ -37,3 +37,9 @@
     border-bottom: 2px solid black;
 
 }
+
+.project-blocked {
+    border: 2px solid orange !important;
+    background-color: yellow !important;
+    color: black;
+}

@@ -124,7 +124,7 @@ export class MyListingComponent implements OnInit {
           auctionEnd: response.auctionEnd,
           comments: response.comments,
           account: response.account.id,
-          project: response.project.id,
+          project: response.project,
           nma: response.nma,
           minimumAsk: response.minimumAsk,
           buyNowPrice: response.buyNowPrice,

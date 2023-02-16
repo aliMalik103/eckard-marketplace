@@ -147,6 +147,7 @@ export class AddNewListingComponent implements OnInit {
   handleStatus(status: any) {
     this.spinner.show()
     this.createNewListing.status = status.id
+    this.createNewListing.project = this.createNewListing?.project.id
     delete this.createNewListing.directSaleToken
     this.createNewListing.offer = this.createNewListing.offer?.map((x: any) =>
       parseInt(x.id)

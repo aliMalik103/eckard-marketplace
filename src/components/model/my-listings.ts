@@ -54,6 +54,8 @@ export interface Project {
     projectId: string
     totalNma: string
     totalRevenue: string
+    blockedUntil: any
+    minimumNma: number
 }
 
 export interface AuctionType {
@@ -66,7 +68,7 @@ export interface Constraint {
     id: number
     constraint: string
     buyLabel: string
-    sellLabel:string
+    sellLabel: string
     constraintType: string
 }
 
@@ -123,6 +125,7 @@ export interface IncomListing {
     incomeToDate: number
     availableNma: number
     totalNma: number
+    minimumNma: number
 }
 
 export interface ContactListing {

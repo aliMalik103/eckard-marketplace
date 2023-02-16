@@ -5,6 +5,7 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/components/services/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as moment from 'moment';
 
 
 
@@ -77,13 +78,12 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
         this.handleUserProject(this.createNewListing.account)
         break;
       case 'project':
-        this.createNewListing.project = parseInt(this.createNewListing.project);
         this.handleFindTotalNMA()
         break;
       case 'nma':
         this.createNewListing.nma = parseFloat(this.createNewListing.nma);
         if (this.incomeListing) {
-          this.isValidNMA.emit(this.incomeListing.availableNma < parseFloat(this.createNewListing.nma))
+          this.isValidNMA.emit((parseFloat(this.createNewListing.nma) >= this.incomeListing.minimumNma) && ((this.incomeListing.availableNma - parseFloat(this.createNewListing.nma)) >= this.incomeListing.minimumNma))
         }
         break;
       case 'minimumAsk':
@@ -119,9 +119,14 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
 
 
           this.myListingsService.userAccountsAndProjects = uniqueProjects
-          this.projectsOptions = uniqueProjects.map((item: any) => item.project);
+          const formattedProjects = uniqueProjects.map((item: any) => ({
+            ...item.project,
+            blockedUntil: item.project.blockedUntil ? moment.utc(item.project.blockedUntil).local().format().slice(0, 16) : null
+          }));
+
+          this.projectsOptions = formattedProjects;
           if (this.projectsOptions.length === 1) {
-            this.createNewListing.project = this.projectsOptions[0].id;
+            this.createNewListing.project = this.projectsOptions[0];
             this.handleFindTotalNMA()
           }
           else {
@@ -166,12 +171,12 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   }
 
   handleIsValidNma() {
-    let flag = this.incomeListing ? (this.incomeListing.availableNma < parseFloat(this.createNewListing.nma)) : null;
-    return flag
+    let flag = this.incomeListing ? ((parseFloat(this.createNewListing.nma) >= this.incomeListing.minimumNma) && ((this.incomeListing.availableNma - parseFloat(this.createNewListing.nma)) >= this.incomeListing.minimumNma)) : null;
+    return !flag
   }
 
   handleGetListingCost() {
-    this.myListingsService.handleGetListingCost(this.createNewListing.account, this.createNewListing.project).subscribe(
+    this.myListingsService.handleGetListingCost(this.createNewListing.account, this.createNewListing.project.id).subscribe(
       (response) => {
         this.listingCost = response
       },
@@ -184,12 +189,12 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   }
 
   handleGetIncomeListing() {
-    this.myListingsService.handleGetIncomeListing(this.createNewListing.account, this.createNewListing.project).subscribe(
+    this.myListingsService.handleGetIncomeListing(this.createNewListing.account, this.createNewListing.project.id).subscribe(
       (response) => {
         this.incomeListing = response
         this.createNewListing.nma = this.createNewListing.nma || this.incomeListing.availableNma;
         if (this.incomeListing) {
-          this.isValidNMA.emit(this.incomeListing.availableNma < parseFloat(this.createNewListing.nma))
+          this.isValidNMA.emit((parseFloat(this.createNewListing.nma) >= this.incomeListing.minimumNma) && ((this.incomeListing.availableNma - parseFloat(this.createNewListing.nma)) >= this.incomeListing.minimumNma))
         }
       },
       (error: any) => {
@@ -201,7 +206,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   }
 
   handleGetCashFlow() {
-    this.myListingsService.handleGetCashFlow(this.createNewListing.project).subscribe(
+    this.myListingsService.handleGetCashFlow(this.createNewListing.project.id).subscribe(
       (response) => {
         this.cashFlow = response
       },
@@ -338,5 +343,9 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
     this.basicCashFlow.oil = value1Object?.oil;
     this.basicCashFlow.gas = value1Object?.gas;
 
+  }
+
+  auctionTypeComparator(a: any, b: any) {
+    return (a && b) ? a.id === b.id : false;
   }
 }

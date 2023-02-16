@@ -147,7 +147,7 @@
 
 
             <div class="d-flex justify-content-between p-4 col-8 col-sm-10" *ngIf="!showOffers">
-                <div class="d-flex " *ngIf="(isValid(createNewListing) && !isValidNma) || (isListEdit && !isListDraft)">
+                <div class="d-flex " *ngIf="(isValid(createNewListing) && isValidNma) || (isListEdit && !isListDraft)">
                     <div *ngFor="let item of statusOptions; index as i">
                         <ng-container
                             *ngIf="item.status == 'Draft' || item.status == 'Active' || (item.status == 'Cancelled' && isListEdit && handleGetOffers(createNewListing.offer) )">

@@ -28,12 +28,16 @@
 
 
                 <select id="project" class="form-select" [(ngModel)]="createNewListing.project"
-                    (ngModelChange)="handleChange('project')" #project="ngModel"
+                    (ngModelChange)="handleChange('project')" #project="ngModel" [compareWith]="auctionTypeComparator"
                     [ngClass]="{'border border-danger':project.invalid && (project.dirty || project.touched)}" required
                     [disabled]="!isListDraft">
-                    <option *ngFor="let item of projectsOptions " [value]="item.id">{{item.projectId}}
+                    <option *ngFor="let item of projectsOptions " [ngValue]="item"
+                        [disabled]="item.blockedUntil > createNewListing.listingStart">
+                        {{item.projectId}} <span *ngIf="item.blockedUntil > createNewListing.listingStart"
+                            class="project-blocked">(blocked)</span>
                     </option>
                 </select>
+
                 <span *ngIf="project.invalid && (project.dirty || project.touched ) &&  project.errors"
                     class="text-danger rounded px-4 error-message">
                     Please select valid project
@@ -44,7 +48,8 @@
 
             <div class=" col-md-6">
                 <label for="nma" class="form-label">NMA Listed <small class="text-muted" *ngIf="isListDraft">(available:
-                        <ng-container *ngIf="incomeListing">{{incomeListing.availableNma}}</ng-container>
+                        <ng-container *ngIf="incomeListing">{{incomeListing.availableNma}}, minimum:
+                            {{incomeListing.minimumNma}}</ng-container>
                         NMA)
                     </small> <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" [(ngModel)]="createNewListing.nma"

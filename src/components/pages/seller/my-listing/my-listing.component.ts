@@ -95,7 +95,7 @@ export class MyListingComponent implements OnInit {
   }
 
   handleNewList() {
-    const { value1: defaultTime } = this.offerConfirmMessages?.find((item: any) => item.key === 'Maximum Auction Duration');
+    const { value1: defaultTime } = this.offerConfirmMessages?.find((item: any) => item.key === 'Default Auction Duration');
     const defaultDuration: moment.Duration = moment.duration(defaultTime, 'hours');
     const fourWeeksFromNow = moment(this.myListingsService.newListing.listingStart).add(defaultDuration).startOf('day');
     this.myListingsService.newListing.auctionEnd = fourWeeksFromNow.format().slice(0, 16)

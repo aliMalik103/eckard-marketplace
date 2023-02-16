@@ -42,8 +42,9 @@
                 <div class="col-md-6">
                     <label for="listingStart" class="form-label">Listing Start <span
                             class="text-danger">*</span></label>
-                    <input type="datetime-local" class="form-control" [(ngModel)]="createNewListing.listingStart "
-                        name="listingStart" id="listingStart" required #listingStart="ngModel"
+                    <input type="datetime-local" class="form-control" [(ngModel)]="createNewListing.listingStart"
+                        (ngModelChange)="handleTimeDuration()" name="listingStart" id="listingStart" required
+                        #listingStart="ngModel"
                         [ngClass]="{'border border-danger':listingStart.invalid && (listingStart.dirty || listingStart.touched)}"
                         [disabled]="!isListDraft">
                     <span
@@ -77,7 +78,8 @@
                     <label for="auctionEnd" class="form-label">Auction Ends At <span
                             class="text-danger">*</span></label>
                     <input type="datetime-local" class="form-control" name="auctionEnd" id="auctionEnd"
-                        [(ngModel)]="createNewListing.auctionEnd" required #auctionEnd="ngModel"
+                        [(ngModel)]="createNewListing.auctionEnd" min="{{minAuctionDuration}}"
+                        max="{{maxAuctionDuration}}" required #auctionEnd="ngModel"
                         [ngClass]="{'border border-danger':auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched)}"
                         [disabled]="!isListDraft">
                     <span *ngIf="auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched ) &&  auctionEnd.errors"

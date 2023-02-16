@@ -76,8 +76,6 @@ export class MyListingsService {
     const todayMidnight = moment().startOf('day');
     const today = todayMidnight.format().slice(0, 16)
     this.newListing.listingStart = today
-    const fourWeeksFromNow = moment().add(4, 'weeks').startOf('day');
-    this.newListing.auctionEnd = fourWeeksFromNow.format().slice(0, 16)
   }
 
 

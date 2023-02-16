@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContactListing } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
+import { MyOffersService } from 'src/components/services/my-offers.service';
 
 
 @Component({
@@ -54,10 +56,11 @@ export class MyListingComponent implements OnInit {
   tableSize: number = 50;
   tableSizes: any = [3, 6, 9, 12];
   isShowOffers: boolean = false
+  offerConfirmMessages!: any
 
 
   constructor(private myListingsService: MyListingsService, private router: Router,
-    private loginService: LoginService, private spinner: NgxSpinnerService) {
+    private loginService: LoginService, private spinner: NgxSpinnerService, private myOffersService: MyOffersService,) {
     this.handleResetNewList()
   }
 
@@ -68,6 +71,7 @@ export class MyListingComponent implements OnInit {
       return
 
     }
+    this.handleOfferDealMessages()
     this.getAllMyListings()
   }
 
@@ -89,8 +93,12 @@ export class MyListingComponent implements OnInit {
     this.getAllMyListings()
 
   }
-  
+
   handleNewList() {
+    const { value1: defaultTime } = this.offerConfirmMessages?.find((item: any) => item.key === 'Maximum Auction Duration');
+    const defaultDuration: moment.Duration = moment.duration(defaultTime, 'hours');
+    const fourWeeksFromNow = moment(this.myListingsService.newListing.listingStart).add(defaultDuration).startOf('day');
+    this.myListingsService.newListing.auctionEnd = fourWeeksFromNow.format().slice(0, 16)
     this.showAllListing = !this.showAllListing;
     this.isShowOffers = false
   }
@@ -181,6 +189,19 @@ export class MyListingComponent implements OnInit {
       return this.myListings.length
     }
     return 0
+  }
+
+  handleOfferDealMessages() {
+    this.myOffersService.handleOfferDealMessages().subscribe(
+      (response) => {
+        this.offerConfirmMessages = response
+
+      },
+      (error: any) => {
+        console.error("Error getting key vlaue  : ", error);
+      },
+      () => console.log("Done getting key vlaue .")
+    )
   }
 
 }

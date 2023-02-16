@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/components/services/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MyOffersService } from 'src/components/services/my-offers.service';
+import * as moment from 'moment';
 
 
 
@@ -53,6 +54,8 @@ export class AddNewListingComponent implements OnInit {
     heading: '',
     message: ''
   }
+  minAuctionDuration!: string
+  maxAuctionDuration!: string
   constructor(
     private addNewListingService: AddNewListingService,
     private myListingsService: MyListingsService,
@@ -68,14 +71,13 @@ export class AddNewListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.handleOfferDealMessages()
     this.handleGetUserAccounts()
     this.handleGetListType()
     this.handleAuctionType()
     this.handleConstraint()
     this.handleGetStatus()
     this.handleGetTracts()
-    this.handleOfferDealMessages()
-
   }
 
   handleGoBack() {
@@ -331,11 +333,35 @@ export class AddNewListingComponent implements OnInit {
     this.myOffersService.handleOfferDealMessages().subscribe(
       (response) => {
         this.offerConfirmMessages = response
+        if (this.createNewListing.listingStart && this.offerConfirmMessages) {
+          this.handleTimeDuration()
+        }
       },
       (error: any) => {
         console.error("Error getting key vlaue  : ", error);
       },
       () => console.log("Done getting key vlaue .")
     )
+  }
+
+  handleTimeDuration() {
+    const { auctionEnd, listingStart } = this.createNewListing;
+    const { value1: maxDuration } = this.offerConfirmMessages?.find((item: any) => item.key === 'Maximum Auction Duration');
+    const { value1: minDuration } = this.offerConfirmMessages?.find((item: any) => item.key === 'Minimum Auction Duration');
+    const durationInHours = moment(auctionEnd).diff(moment(listingStart), 'hours');
+    const maxDurationMoment = moment.duration(maxDuration, 'hours');
+    const minDurationMoment = moment.duration(minDuration, 'hours');
+    const maxAuctionEnd = moment(listingStart).add(maxDurationMoment).startOf('day');
+    const minAuctionEnd = moment(listingStart).add(minDurationMoment).startOf('day');
+    this.minAuctionDuration = minAuctionEnd.format('YYYY-MM-DD[T]HH:mm')
+    this.maxAuctionDuration = maxAuctionEnd.format('YYYY-MM-DD[T]HH:mm')
+    if (durationInHours > maxDuration) {
+      this.toastr.warning(`The duration of your listing is longer than the maximum of ${maxDuration} hours. Please adjust accordingly.`);
+      this.createNewListing.auctionEnd = maxAuctionEnd.format('YYYY-MM-DD[T]HH:mm');
+    } else if (durationInHours < minDuration) {
+      this.toastr.warning(`The duration of your listing is shorter than the minimum of ${minDuration} hours. Please adjust accordingly.`);
+      this.createNewListing.auctionEnd = minAuctionEnd.format('YYYY-MM-DD[T]HH:mm');
+    }
+
   }
 }

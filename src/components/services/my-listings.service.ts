@@ -193,7 +193,7 @@ export class MyListingsService {
     let currentGas = cashFlow.gas;
     let currentOil = cashFlow.oil;
 
-    for (let i = 1; i <= basicCashFlow.noOfMonths; i++) {
+    for (let i = 1; i <= basicCashFlow.months; i++) {
       let gasDecline = currentGas * (basicCashFlow.decline / 100);
       let oilDecline = currentOil * (basicCashFlow.decline / 100);
       currentGas = currentGas - gasDecline;
@@ -202,8 +202,8 @@ export class MyListingsService {
       oilArray += currentOil;
     }
 
-    gasArray *= basicCashFlow.gasPrice;
-    oilArray *= basicCashFlow.oilPrice;
+    gasArray *= basicCashFlow.gas;
+    oilArray *= basicCashFlow.oil;
     gasArray /= cashFlow.totalProjectNma;
     oilArray /= cashFlow.totalProjectNma;
     return (gasArray + oilArray) * listDetails.nma ? (gasArray + oilArray) * listDetails.nma : 0;

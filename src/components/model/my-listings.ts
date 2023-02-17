@@ -56,6 +56,7 @@ export interface Project {
     totalRevenue: string
     blockedUntil: any
     minimumNma: number
+    blockException: boolean
 }
 
 export interface AuctionType {
@@ -112,6 +113,7 @@ export interface ContactAccount {
     investmentAmount: string
     acquiredNma: string
     status: string
+    blockException: boolean
 }
 
 export interface ListingCost {

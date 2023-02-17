@@ -78,7 +78,7 @@ export class AllActiveListingComponent implements OnInit {
     'Active Listings': [
       'Seller / Project',
       'Auction End',
-      'Action Type',
+      'Auction Type',
       'Listed NMA',
       'Minimum Ask',
       'Buy Now at',
@@ -89,6 +89,7 @@ export class AllActiveListingComponent implements OnInit {
     'Closed Listings': [
       'Seller / Project',
       'Auction End',
+      'Auction Type',
       'Listed NMA',
       'Minimum Ask',
       'Buy Now at',
@@ -100,6 +101,7 @@ export class AllActiveListingComponent implements OnInit {
     'Canceled Listings': [
       'Seller / Project',
       'Auction End',
+      'Auction Type',
       'Listed NMA',
       'Minimum Ask',
       'Buy Now at',

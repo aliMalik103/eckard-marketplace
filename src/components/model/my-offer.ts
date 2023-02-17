@@ -23,6 +23,8 @@ export interface MyOffers {
     directSaleToken: any
     SalePrice?: any
     SaleDate?: any
+
+    Cancel_Date?: any
 }
 
 export interface OfferDetails {

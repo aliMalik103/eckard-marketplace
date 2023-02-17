@@ -21,6 +21,7 @@ import { ProfileModule } from 'src/components/pages/profile/profile.module';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent

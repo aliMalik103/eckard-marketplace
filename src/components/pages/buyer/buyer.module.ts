@@ -6,11 +6,13 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 import { BuyerNotificationsModule } from './buyer-notifications/buyer-notifications.module';
 import { BuyerTransactionsModule } from './buyer-transactions/buyer.transactions.module';
 import { MyBidsModule } from './my-bids/my-bids.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
     declarations: [
     ],
     imports: [
+      NgMultiSelectDropDownModule.forRoot(),
         AppRoutingModule,
         FormsModule,
         BuyerNotificationsModule,

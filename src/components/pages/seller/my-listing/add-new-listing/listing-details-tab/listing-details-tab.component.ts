@@ -83,7 +83,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
       case 'nma':
         this.createNewListing.nma = parseFloat(this.createNewListing.nma);
         if (this.incomeListing) {
-          this.isValidNMA.emit((parseFloat(this.createNewListing.nma) >= this.incomeListing.minimumNma) && ((this.incomeListing.availableNma - parseFloat(this.createNewListing.nma)) >= this.incomeListing.minimumNma))
+          this.isValidNMA.emit(this.checkIsNmaValid())
         }
         break;
       case 'minimumAsk':
@@ -171,7 +171,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   }
 
   handleIsValidNma() {
-    let flag = this.incomeListing ? ((parseFloat(this.createNewListing.nma) >= this.incomeListing.minimumNma) && ((this.incomeListing.availableNma - parseFloat(this.createNewListing.nma)) >= this.incomeListing.minimumNma)) : null;
+    let flag = this.incomeListing ? this.checkIsNmaValid() : null;
     return !flag
   }
 
@@ -187,14 +187,18 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
       () => console.log("Done getting listing cost .")
     )
   }
-
+  checkIsNmaValid() {
+    const { availableNma, minimumNma } = this.incomeListing;
+    const nma = parseFloat(this.createNewListing.nma);
+    return (nma >= minimumNma) && ((availableNma - nma) >= minimumNma) || (nma === availableNma);
+  }
   handleGetIncomeListing() {
     this.myListingsService.handleGetIncomeListing(this.createNewListing.account, this.createNewListing.project.id).subscribe(
       (response) => {
         this.incomeListing = response
         this.createNewListing.nma = this.createNewListing.nma || this.incomeListing.availableNma;
         if (this.incomeListing) {
-          this.isValidNMA.emit((parseFloat(this.createNewListing.nma) >= this.incomeListing.minimumNma) && ((this.incomeListing.availableNma - parseFloat(this.createNewListing.nma)) >= this.incomeListing.minimumNma))
+          this.isValidNMA.emit(this.checkIsNmaValid())
         }
       },
       (error: any) => {

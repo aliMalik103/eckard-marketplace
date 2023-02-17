@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { AllActiveListingComponent } from './all-active-listing/all-active-listings.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -26,6 +26,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     AllActiveListingComponent
   ],
   imports: [
+    NgMultiSelectDropDownModule.forRoot(),
     AppRoutingModule,
     FormsModule,
     BrowserModule,

@@ -32,8 +32,9 @@
                     [ngClass]="{'border border-danger':project.invalid && (project.dirty || project.touched)}" required
                     [disabled]="!isListDraft">
                     <option *ngFor="let item of projectsOptions " [ngValue]="item"
-                        [disabled]="item.blockedUntil > createNewListing.listingStart">
-                        {{item.projectId}} <span *ngIf="item.blockedUntil > createNewListing.listingStart"
+                        [disabled]="item.blockException || item.blockedUntil > createNewListing.listingStart">
+                        {{item.projectId}} <span
+                            *ngIf=" item.blockException || item.blockedUntil > createNewListing.listingStart"
                             class="project-blocked">(blocked)</span>
                     </option>
                 </select>

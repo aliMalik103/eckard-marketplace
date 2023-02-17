@@ -108,11 +108,23 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
           this.projectsOptions = []
         }
         else {
-          const uniqueProjects = response?.reduce((acc: any, current: any) => {
+          const updatedResponse = response.map((item: any) => {
+            return {
+              ...item,
+              project: {
+                ...item.project,
+                blockException: item.blockException
+              }
+            };
+          });
+          const uniqueProjects = updatedResponse?.reduce((acc: any, current: any) => {
             const x = acc.find((item: any) => item.project.id === current.project.id && item.project.projectId === current.project.projectId);
             if (!x) {
               return [...acc, current];
             } else {
+              if (current.blockException) {
+                x.project.blockException = true;
+              }
               return acc;
             }
           }, []);

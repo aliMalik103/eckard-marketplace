@@ -59,7 +59,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th *ngFor="let item of offersColumns ; index as i " class="text-secondary " [ngClass]="{'text-end': i > 0 }">{{item}}</th>
+                <th *ngFor="let item of offersColumns ; index as i " class="text-secondary " [ngClass]="{'text-end': (i > 0 && i !=2), 'text-center': i == 2 }">{{item}}</th>
             </tr>
         </thead>
         <tbody class="my-listing-table-body" id="accordion">

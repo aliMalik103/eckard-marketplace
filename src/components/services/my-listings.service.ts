@@ -187,7 +187,24 @@ export class MyListingsService {
     return res;
   }
 
-  handleCalculateCashFlow(basicCashFlow: any, cashFlow: any, listDetails: any) {
+  handleCalculateCashFlow(user: any, basicCashFlow: any, cashFlow: any, listDetails: any) {
+    const body = {
+      contact: user.id,
+      project: listDetails?.project?.id,
+      json_fields: {
+        months: basicCashFlow.months,
+        decline: basicCashFlow.decline,
+        oil: basicCashFlow.oil,
+        gas: basicCashFlow.gas
+      }
+    }
+    this.handleCreateHistory(body).subscribe(
+      (response) => {
+        console.log("Re-calculate history save",response)
+      },
+      (error: any) => {
+        console.error("Error create history  : ", error);
+      })
     let gasArray = 0;
     let oilArray = 0;
     let currentGas = cashFlow.gas;
@@ -207,6 +224,11 @@ export class MyListingsService {
     gasArray /= cashFlow.totalProjectNma;
     oilArray /= cashFlow.totalProjectNma;
     return (gasArray + oilArray) * listDetails.nma ? (gasArray + oilArray) * listDetails.nma : 0;
+  }
+
+  handleCreateHistory(body: any) {
+    const res = this.http.post(`${environment.API_BASE_URL}/history/`, body)
+    return res;
   }
 
 }

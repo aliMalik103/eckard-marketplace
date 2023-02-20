@@ -169,7 +169,7 @@ export class MyOffersComponent implements OnInit {
 
   handleCalculateCashFlow() {
     this.isRecalculate = true
-    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.basicCashFlow, this.cashFlow, this.listDetails);
+    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.loginService.user,this.basicCashFlow, this.cashFlow, this.listDetails);
 
   }
 

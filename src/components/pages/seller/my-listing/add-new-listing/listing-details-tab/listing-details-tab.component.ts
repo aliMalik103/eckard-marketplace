@@ -319,7 +319,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
 
   handleCalculateCashFlow() {
     this.isRecalculate = true
-    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.basicCashFlow, this.cashFlow, this.createNewListing);
+    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.loginService.user,this.basicCashFlow, this.cashFlow, this.createNewListing);
   }
 
 

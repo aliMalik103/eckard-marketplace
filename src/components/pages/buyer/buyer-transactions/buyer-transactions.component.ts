@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./buyer-transactions.component.css']
 })
 export class BuyerTransactionsComponent {
+  transactionStatus = 'Buy'
 
 }

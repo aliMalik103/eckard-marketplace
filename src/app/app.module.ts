@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ProfileModule } from 'src/components/pages/profile/profile.module';
+import { TransactionsModule } from 'src/components/pages/transactions/transaction.module';
 
 
 
@@ -49,7 +50,8 @@ import { ProfileModule } from 'src/components/pages/profile/profile.module';
     BrowserAnimationsModule,
     CurrencyMaskModule,
     NgxSpinnerModule,
-    ProfileModule
+    ProfileModule,
+    TransactionsModule
 
   ],
   providers: [AddNewListingService],

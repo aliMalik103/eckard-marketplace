@@ -7,6 +7,7 @@ import { BuyerNotificationsModule } from './buyer-notifications/buyer-notificati
 import { BuyerTransactionsModule } from './buyer-transactions/buyer.transactions.module';
 import { MyBidsModule } from './my-bids/my-bids.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { TransactionsModule } from '../transactions/transaction.module';
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
         BuyerNotificationsModule,
         BuyerTransactionsModule,
         MyBidsModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        TransactionsModule
     ],
     providers: [MyListingsService],
     exports: []

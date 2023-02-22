@@ -9,10 +9,11 @@ export class ListingDetailsComponent implements OnInit {
 
   @Input() listDetails: any
   @Input() offer: any
+  @Input() isTransaction = false
 
 
   ngOnInit(): void {
-    console.log(' ');
+    console.log('offer , details  ', this.offer, this.listDetails);
   }
 
 }

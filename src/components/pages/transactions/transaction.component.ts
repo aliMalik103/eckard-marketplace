@@ -1,4 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Status } from 'src/components/model/my-listings';
+import { LoginService } from 'src/components/services/login.service';
+import { MyListingsService } from 'src/components/services/my-listings.service';
+import { AddNewListingService } from '../seller/my-listing/add-new-listing/add-new-listing.service';
 
 @Component({
     selector: 'app-transactions',
@@ -13,29 +18,70 @@ export class TransactionsComponent implements OnInit {
     tableSize: number = 50;
     tableSizes: any = [3, 6, 9, 12];
     myTransactions: any = [];
-
     transactionColumns: string[] = [];
+    listDetails = []
+    offer = []
+    newOffer = []
+    constraintOptions!: any[]
+    statusOptions!: Status[]
+    pendingsTransactions!: any
+
+
+
+    constructor(private addNewListingService: AddNewListingService,
+        private myListingsService: MyListingsService, private loginService: LoginService, private spinner: NgxSpinnerService
+    ) { }
 
     ngOnInit(): void {
-        console.log('Method not implemented.', this.transactionStatus);
-
         this.updateTransactionColumns();
+        this.handleConstraint()
+        this.handleGetStatus()
     }
 
     updateTransactionColumns() {
         if (this.transactionStatus === 'Sell') {
+            this.spinner.show()
+
             this.transactionColumns = ['Type', 'Project', 'NMA', 'Price', 'Buyer', 'Action', 'Status', 'Progress'];
+            this.handleGetSellerTransactions()
         } else {
+            this.spinner.show()
+
+            this.handleGetBuyingTransactions()
             this.transactionColumns = ['Type', 'Project', 'NMA', 'Price', 'Seller', 'Action', 'Status', 'Progress'];
         }
     }
 
     handleGetSellerTransactions() {
-        // ...
+        this.myListingsService.handleGetSellerPendingTransactions(this.loginService.user.id).subscribe(
+            (response) => {
+                this.spinner.hide()
+
+                this.pendingsTransactions = response
+
+            },
+            (error: any) => {
+                this.spinner.hide()
+
+                console.log("Error getting list details", error)
+            },
+            () => console.log("Done getting list details"));
     }
 
     handleGetBuyingTransactions() {
-        // ...
+        this.myListingsService.handleGetBuyerPendingTransactions(this.loginService.user.id).subscribe(
+            (response) => {
+                this.spinner.hide()
+
+                this.pendingsTransactions = response
+
+            },
+            (error: any) => {
+                this.spinner.hide()
+
+                console.log("Error getting list details", error)
+            },
+            () => console.log("Done getting list details"));
     }
 
     toggleListing(type: any) {
@@ -53,9 +99,43 @@ export class TransactionsComponent implements OnInit {
     }
 
     handleMyTransactionsLength() {
-        if (this.myTransactions) {
-            return this.myTransactions.length;
+        if (this.pendingsTransactions) {
+            return this.pendingsTransactions.length;
         }
         return 0;
+    }
+
+    handleConstraint() {
+
+        this.addNewListingService.handleConstraint().subscribe(
+            (response) => {
+                const buyOptions: any = [];
+                response?.map(item => {
+                    if (item.buyLabel) {
+                        buyOptions.push({ ...item, isChecked: false });
+                    }
+                });
+                this.constraintOptions = buyOptions;
+            },
+            (error: any) => {
+
+                console.log("Error getting buyer Constraint", error)
+            },
+            () => console.log("Done getting buyer Constraint"));
+    }
+
+    handleGetStatus() {
+        this.addNewListingService.handleGetStatus().subscribe(
+            response => {
+                this.statusOptions = response
+            },
+            (error: any) => {
+                console.log('Error getting status', error)
+            },
+            () => console.log('Done getting status ')
+        )
+    }
+
+    handleUpdateOffers() {
     }
 }

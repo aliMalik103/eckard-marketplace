@@ -15,3 +15,14 @@
 .list-underline {
     border-bottom: 2px solid rgb(11, 11, 85);
 }
+.completed {
+    background-color: #4CAF50;
+}
+.progress-border{
+    border : 1px solid #82828263;
+}
+
+.offer-td {
+    border-bottom: 2px solid #0a2b3c;
+    color: #0a2b3c;
+}

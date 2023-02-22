@@ -5,23 +5,51 @@
     <div class="d-flex flex-row mt-4 ">
         <div class="col gap-2 p-0 ">
             <label for="Seller" class="form-label fw-bold">Seller: </label>
-            <span class=" px-2 text-muted listing-details-content">{{offer.accountMpName}}</span>
+            <span class=" px-2 text-muted listing-details-content">
+                <ng-container *ngIf="isTransaction; else transactionMpBlock">
+                    {{offer.account.mpName}}
+                </ng-container>
+                <ng-template #transactionMpBlock>
+                    {{offer.accountMpName}}
+                </ng-template>
+
+            </span>
         </div>
 
         <div class="col gap-2 p-0 ">
             <label for="Project" class="form-label fw-bold">Project: </label>
-            <span class=" px-2 text-muted listing-details-content">{{offer.projectId}}</span>
+            <span class=" px-2 text-muted listing-details-content">
+                <ng-container *ngIf="isTransaction; else transactionProjectBlock">
+                    {{offer.project.projectId}}
+                </ng-container>
+                <ng-template #transactionProjectBlock>
+                    {{offer.projectId}}
+                </ng-template>
+            </span>
         </div>
         <div class="col gap-2 p-0 ">
             <label for="AuctionType" class="form-label fw-bold ">Auction Type: </label>
             <span class=" px-2 text-muted listing-details-content">
-                <ng-container
-                    *ngIf="offer.auctionType.startsWith('Public -') || offer.auctionType.startsWith('Silent -') ; else elseAuctionType">
-                    {{offer.auctionType.slice(8)}}
+
+                <ng-container *ngIf="isTransaction; else transactionAuctionBlock">
+                    <ng-container
+                        *ngIf="offer.auction_type.auctionLabel.startsWith('Public -') || offer.auction_type.auctionLabel.startsWith('Silent -') ; else elseAuctionType">
+                        {{offer.auction_type.auctionLabel.slice(8)}}
+                    </ng-container>
+                    <ng-template #elseAuctionType>
+                        {{offer.auction_type.auctionLabel}}
+                    </ng-template>
                 </ng-container>
-                <ng-template #elseAuctionType>
-                    {{offer.auctionType}}
+                <ng-template #transactionAuctionBlock>
+                    <ng-container
+                        *ngIf="offer.auctionType.startsWith('Public -') || offer.auctionType.startsWith('Silent -') ; else elseAuctionType">
+                        {{offer.auctionType.slice(8)}}
+                    </ng-container>
+                    <ng-template #elseAuctionType>
+                        {{offer.auctionType}}
+                    </ng-template>
                 </ng-template>
+
             </span>
         </div>
 
@@ -42,14 +70,28 @@
         <div class="col gap-2 p-0 ">
             <label for="buynow" class="form-label fw-bold">Buy Now:
             </label>
-            <span class=" px-2 text-muted listing-details-content"
-                *ngIf="!(offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer')); else elseBuyNow">{{listDetails.buyNowPrice
-                |
-                currency:'':'':'.2-2'}} ({{listDetails.buyNowPrice / listDetails.nma |
-                currency:'':'':'.2-2'}}/NMA)</span>
-            <ng-template #elseBuyNow>
-                <span class=" px-2 text-muted listing-details-content">N/A</span>
+            <ng-container *ngIf="isTransaction; else transactionBuyNowBlock">
+                <span class=" px-2 text-muted listing-details-content"
+                    *ngIf="!(offer.auction_type.auctionLabel != 'Fix Price' && !offer.auction_type.auctionLabel.endsWith('Buy Now or Make an Offer')); else elseBuyNow">{{listDetails.buyNowPrice
+                    |
+                    currency:'':'':'.2-2'}} ({{listDetails.buyNowPrice / listDetails.nma |
+                    currency:'':'':'.2-2'}}/NMA)</span>
+                <ng-template #elseBuyNow>
+                    <span class=" px-2 text-muted listing-details-content">N/A</span>
+                </ng-template>
+            </ng-container>
+
+            <ng-template #transactionBuyNowBlock>
+                <span class=" px-2 text-muted listing-details-content"
+                    *ngIf="!(offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer')); else elseBuyNow">{{listDetails.buyNowPrice
+                    |
+                    currency:'':'':'.2-2'}} ({{listDetails.buyNowPrice / listDetails.nma |
+                    currency:'':'':'.2-2'}}/NMA)</span>
+                <ng-template #elseBuyNow>
+                    <span class=" px-2 text-muted listing-details-content">N/A</span>
+                </ng-template>
             </ng-template>
+
         </div>
 
     </div>
@@ -60,7 +102,7 @@
             </div>
 
             <div class="p-0">
-                <ng-container *ngIf="listDetails.constraints.length > 0; else elseBlock">
+                <ng-container *ngIf="listDetails?.constraints?.length > 0; else elseBlock">
                     <ul>
                         <li *ngFor="let item of listDetails.constraints">
                             {{item.sellLabel}}

@@ -20,6 +20,7 @@ export class MyOffersComponent implements OnInit {
   @Output() updateOffers = new EventEmitter()
   @Input() statusOptions!: Status[]
   @Input() index!: any
+  @Input() isTransaction = false
   cashFlowStatus: string = ''
   isDefaults: boolean = false
 
@@ -42,8 +43,14 @@ export class MyOffersComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleOfferDealMessages()
-    this.handleGetCashFlow()
-    this.handleGetCashConfig()
+    if (!this.isTransaction) {
+
+      this.handleGetCashFlow()
+      this.handleGetCashConfig()
+    }
+    if (this.isTransaction) {
+      this.handleConstrainsOptions()
+    }
   }
 
   basicCashFlow: any = {
@@ -64,10 +71,6 @@ export class MyOffersComponent implements OnInit {
     this.newOffer.constraints = this.constraintOptions
       .filter(value => value.isChecked)
       .map(value => value);
-
-
-
-
     console.log("Listing Details", this.listDetails, this.newOffer.constraints)
   }
 
@@ -169,7 +172,7 @@ export class MyOffersComponent implements OnInit {
 
   handleCalculateCashFlow() {
     this.isRecalculate = true
-    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.loginService.user,this.basicCashFlow, this.cashFlow, this.listDetails);
+    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.loginService.user, this.basicCashFlow, this.cashFlow, this.listDetails);
 
   }
 
@@ -469,5 +472,15 @@ export class MyOffersComponent implements OnInit {
 
   }
 
+  handleConstrainsOptions() {
+    this.constraintOptions = this.constraintOptions?.map((obj: any) => {
+      return {
+        id: obj.id,
+        constraint: obj.constraint,
+        buyLabel: obj.buyLabel,
+        isChecked: this.newOffer.constraints?.some((item: any) => item.id === obj.id)
+      }
+    });
+  }
 
 }

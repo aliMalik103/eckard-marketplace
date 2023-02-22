@@ -231,4 +231,14 @@ export class MyListingsService {
     return res;
   }
 
+  handleGetSellerPendingTransactions(id: any):Observable<any>{
+  const res = this.http.get(`${environment.API_BASE_URL}/transaction/seller/${id}`)
+  return res;
+  }
+
+  handleGetBuyerPendingTransactions(id: any):Observable<any>{
+    const res = this.http.get(`${environment.API_BASE_URL}/transaction/buyer/${id}`)
+    return res;
+    }
+
 }

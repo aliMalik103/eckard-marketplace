@@ -14,6 +14,18 @@ export class TransactionsComponent implements OnInit {
 
     @Input() transactionStatus!: any;
     page: number = 1;
+    labels:any={
+      "Account_Number":"Account Number",
+      "Bank_Name":"Bank Name",
+      "Recipient":"Recipient",
+      "Routing_Number":"Routing Number",
+      "City":"City",
+      "Country_Code":"Country Code",
+      "State":"State",
+      "Streat":"Streat",
+      "Zip":"Zip",
+
+    }
     count: number = 0;
     tableSize: number = 50;
     tableSizes: any = [3, 6, 9, 12];
@@ -22,8 +34,15 @@ export class TransactionsComponent implements OnInit {
     listDetails = []
     offer = []
     newOffer = []
+    methodsColumns: Array<String> = [
+    
+      "Method Type",
+      "Method Information",
+   
+    ]
     constraintOptions!: any[]
     statusOptions!: Status[]
+    accountsMethods: any = []
     pendingsTransactions!: any
 
 
@@ -51,10 +70,22 @@ export class TransactionsComponent implements OnInit {
             this.transactionColumns = ['Type', 'Project', 'NMA', 'Price', 'Seller', 'Action', 'Status', 'Progress'];
         }
     }
-
+    objectKeys(obj:any) {
+      return Object.keys(obj);
+  }
+    clickTransaction(transaction:any){
+     if(this.transactionStatus === 'Sell'){
+      this.loginService.getAccountMethods(parseInt(transaction.account.id)).subscribe((response) => {
+        this.accountsMethods=response;
+   
+      })
+    }
+      // alert(JSON.stringify(transaction.account))
+    }
     handleGetSellerTransactions() {
         this.myListingsService.handleGetSellerPendingTransactions(this.loginService.user.id).subscribe(
             (response) => {
+             
                 this.spinner.hide()
 
                 this.pendingsTransactions = response

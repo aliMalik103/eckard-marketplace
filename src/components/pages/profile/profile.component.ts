@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { ListingType, AuctionType, Project, Account, Status, Tract, MyListing, ContactAccount } from 'src/components/model/my-listings';
+import { MyListingsService } from 'src/components/services/my-listings.service';
 
 export interface Profile {
   id: any
@@ -23,10 +25,30 @@ export class ProfileComponent implements OnInit {
   isPassword: boolean = false
   isConfirmPassword: boolean = false
   imageChangedEvent: any = '';
+  selectedType: any;
+
   showCropper = false;
+  accountsOptions!: Account[]
+  methodsColumns: Array<String> = [
+    
+    "Method Type",
+    "Method Information",
+ 
+  ]
+  labels:any={
+    "Account_Number":"Account Number",
+    "Bank_Name":"Bank Name",
+    "Recipient":"Recipient",
+    "Routing_Number":"Routing Number",
+    "City":"City",
+    "Country_Code":"Country Code",
+    "State":"State",
+    "Streat":"Streat",
+    "Zip":"Zip",
 
-
-
+  }
+  accountsTypes: any = ["Check", "Wire"]
+  selectAccount: any
   profile: Profile = {
     id: null,
     firstName: "",
@@ -35,18 +57,96 @@ export class ProfileComponent implements OnInit {
     notification: false,
     mpStatus: ''
   }
-  constructor(private loginService: LoginService, private spinner: NgxSpinnerService,
+  accountsMethods: any = []
+  methods: any = {
+
+  }
+  constructor(private loginService: LoginService, private spinner: NgxSpinnerService, private myListingsService: MyListingsService,
     private toastr: ToastrService, private router: Router) {
 
   }
 
   ngOnInit(): void {
     this.profileDetails()
+    this.handleGetUserAccounts()
+
+  }
+  getAccountMethods(id:any) {
+
+    this.loginService.getAccountMethods(parseInt(id)).subscribe((response) => {
+      console.log(response)
+      this.accountsMethods = response;
+
+    })
+  }
+  handleSubmit() {
+    this.updateProfileDetails(this.profile)
+  }
+
+
+  objectKeys(obj:any) {
+    return Object.keys(obj);
+}
+
+
+  handleAccountSubmit() {
+    this.spinner.show()
+
+    const body = {
+      type: this.selectedType,
+      account: parseInt(this.selectAccount),
+      json_fields: this.methods
+    }
+
+
+    this.loginService.addTransactionMethod(body).subscribe(
+      (response) => {
+        // this.methods = {};
+
+        this.spinner.hide();
+        this.getAccountMethods(this.selectAccount)
+        this.toastr.success('Account Method Added Successfully!');
+
+      })
 
   }
 
-  handleSubmit() {
-    this.updateProfileDetails(this.profile)
+
+
+
+
+
+  handleGetUserAccounts() {
+    this.myListingsService
+      .handleGetUserAccounts(this.loginService.user.id)
+      .subscribe(
+        response => {
+          this.accountsOptions = response
+          if (this.accountsOptions.length == 1) {
+            this.selectAccount = this.accountsOptions[0].id
+          }
+        },
+        (error: any) => {
+          console.error('Error getting accounts: ', error)
+        },
+        () => console.log('Done getting accounts.')
+      )
+  }
+
+  handleChange(value: string) {
+    switch (value) {
+      case 'account':
+        this.methods.account_id = this.selectAccount;
+
+        this.getAccountMethods(this.selectAccount)
+
+        break;
+      case 'type':
+        this.methods.type = this.selectedType
+        break;
+      default:
+        return
+    }
   }
 
   profileDetails() {

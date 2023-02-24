@@ -25,7 +25,15 @@ export class LoginService {
     }
   }
 
+addTransactionMethod(body:any){
+  const res = this.http.post(`${environment.API_BASE_URL}/fund_transfer_method/`, body)
+  return res;
+}
 
+getAccountMethods(id:any){
+  const res = this.http.get(`${environment.API_BASE_URL}/fund_transfer_method/account/${id}`)
+  return res;
+}
 
   login(user: LoginForm): Observable<User> {
     const res = this.http.post<User>(`${environment.API_BASE_URL}/auth/login/`, user).pipe(

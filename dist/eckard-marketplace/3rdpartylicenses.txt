@@ -71,9 +71,15 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 
+ng-multiselect-dropdown
+MIT
+
 ng2-currency-mask
 
 ngx-pagination
+MIT
+
+ngx-spinner
 MIT
 
 ngx-toastr

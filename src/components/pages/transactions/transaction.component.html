@@ -1,43 +1,43 @@
 <div class="container card mt-4 pt-4 h-100">
 
-    <div class="breadcrumb-container">
+  <div class="breadcrumb-container">
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-link">
-                <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
-                <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a> My Pending
-                        Transactions
-                    </a> </li>
-            </ol>
-        </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-link">
+        <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a> My Pending
+            Transactions
+          </a> </li>
+      </ol>
+    </nav>
 
+  </div>
+
+  <div class="d-flex gap-5 mt-4 mb-3 align-items-center">
+
+    <div class="d-inline-block mr-2">
+      <h3>Pending Transactions</h3>
+    </div>
+    <div class="d-inline-block pe-auto list-type-heading ml-2" (click)="toggleListing('Buy')">
+      <span [ngClass]="{'list-underline': transactionStatus =='Buy'}">Buying Transactions</span>
+    </div>
+    <div class="d-inline-block pe-auto  list-type-heading ml-2" (click)="toggleListing('Sell')">
+      <span [ngClass]="{'list-underline': transactionStatus =='Sell'}">Selling Transactions</span>
     </div>
 
-    <div class="d-flex gap-5 mt-4 mb-3 align-items-center">
 
-        <div class="d-inline-block mr-2">
-            <h3>Pending Transactions</h3>
-        </div>
-        <div class="d-inline-block pe-auto list-type-heading ml-2" (click)="toggleListing('Buy')">
-            <span [ngClass]="{'list-underline': transactionStatus =='Buy'}">Buying Transactions</span>
-        </div>
-        <div class="d-inline-block pe-auto  list-type-heading ml-2" (click)="toggleListing('Sell')">
-            <span [ngClass]="{'list-underline': transactionStatus =='Sell'}">Selling Transactions</span>
-        </div>
+  </div>
 
-
-    </div>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th *ngFor="let item of transactionColumns;index as i" class="text-secondary"
-                    [ngClass]="{'text-end':i >= 2 && i <= 3,  'text-center': i==4}">{{item}}</th>
-            </tr>
-        </thead>
-        <tbody class="my-listing-table-body text-secondary" id="accordion">
-            <ng-container *ngFor="let transaction of pendingsTransactions | paginate
+  <table class="table">
+    <thead>
+      <tr>
+        <th *ngFor="let item of transactionColumns;index as i" class="text-secondary"
+          [ngClass]="{'text-end':i >= 2 && i <= 3,  'text-center': i==4}">{{item}}</th>
+      </tr>
+    </thead>
+    <tbody class="my-listing-table-body text-secondary" id="accordion">
+      <ng-container *ngFor="let transaction of pendingsTransactions | paginate
                 : {
                     itemsPerPage: tableSize,
                     currentPage: page,
@@ -45,66 +45,106 @@
                   };
             let i = index">
 
-                <tr>
-                    <td>{{transactionStatus | uppercase}}</td>
-                    <td id="heading{{i}}">
-                        <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
-                            [attr.aria-controls]="'collapse'+i" class="offer-td collapsed pe-auto"
-                            title="Transactions details">
+        <tr>
+          <td>{{transactionStatus | uppercase}}</td>
+          <td id="heading{{i}}">
+            <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
+              (click)="clickTransaction(transaction?.listing)" [attr.aria-controls]="'collapse'+i"
+              class="offer-td collapsed pe-auto" title="Transactions details">
 
-                            {{transaction?.listing?.project?.projectId}}
-                        </span>
-                    </td>
-                    <td class="text-end"> {{transaction.nma}}</td>
-                    <td class="text-end">{{transaction.trans_amount | currency:'':'':'.2-2'}}</td>
-                    <td class="text-center">
-                        <ng-container *ngIf="transactionStatus =='Buy' ; else statusElseBlock">
-                            {{transaction.listing.account.mpName}}
-                        </ng-container>
-                        <ng-template #statusElseBlock>
-                            {{transaction.offer.mpName[0]}}
-                        </ng-template>
-
-                    </td>
-                    <td> n/a </td>
-                    <td>{{transaction.status.statusLabel}}</td>
-                    <td>
-                        <span class="progress-border p-1 status-E">E</span>
-                        <span class="progress-border p-1 status-B">B</span>
-                        <span class="progress-border p-1 status-S">S</span>
-                        <span class="progress-border p-1 status-E">E</span>
-                    </td>
-
-                </tr>
-                <tr id="collapse{{i}}" class=" collapse fade" [attr.aria-labelledby]="'heading'+i"
-                    data-parent="#accordion">
-                    <td colspan="8">
-
-                        <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
-
-                            <app-listing-details [listDetails]="transaction.listing" [offer]="transaction.listing"
-                                [isTransaction]="true">
-                            </app-listing-details>
-                            <hr>
-
-                            <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="transaction.offer"
-                                [offer]="transaction.listing" [listDetails]="transaction.listing"
-                                [statusOptions]="statusOptions" (updateOffers)="handleUpdateOffers()" [index]="i"
-                                [isTransaction]="true">
-                            </app-my-offers>
-                        </div>
-                    </td>
-                </tr>
+              {{transaction?.listing?.project?.projectId}}
+            </span>
+          </td>
+          <td class="text-end"> {{transaction.nma}}</td>
+          <td class="text-end">{{transaction.trans_amount | currency:'':'':'.2-2'}}</td>
+          <td class="text-center">
+            <ng-container *ngIf="transactionStatus =='Buy' ; else statusElseBlock">
+              {{transaction.listing.account.mpName}}
             </ng-container>
+            <ng-template #statusElseBlock>
+              {{transaction.offer.mpName[0]}}
+            </ng-template>
+
+          </td>
+          <td> n/a </td>
+          <td>{{transaction.status.statusLabel}}</td>
+          <td>
+            <span class="progress-border p-1 status-E">E</span>
+            <span class="progress-border p-1 status-B">B</span>
+            <span class="progress-border p-1 status-S">S</span>
+            <span class="progress-border p-1 status-E">E</span>
+          </td>
+
+        </tr>
+        <tr id="collapse{{i}}" class=" collapse fade" [attr.aria-labelledby]="'heading'+i" data-parent="#accordion">
+          <td colspan="8">
+
+            <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
+
+              <app-listing-details [listDetails]="transaction.listing" [offer]="transaction.listing"
+                [isTransaction]="true">
+              </app-listing-details>
+              <hr>
+            <div *ngIf="objectKeys(transaction.fund_transfer_method).length>0">
+              <div>
+                <h5 class="offer-heading" style="color: cadetblue">Transfer Method Details</h5>
+            </div>
+            <div class="offer-heading" style="color: cadetblue"*ngIf="transaction.fund_transfer_method" >
+                Type: {{transaction.fund_transfer_method.type}}
+              </div>
+              <div style="display: flex;flex-direction: row;">
+                <div *ngFor="let key of objectKeys(transaction.fund_transfer_method.json_fields)">
+                  <div *ngIf="labels[key]" style="margin: 10px;">
+                    <div style="font-weight:bold;padding-left: 15px;"> {{labels[key]}}</div>
+                    <div style="padding-left: 15px;">{{transaction.fund_transfer_method.json_fields[key]}} </div>
+                  </div>
+                </div>
+              </div>
 
 
 
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-center" *ngIf="handleMyTransactionsLength() > 0">
-        <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
-        </pagination-controls>
-    </div>
+            </div>
+              <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="transaction.offer"
+                [offer]="transaction.listing" [listDetails]="transaction.listing" [statusOptions]="statusOptions"
+                (updateOffers)="handleUpdateOffers()" [index]="i" [isTransaction]="true">
+              </app-my-offers>
+     
+
+<!-- 
+              <div *ngFor="let list of accountsMethods let i = index">
+
+
+                <div style="padding-top:10px" >
+                  Type: {{list.type}}
+                </div>
+                <div style="display: flex;flex-direction: row;">
+                  <div *ngFor="let key of objectKeys(list.json_fields)">
+                    <div *ngIf="labels[key]">
+                      <div style="font-weight:bold;padding-left: 10px;"> {{labels[key]}}</div>
+                      <div style="padding-left: 10px;">{{list.json_fields[key]}} </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div> -->
+
+
+
+
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+
+
+
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-center" *ngIf="handleMyTransactionsLength() > 0">
+    <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+    </pagination-controls>
+  </div>
 </div>
 
 

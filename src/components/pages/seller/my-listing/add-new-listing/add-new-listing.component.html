@@ -80,6 +80,7 @@
                     <input type="datetime-local" class="form-control" name="auctionEnd" id="auctionEnd"
                         [(ngModel)]="createNewListing.auctionEnd" min="{{minAuctionDuration}}"
                         max="{{maxAuctionDuration}}" required #auctionEnd="ngModel"
+                        (ngModelChange)="handleTimeDuration()"
                         [ngClass]="{'border border-danger':auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched)}"
                         [disabled]="!isListDraft">
                     <span *ngIf="auctionEnd.invalid && (auctionEnd.dirty || auctionEnd.touched ) &&  auctionEnd.errors"
@@ -164,12 +165,13 @@
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">{{listMessage.heading}}
+                                            <h5 class="modal-title" id="staticBackdropLabel"
+                                                [innerHTML]="listMessage?.value1">
                                             </h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body"> {{listMessage.message}}
+                                        <div class="modal-body" [innerHTML]="listMessage?.value2">
                                         </div>
                                         <div class="modal-footer">
                                             <div class="mr-auto ">

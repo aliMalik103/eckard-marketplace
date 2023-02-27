@@ -6,20 +6,30 @@
         </ng-template>
     </h5>
 </div>
-<div class="mt-4 d-flex flex-row">
+<div class="mt-4">
 
-    <label for="constraints" class="form-label w-25 fw-bold">Constraints / Contingencies</label>
+    <label for="constraints" class="form-label fw-bold">Constraints / Contingencies</label>
+    <div class="col-sm-10">
+        <ng-container *ngIf="isTransaction; else elseBlockConstraints">
+            <ul>
+                <li *ngFor="let item of newOffer.constraints">
+                    {{item.buyLabel}}
+                </li>
+            </ul>
+        </ng-container>
+        <ng-template #elseBlockConstraints>
 
-    <div class="form-check form-check-inline" *ngFor="let item of constraintOptions">
-        <input class="form-check-input mt-1" type="checkbox" [(ngModel)]="item.isChecked" (change)="changeSelection()"
-            [disabled]="(offer.offer_Status == 'Accepted') || isTransaction" [name]="item.constraint"
-            [id]="'constraint'+item.id">
-        <label>
-            {{item.buyLabel}}
-        </label>
+            <div class="form-check" *ngFor="let item of constraintOptions">
+                <input class="form-check-input mt-1" type="checkbox" [(ngModel)]="item.isChecked"
+                    (change)="changeSelection()" [disabled]="(offer.offer_Status == 'Accepted')"
+                    [name]="item.constraint" [id]="'constraint'+item.id">
+                <label>
+                    {{item.buyLabel}}
+                </label>
+            </div>
+        </ng-template>
     </div>
 </div>
-
 
 <div class="mt-3 row">
     <label for="comments" class="form-label fw-bold">Comments</label>

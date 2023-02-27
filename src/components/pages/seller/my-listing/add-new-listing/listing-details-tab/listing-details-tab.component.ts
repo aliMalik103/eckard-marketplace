@@ -33,6 +33,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   isRecalculate: boolean = false
   cashFlowStatus: string = ''
   isDefaults: boolean = false
+  nmaErrorMessage = ''
 
   basicCashFlow: any = {
     id: null,
@@ -202,6 +203,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
   checkIsNmaValid() {
     const { availableNma, minimumNma } = this.incomeListing;
     const nma = parseFloat(this.createNewListing.nma);
+    this.handleNmaErrorMessage()
     return (nma >= minimumNma) && ((availableNma - nma) >= minimumNma) || (nma === availableNma);
   }
   handleGetIncomeListing() {
@@ -319,7 +321,7 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
 
   handleCalculateCashFlow() {
     this.isRecalculate = true
-    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.loginService.user,this.basicCashFlow, this.cashFlow, this.createNewListing);
+    this.calculateTotalCashFlow = this.myListingsService.handleCalculateCashFlow(this.loginService.user, this.basicCashFlow, this.cashFlow, this.createNewListing);
   }
 
 
@@ -363,5 +365,20 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
 
   auctionTypeComparator(a: any, b: any) {
     return (a && b) ? a.id === b.id : false;
+  }
+
+  handleNmaErrorMessage() {
+    const { availableNma, minimumNma } = this.incomeListing;
+    const nma = parseFloat(this.createNewListing.nma);
+    this.nmaErrorMessage = 'Listed NMA below Minimum NMA'
+
+    if (minimumNma > nma) {
+      this.nmaErrorMessage = 'Listed NMA below Minimum NMA'
+
+    }
+    else if ((minimumNma > (availableNma - nma)) && (nma != availableNma)) {
+      this.nmaErrorMessage = 'Remaining Position below Minimum NMA'
+    }
+
   }
 }

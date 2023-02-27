@@ -50,10 +50,8 @@ export class AddNewListingComponent implements OnInit {
     directSaleToken: ''
   }
   isValidNma!: boolean
-  listMessage = {
-    heading: '',
-    message: ''
-  }
+  listMessage!: any
+
   minAuctionDuration!: string
   maxAuctionDuration!: string
   constructor(
@@ -122,22 +120,36 @@ export class AddNewListingComponent implements OnInit {
   }
 
   handleMessage(event: any) {
+    let message
     switch (event.target.value) {
       case 'SAVE DRAFT':
-        this.listMessage.heading = 'Listing Saved';
-        this.listMessage.message = 'Are you sure you want to save listing as draft?'
+        message = this.offerConfirmMessages?.filter(
+          (item: any) => item.key == 'Draft Disclaimer'
+        )
+        this.listMessage = message[0]
         break;
       case 'ACTIVATE LISTING':
-        this.listMessage.heading = 'Listing Saved';
-        this.listMessage.message = 'Are you sure you want to save listing as active?'
+
+        message = this.offerConfirmMessages?.filter(
+          (item: any) => item.key == 'Listing Disclaimer'
+        )
+        this.listMessage = message[0]
         break;
       case 'UPDATE LISTING':
-        this.listMessage.heading = 'Listing Updated';
-        this.listMessage.message = 'Are you sure you want to update the listing?'
+
+        message = this.offerConfirmMessages?.filter(
+          (item: any) => item.key == 'Listing Disclaimer'
+        )
+        this.listMessage = message[0]
+
+
         break;
       case 'CANCEL LISTING':
-        this.listMessage.heading = 'Cancel Listing';
-        this.listMessage.message = 'Are you sure you want to cancel the listing?'
+
+        message = this.offerConfirmMessages?.filter(
+          (item: any) => item.key == 'Listing Cancel Disclaimer'
+        )
+        this.listMessage = message[0]
         break;
 
       default:

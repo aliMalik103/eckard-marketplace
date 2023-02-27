@@ -58,11 +58,10 @@
                     [ngClass]="{'border border-danger': nma.invalid && (nma.dirty || nma.touched) ||  handleIsValidNma() && !(isListEdit && !isListDraft) }"
                     required [disabled]="!isListDraft">
                 <span
-                    *ngIf="nma.invalid && (nma.dirty || nma.touched ) &&  nma.errors || handleIsValidNma() && !(isListEdit && !isListDraft)"
+                    *ngIf="nma.invalid && (nma.dirty || nma.touched ) &&  nma.errors  || handleIsValidNma() && !(isListEdit && !isListDraft)"
                     class="text-danger rounded px-4 error-message">
-                    Please enter valid NMA
+                    {{nmaErrorMessage}}
                 </span>
-
             </div>
             <div class="col-6 d-flex flex-column pt-4" *ngIf="listingCost && createNewListing.nma">
                 <div class="align-items-center text-secondary">

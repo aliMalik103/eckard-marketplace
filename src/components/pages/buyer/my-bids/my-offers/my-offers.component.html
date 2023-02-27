@@ -12,9 +12,18 @@
     <div class="col-sm-10">
         <ng-container *ngIf="isTransaction; else elseBlockConstraints">
             <ul>
-                <li *ngFor="let item of newOffer.constraints">
-                    {{item.buyLabel}}
-                </li>
+                <ng-container *ngIf="newOffer?.constraints?.length > 0 ; else elseBlockOffer">
+
+                    <li *ngFor="let item of newOffer.constraints">
+                        {{item.buyLabel}}
+                    </li>
+                </ng-container>
+
+                <ng-template #elseBlockOffer>
+                    <li>
+                        No constraints
+                    </li>
+                </ng-template>
             </ul>
         </ng-container>
         <ng-template #elseBlockConstraints>

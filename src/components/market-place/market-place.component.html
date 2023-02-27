@@ -22,139 +22,146 @@
 
         </div>
         <div class="tab-pane fade show active mt-4  p-4" id="marketPlace" role="tabpanel" aria-labelledby="home-tab">
-            <div class="d-flex">
-                <div class="mb-2 col">
-                    <div class="w-25">
-                        <h5>Buyer </h5>
+            <ng-container *ngIf="true ; else elseEckardBlock">
+
+                <div class="d-flex">
+                    <div class="mb-2 col">
+                        <div class="w-25">
+                            <h5>Buyer </h5>
+                        </div>
+                        <div class="">
+                            <div class="mb-3 card d-flex  shadow-sm p-3 mb-2 bg-white pe-auto rounded justify-content-between flex-row p-2 align-items-center "
+                                [ngClass]="{'isDisabled':!isActiveUser}" [routerLink]="['/all-listing']">
+                                <div>
+                                    <img src="assets/tag.svg" width='24' height="24" class="m-1" alt="chevron-right" />
+                                    <a class="marketplace-items ">All Listings
+                                    </a>({{allActiveListings}})
+                                </div>
+                                <div>
+                                    <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                </div>
+                            </div>
+                            <div class="mb-3 card d-flex  shadow-sm p-3 mb-2 pe-auto bg-white rounded justify-content-between flex-row p-2 align-items-center "
+                                [ngClass]="{'isDisabled':!isActiveUser}" [routerLink]="['/my-offers']">
+                                <div>
+                                    <img src="assets/edit.svg" width='24' height="24" class="m-1" alt="chevron-right" />
+                                    <a class="marketplace-items ">My Offers
+                                    </a>({{totalMyOffers}})
+                                </div>
+                                <div>
+                                    <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                </div>
+                            </div>
+                            <div class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-2 bg-white rounded justify-content-between flex-row p-2 align-items-center "
+                                [routerLink]="['/buyer-transactions']">
+                                <div>
+                                    <img src="assets/file-minus.svg" width='24' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                    <a class="marketplace-items">Pending/Closed
+                                        Transactions
+                                    </a>({{totalPendingOffer}})
+                                </div>
+                                <div>
+                                    <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                </div>
+                            </div>
+                            <div [routerLink]="['/buyer-notifications']"
+                                class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-5 bg-white rounded justify-content-between flex-row p-2 align-items-center ">
+                                <div>
+                                    <img src="assets/bell.svg" width='24' height="24" class="m-1" alt="chevron-right" />
+                                    <a class="marketplace-items">Notifications </a>(0)
+                                </div>
+                                <div>
+                                    <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+                    <div class="mb-2 col">
+                        <div class="w-25">
+                            <h5>Seller</h5>
+                        </div>
+                        <div class="">
+                            <div class="mb-3 card d-flex  shadow-sm p-3 mb-2 bg-white pe-auto rounded justify-content-between flex-row p-2 align-items-center "
+                                [ngClass]="{'isDisabled':!isActiveUser}" [routerLink]="['/my-listing']">
+                                <div>
+                                    <img src="assets/tag.svg" width='24' height="24" class="m-1" alt="chevron-right" />
+                                    <a class="marketplace-items ">My Listings
+                                    </a>({{totalMyListings}})
+                                </div>
+                                <div>
+                                    <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                </div>
+                            </div>
+
+                            <div class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-2 bg-white rounded justify-content-between flex-row p-2 align-items-center "
+                                [routerLink]="['/seller-transactions']">
+                                <div>
+                                    <img src="assets/file-minus.svg" width='24' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                    <a class="marketplace-items">Pending/Closed Transactions
+                                    </a>({{totalPendingList}})
+                                </div>
+                                <div>
+                                    <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                </div>
+                            </div>
+                            <div [routerLink]="['/seller-notifications']"
+                                class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-5 bg-white rounded justify-content-between flex-row p-2 align-items-center ">
+                                <div>
+                                    <img src="assets/bell.svg" width='24' height="24" class="m-1" alt="chevron-right" />
+                                    <a class="marketplace-items">Notifications </a>(0)
+                                </div>
+                                <div>
+                                    <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                                        alt="chevron-right" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 col-12 ">
                     <div class="">
-                        <div class="mb-3 card d-flex  shadow-sm p-3 mb-2 bg-white pe-auto rounded justify-content-between flex-row p-2 align-items-center "
-                            [ngClass]="{'isDisabled':!isActiveUser}" [routerLink]="['/all-listing']">
+                        <div class="card gap-3 shadow-sm p-3 mb-2 bg-white  rounded  p-2  ">
                             <div>
-                                <img src="assets/tag.svg" width='24' height="24" class="m-1" alt="chevron-right" />
-                                <a class="marketplace-items ">All Listings
-                                </a>({{allActiveListings}})
+                                <img src="assets/info.svg" width='24' height="24" class="m-1" alt="chevron-right" />
+                                <span class="ml-1">Important Information</span>
+
+
                             </div>
-                            <div>
-                                <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
+                            <div class="pl-4">
+                                <a class="marketplace-items marketplace-items-disclosure"
+                                    [routerLink]="['/sec-disclosure']">SEC
+                                    Disclosure </a> <img src="assets/external-link.svg" width='24' height="24"
+                                    class="m-1" alt="chevron-right" />
+
+                                <a class="marketplace-items marketplace-items-disclosure"
+                                    [routerLink]="['/user-agreement']">User Agreement </a><img
+                                    src="assets/external-link.svg" width='24' height="24" class="m-1"
                                     alt="chevron-right" />
+
+
                             </div>
+
                         </div>
-                        <div class="mb-3 card d-flex  shadow-sm p-3 mb-2 pe-auto bg-white rounded justify-content-between flex-row p-2 align-items-center "
-                            [ngClass]="{'isDisabled':!isActiveUser}" [routerLink]="['/my-offers']">
-                            <div>
-                                <img src="assets/edit.svg" width='24' height="24" class="m-1" alt="chevron-right" />
-                                <a class="marketplace-items ">My Offers
-                                </a>({{totalMyOffers}})
-                            </div>
-                            <div>
-                                <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
-                                    alt="chevron-right" />
-                            </div>
-                        </div>
-                        <div class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-2 bg-white rounded justify-content-between flex-row p-2 align-items-center "
-                            [routerLink]="['/buyer-transactions']">
-                            <div>
-                                <img src="assets/file-minus.svg" width='24' height="24" class="m-1"
-                                    alt="chevron-right" />
-                                <a class="marketplace-items">Pending/Closed
-                                    Transactions
-                                </a>({{totalPendingOffer}})
-                            </div>
-                            <div>
-                                <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
-                                    alt="chevron-right" />
-                            </div>
-                        </div>
-                        <div [routerLink]="['/buyer-notifications']"
-                            class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-5 bg-white rounded justify-content-between flex-row p-2 align-items-center ">
-                            <div>
-                                <img src="assets/bell.svg" width='24' height="24" class="m-1" alt="chevron-right" />
-                                <a class="marketplace-items">Notifications </a>(0)
-                            </div>
-                            <div>
-                                <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
-                                    alt="chevron-right" />
-                            </div>
-                        </div>
+
+
 
                     </div>
                 </div>
-                <div class="mb-2 col">
-                    <div class="w-25">
-                        <h5>Seller</h5>
-                    </div>
-                    <div class="">
-                        <div class="mb-3 card d-flex  shadow-sm p-3 mb-2 bg-white pe-auto rounded justify-content-between flex-row p-2 align-items-center "
-                            [ngClass]="{'isDisabled':!isActiveUser}" [routerLink]="['/my-listing']">
-                            <div>
-                                <img src="assets/tag.svg" width='24' height="24" class="m-1" alt="chevron-right" />
-                                <a class="marketplace-items ">My Listings
-                                </a>({{totalMyListings}})
-                            </div>
-                            <div>
-                                <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
-                                    alt="chevron-right" />
-                            </div>
-                        </div>
-
-                        <div class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-2 bg-white rounded justify-content-between flex-row p-2 align-items-center "
-                            [routerLink]="['/seller-transactions']">
-                            <div>
-                                <img src="assets/file-minus.svg" width='24' height="24" class="m-1"
-                                    alt="chevron-right" />
-                                <a class="marketplace-items">Pending/Closed Transactions
-                                </a>({{totalPendingList}})
-                            </div>
-                            <div>
-                                <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
-                                    alt="chevron-right" />
-                            </div>
-                        </div>
-                        <div [routerLink]="['/seller-notifications']"
-                            class="mb-3 card d-flex  shadow-sm p-3 pe-auto mb-5 bg-white rounded justify-content-between flex-row p-2 align-items-center ">
-                            <div>
-                                <img src="assets/bell.svg" width='24' height="24" class="m-1" alt="chevron-right" />
-                                <a class="marketplace-items">Notifications </a>(0)
-                            </div>
-                            <div>
-                                <img src="assets/chevron-right.svg" width='20' height="24" class="m-1"
-                                    alt="chevron-right" />
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-4 col-12 ">
-                <div class="">
-                    <div class="card gap-3 shadow-sm p-3 mb-2 bg-white  rounded  p-2  ">
-                        <div>
-                            <img src="assets/info.svg" width='24' height="24" class="m-1" alt="chevron-right" />
-                            <span class="ml-1">Important Information</span>
-
-
-                        </div>
-                        <div class="pl-4">
-                            <a class="marketplace-items marketplace-items-disclosure"
-                                [routerLink]="['/sec-disclosure']">SEC
-                                Disclosure </a> <img src="assets/external-link.svg" width='24' height="24" class="m-1"
-                                alt="chevron-right" />
-
-                            <a class="marketplace-items marketplace-items-disclosure"
-                                [routerLink]="['/user-agreement']">User Agreement </a><img
-                                src="assets/external-link.svg" width='24' height="24" class="m-1" alt="chevron-right" />
-
-
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-            </div>
+            </ng-container>
+            <ng-template #elseEckardBlock>
+                <app-eckard-staff-place></app-eckard-staff-place>
+            </ng-template>
         </div>
 
     </div>

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { EckardStaffPlaceModule } from '../pages/eckard-staff-place/eckard-staff-place.module';
 import { LoginService } from '../services/login.service';
 import { MyOffersService } from '../services/my-offers.service';
 import { MarketPlaceComponent } from './market-place.component';
@@ -15,8 +16,8 @@ import { MarketPlaceComponent } from './market-place.component';
         AppRoutingModule,
         FormsModule,
         CommonModule,
-        NgxSpinnerModule
-
+        NgxSpinnerModule,
+        EckardStaffPlaceModule
     ],
     providers: [LoginService, MyOffersService],
     exports: [MarketPlaceComponent]

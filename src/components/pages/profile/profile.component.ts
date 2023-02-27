@@ -29,24 +29,8 @@ export class ProfileComponent implements OnInit {
 
   showCropper = false;
   accountsOptions!: Account[]
-  methodsColumns: Array<String> = [
-    
-    "Method Type",
-    "Method Information",
- 
-  ]
-  labels:any={
-    "Account_Number":"Account Number",
-    "Bank_Name":"Bank Name",
-    "Recipient":"Recipient",
-    "Routing_Number":"Routing Number",
-    "City":"City",
-    "Country_Code":"Country Code",
-    "State":"State",
-    "Streat":"Streat",
-    "Zip":"Zip",
 
-  }
+
   accountsTypes: any = ["Check", "Wire"]
   selectAccount: any
   profile: Profile = {
@@ -71,11 +55,37 @@ export class ProfileComponent implements OnInit {
     this.handleGetUserAccounts()
 
   }
-  getAccountMethods(id:any) {
+  getAccountMethods(id: any) {
+    const transferMethods :any= [];
+    this.loginService.getAccountMethods(parseInt(id)).subscribe((response: any) => {
+      response.map((res: any) => {
+        let methodsInfo :any= {};
+        if (res.type == "Check") {
+          methodsInfo['Recipient']=res.json_fields['Recipient'];
+          methodsInfo['Streat']=res.json_fields['Streat'];
+          methodsInfo['City']=res.json_fields['City'];
+          methodsInfo['State']=res.json_fields['State'];
+          methodsInfo['Zip']=res.json_fields['Zip'];
+        }
+        else {
+         
+          methodsInfo['Recipient']=res.json_fields['Recipient'];
+          methodsInfo['Bank Name']=res.json_fields['Bank_Name'];
+          methodsInfo['Account Number']=res.json_fields['Account_Number'];
+          methodsInfo['ABA Routing Number']=res.json_fields['Routing_Number'];
+        }
+      
 
-    this.loginService.getAccountMethods(parseInt(id)).subscribe((response) => {
-      console.log(response)
-      this.accountsMethods = response;
+
+        transferMethods.push({
+         ...res,
+         json_fields:methodsInfo
+          
+        })
+
+      })
+     
+      this.accountsMethods = transferMethods;
 
     })
   }
@@ -84,9 +94,9 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  objectKeys(obj:any) {
+  objectKeys(obj: any) {
     return Object.keys(obj);
-}
+  }
 
 
   handleAccountSubmit() {
@@ -123,7 +133,8 @@ export class ProfileComponent implements OnInit {
         response => {
           this.accountsOptions = response
           if (this.accountsOptions.length == 1) {
-            this.selectAccount = this.accountsOptions[0].id
+            this.selectAccount = this.accountsOptions[0].id;
+            this.getAccountMethods(this.accountsOptions[0].id)
           }
         },
         (error: any) => {

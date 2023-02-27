@@ -30,6 +30,12 @@ addTransactionMethod(body:any){
   return res;
 }
 
+
+associateTransferMethod(body:any){
+  const res = this.http.post(`${environment.API_BASE_URL}/transaction_fund/`, body)
+  return res;
+}
+
 getAccountMethods(id:any){
   const res = this.http.get(`${environment.API_BASE_URL}/fund_transfer_method/account/${id}`)
   return res;

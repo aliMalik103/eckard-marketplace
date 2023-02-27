@@ -49,7 +49,7 @@
           <td>{{transactionStatus | uppercase}}</td>
           <td id="heading{{i}}">
             <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
-              (click)="clickTransaction(transaction?.listing)" [attr.aria-controls]="'collapse'+i"
+              (click)="clickTransaction(transaction)" [attr.aria-controls]="'collapse'+i"
               class="offer-td collapsed pe-auto" title="Transactions details">
 
               {{transaction?.listing?.project?.projectId}}
@@ -76,7 +76,7 @@
           </td>
 
         </tr>
-        <tr id="collapse{{i}}" class=" collapse fade" [attr.aria-labelledby]="'heading'+i" data-parent="#accordion">
+        <tr id="collapse{{i}}"  class=" collapse fade" [attr.aria-labelledby]="'heading'+i" data-parent="#accordion">
           <td colspan="8">
 
             <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
@@ -85,52 +85,136 @@
                 [isTransaction]="true">
               </app-listing-details>
               <hr>
-            <div *ngIf="objectKeys(transaction.fund_transfer_method).length>0">
-              <div>
-                <h5 class="offer-heading" style="color: cadetblue">Transfer Method Details</h5>
-            </div>
-            <div class="offer-heading" style="color: cadetblue"*ngIf="transaction.fund_transfer_method" >
-                Type: {{transaction.fund_transfer_method.type}}
-              </div>
-              <div style="display: flex;flex-direction: row;">
-                <div *ngFor="let key of objectKeys(transaction.fund_transfer_method.json_fields)">
-                  <div *ngIf="labels[key]" style="margin: 10px;">
-                    <div style="font-weight:bold;padding-left: 15px;"> {{labels[key]}}</div>
-                    <div style="padding-left: 15px;">{{transaction.fund_transfer_method.json_fields[key]}} </div>
-                  </div>
+
+
+              <div *ngIf="transactionStatus === 'Sell'">
+                <div style="padding-top: 10px;font-size: medium;">
+                  Transfer Method Details
                 </div>
+                <div *ngFor="let item of accountsMethods;index as i">
+
+                  <div *ngIf="objectKeys(item).length>0" >
+
+                    <div style="padding-top: 10px;font-size: medium;font-weight: bold;" *ngIf="item">
+                      <input type="checkbox" [(ngModel)]="item.current" 
+                     [disabled]="methodAssocietedAlready"  [attr.data-bs-target]="'#exampleModal'+i"  data-bs-toggle="modal">
+                      
+                      <label style="padding-left: 10px;">{{item.type}}</label>
+                    </div>
+                    <div
+                      style="display: flex;flex-direction: row;border-bottom-width: 1px;border-bottom-style:solid;border-bottom-color: lightgray;">
+                      <div *ngFor="let key of objectKeys(item.json_fields)">
+                        <div style="margin: 10px;width:fit-content;" >
+                         
+
+                          <div  style="padding-left: 100px;font-size: medium;"> {{key}}</div>
+
+                          <div style="padding-left: 100px;font-size: small;">{{item.json_fields[key]}} </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+                  <ng-container>
+                    <div class="modal fade" id="exampleModal{{i}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">
+                                      Transaction Method
+                                   
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  Are you sure to associate this method for transaction?
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="mr-auto ">
+  
+                                        <button type="button" class="btn btn-warning text-white mr-2 fw-bold"
+                                            data-bs-dismiss="modal"   (click)="associateMethod(item)">YES</button>
+                                        <button type="button" class="btn btn-danger ml-2 fw-bold"
+                                            data-bs-dismiss="modal">NO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                </div>
+
+           
+
+              
               </div>
 
+              <div *ngIf="transactionStatus !== 'Sell'">
+                <div style="padding-top: 10px;font-size: medium;">
+                  Transfer Method
+                </div>
+                <!-- <div style="padding-top: 10px;font-size: medium;font-weight: bold;"
+                  *ngIf="transaction.fund_transfer_method">
+                  {{transaction.fund_transfer_method.type}}
+                </div>
+                <div
+                  style="display: flex;flex-direction: row;border-bottom-width: 1px;border-bottom-style:solid;border-bottom-color: lightgray;">
+                  <div *ngFor="let key of objectKeys(transaction.fund_transfer_method.json_fields)">
+                    <div style="margin: 10px;width:fit-content;" *ngIf="labels[key]">
+                      <div style="padding-left: 100px;font-size: medium;"> {{labels[key]}}</div>
+                      <div style="padding-left: 100px;font-size: small;">
+                        {{transaction.fund_transfer_method.json_fields[key]}} </div>
+                    </div>
+                  </div>
+                </div> -->
+<div *ngIf="transaction.fund_transfer_method?.length==0">
+
+  <div style="padding-top: 10px;font-size: medium;">
+    N/A
+  </div>
+</div>
 
 
-            </div>
+                <div *ngFor="let item of transaction.fund_transfer_method">
+
+               
+
+                    <div style="padding-top: 10px;font-size: medium;font-weight: bold;" *ngIf="item">
+                     
+                      
+                      <label style="padding-left: 10px;">{{item.type}}</label>
+                    </div>
+                    <div
+                      style="display: flex;flex-direction: row;border-bottom-width: 1px;border-bottom-style:solid;border-bottom-color: lightgray;">
+                      <div *ngFor="let key of objectKeys(item.json_fields)">
+                        <div style="margin: 10px;width:fit-content;" >
+                         
+
+                          <div  style="padding-left: 100px;font-size: medium;"> {{key}}</div>
+
+                          <div style="padding-left: 100px;font-size: small;">{{item.json_fields[key]}} </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+              </div>
+
               <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="transaction.offer"
                 [offer]="transaction.listing" [listDetails]="transaction.listing" [statusOptions]="statusOptions"
                 (updateOffers)="handleUpdateOffers()" [index]="i" [isTransaction]="true">
               </app-my-offers>
-     
-
-<!-- 
-              <div *ngFor="let list of accountsMethods let i = index">
-
-
-                <div style="padding-top:10px" >
-                  Type: {{list.type}}
-                </div>
-                <div style="display: flex;flex-direction: row;">
-                  <div *ngFor="let key of objectKeys(list.json_fields)">
-                    <div *ngIf="labels[key]">
-                      <div style="font-weight:bold;padding-left: 10px;"> {{labels[key]}}</div>
-                      <div style="padding-left: 10px;">{{list.json_fields[key]}} </div>
-                    </div>
-                  </div>
-                </div>
-
-
-              </div> -->
-
-
-
 
             </div>
           </td>

@@ -116,7 +116,21 @@
       </div>
 
 
+   
+
+
+
       <div class="row" *ngIf="selectedType==='Wire'">
+
+        <div class="col-md-6 mt-2 text-start"><label class="labels ">Recipient </label><input type="text"
+          class="form-control" id="recipient" name="recipient" [(ngModel)]="methods.Recipient" #recipient="ngModel"
+          required [ngClass]="{'border border-danger':recipient.invalid && (recipient.dirty || recipient.touched)}">
+        <div *ngIf="recipient.invalid && (recipient.dirty || recipient.touched ) &&  recipient.errors"
+          class="text-danger rounded px-4 error-message">
+          Please enter Recipient
+        </div>
+      </div>
+
         <div class="col-md-6 mt-2 text-start"><label class="labels ">Bank Name</label><input type="text"
             class="form-control" id="bankName" name="bankName" [(ngModel)]="methods.Bank_Name" #bankName="ngModel"
             required [ngClass]="{'border border-danger':bankName.invalid && (bankName.dirty || bankName.touched)}">
@@ -125,20 +139,6 @@
             Please enter Bank Name
           </div>
         </div>
-
-
-
-
-        <div class="col-md-6 mt-2 text-start"><label class="labels ">ABA Routing Number</label><input type="text"
-            class="form-control" id="routingNumber" name="routingNumber" [(ngModel)]="methods.Routing_Number"
-            #routingNumber="ngModel" required
-            [ngClass]="{'border border-danger':routingNumber.invalid && (routingNumber.dirty || routingNumber.touched)}">
-          <div *ngIf="routingNumber.invalid && (routingNumber.dirty || routingNumber.touched ) &&  routingNumber.errors"
-            class="text-danger rounded px-4 error-message">
-            Please enter ABA Routing Number
-          </div>
-        </div>
-
 
 
 
@@ -153,21 +153,17 @@
           </div>
         </div>
 
-
-
-
-
-        <div class="col-md-6 mt-2 text-start"><label class="labels ">Recipient </label><input type="text"
-            class="form-control" id="recipient" name="recipient" [(ngModel)]="methods.Recipient" #recipient="ngModel"
-            required [ngClass]="{'border border-danger':recipient.invalid && (recipient.dirty || recipient.touched)}">
-          <div *ngIf="recipient.invalid && (recipient.dirty || recipient.touched ) &&  recipient.errors"
+        <div class="col-md-6 mt-2 text-start"><label class="labels ">ABA Routing Number</label><input type="text"
+            class="form-control" id="routingNumber" name="routingNumber" [(ngModel)]="methods.Routing_Number"
+            #routingNumber="ngModel" required
+            [ngClass]="{'border border-danger':routingNumber.invalid && (routingNumber.dirty || routingNumber.touched)}">
+          <div *ngIf="routingNumber.invalid && (routingNumber.dirty || routingNumber.touched ) &&  routingNumber.errors"
             class="text-danger rounded px-4 error-message">
-            Please enter Recipient
+            Please enter ABA Routing Number
           </div>
         </div>
+
       </div>
-
-
 
 
       <div class="row" *ngIf="selectedType==='Check'">
@@ -178,6 +174,15 @@
           <div *ngIf="recipient.invalid && (recipient.dirty || recipient.touched ) &&  recipient.errors"
             class="text-danger rounded px-4 error-message">
             Please enter Recipient
+          </div>
+        </div>
+
+        <div class="col-md-6 mt-2 text-start"><label class="labels ">Street </label><input type="text"
+            class="form-control" id="streat" name="streat" [(ngModel)]="methods.Streat" #streat="ngModel" required
+            [ngClass]="{'border border-danger':streat.invalid && (streat.dirty || streat.touched)}">
+          <div *ngIf="streat.invalid && (streat.dirty || streat.touched ) &&  streat.errors"
+            class="text-danger rounded px-4 error-message">
+            Please enter streat
           </div>
         </div>
 
@@ -195,33 +200,12 @@
             [ngClass]="{'border border-danger':streat.invalid && (streat.dirty || streat.touched)}">
           <div *ngIf="streat.invalid && (streat.dirty || streat.touched ) &&  streat.errors"
             class="text-danger rounded px-4 error-message">
-            Please enter ABA Routing Number
+            Please enter state
           </div>
         </div>
 
 
 
-
-
-        <div class="col-md-6 mt-2 text-start"><label class="labels ">Street </label><input type="text"
-            class="form-control" id="streat" name="streat" [(ngModel)]="methods.Streat" #streat="ngModel" required
-            [ngClass]="{'border border-danger':streat.invalid && (streat.dirty || streat.touched)}">
-          <div *ngIf="streat.invalid && (streat.dirty || streat.touched ) &&  streat.errors"
-            class="text-danger rounded px-4 error-message">
-            Please enter Account Number
-          </div>
-        </div>
-
-
-        <div class="col-md-6 mt-2 text-start"><label class="labels ">Country Code </label><input type="text"
-            class="form-control" id="countryCode" name="countryCode" [(ngModel)]="methods.Country_Code"
-            #countryCode="ngModel" required
-            [ngClass]="{'border border-danger':countryCode.invalid && (countryCode.dirty || countryCode.touched)}">
-          <div *ngIf="countryCode.invalid && (countryCode.dirty || countryCode.touched ) &&  countryCode.errors"
-            class="text-danger rounded px-4 error-message">
-            Please enter Country Code
-          </div>
-        </div>
 
 
         <div class="col-md-6 mt-2 text-start"><label class="labels ">Zip </label><input type="text" class="form-control"
@@ -234,33 +218,62 @@
         </div>
       </div>
 
-
       <div class="col-md-12 text-start mt-3" *ngIf="selectAccount && selectedType">
         <div class="form-check"><button class="btn btn-primary profile-button" type="button"
-            (click)="handleAccountSubmit()">
+              [attr.data-bs-target]="'#exampleModal'"  data-bs-toggle="modal">
             Add Account
           </button></div>
       </div>
 
       <div *ngIf="selectAccount">
-        <h5 class="offer-heading" style="margin-top: 10px;color: cadetblue;">Transfer Methods</h5>
-    </div>
+        <div style="padding-top: 10px;font-size: medium;">
+         Transfer Methods
+        </div>
+      </div>
       <div *ngFor="let list of accountsMethods let i = index">
 
-
-        <div style="padding-top: 10px;font-weight: bold;color: cadetblue">
-          Type: {{list.type}}
+        <div style="padding-top: 10px;font-size: medium;font-weight: bold;">
+          {{list.type}}
         </div>
-        <div style="display: flex;flex-direction: row;">
+        <div style="display: flex;flex-direction: row;border-bottom-width: 1px;border-bottom-style:solid">
           <div *ngFor="let key of objectKeys(list.json_fields)">
-<div *ngIf="labels[key]" style="margin: 10px;">
-            <div style="font-weight:bold;padding-left: 15px;"> {{labels[key]}}</div>
-            <div style="padding-left: 15px;">{{list.json_fields[key]}} </div>
-          </div>
+            <div style="margin: 10px;width:fit-content;">
+              <div style="padding-left: 100px;font-size: medium;"> {{key}}</div>
+              <div style="padding-left: 100px;font-size: small;">{{list.json_fields[key]}} </div>
+            </div>
           </div>
         </div>
 
+        <ng-container>
+          <div class="modal fade" id="exampleModal" data-bs-backdrop="static"
+              data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">
+                            Transaction Method
+                         
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                              aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure to add transfer method for this account?
+                      </div>
+                      <div class="modal-footer">
+                          <div class="mr-auto ">
 
+                              <button type="button" class="btn btn-warning text-white mr-2 fw-bold"
+                                  data-bs-dismiss="modal" (click)="handleAccountSubmit()">YES</button>
+                              <button type="button" class="btn btn-danger ml-2 fw-bold"
+                                  data-bs-dismiss="modal">NO</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </ng-container>
       </div>
     </div>
   </div>

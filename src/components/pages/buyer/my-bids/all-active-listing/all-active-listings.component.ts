@@ -228,7 +228,7 @@ export class AllActiveListingComponent implements OnInit {
     if (!noFilters) {
       this.copymyOffers.filter((offer: any) => {
         var filtermapped: any = false;
-        if (offer.auctionType !== 'Direct Sale') {
+        if (offer.auctionType !== 'Direct Sale' && !offer.isAuctionEnd && !offer.isListingStart) {
           const project=this.selectedItems.length > 0 ? this.selectedItems.find((acFilter: any) => acFilter.item_id == offer.projectId) : true;
           const auction=this.auctionFiltersSelected.length > 0 ? this.auctionFiltersSelected.find((acFilter: any) => acFilter.item_id == offer.auctionType) : true;
           const min_ask=this.minAskFiltersSelected.length > 0 ? this.minAskFiltersSelected.find((acFilter: any) => acFilter.item_id == offer.minimumAsk) : true;
@@ -247,8 +247,8 @@ export class AllActiveListingComponent implements OnInit {
       this.myOffers = filteredData
     } else {
       this.myOffers = copymyOffers?.filter(
-        ({ status, auctionType }) =>
-          status === offerStatus && auctionType !== 'Direct Sale'
+        ({ status, auctionType, isAuctionEnd, isListingStart }) =>
+          status === offerStatus && auctionType !== 'Direct Sale' && !isAuctionEnd && !isListingStart
       )
     }
   }

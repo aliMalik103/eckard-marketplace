@@ -88,35 +88,65 @@
 
 
               <div *ngIf="transactionStatus === 'Sell'">
-                <div style="padding-top: 10px;font-size: medium;">
-                  Transfer Method Details
-                </div>
-                <div *ngFor="let item of accountsMethods;index as i">
 
-                  <div *ngIf="objectKeys(item).length>0" >
+                <div class="mt-4">
+                  <h5 class="offer-heading" style="color: navy;">
+                    <ng-container>
 
-                    <div style="padding-top: 10px;font-size: medium;font-weight: bold;" *ngIf="item">
-                      <input type="checkbox" [(ngModel)]="item.current" 
-                     [disabled]="methodAssocietedAlready"  [attr.data-bs-target]="'#exampleModal'+i"  data-bs-toggle="modal">
+                      Fund Transfer Methods (FTM)
+                    </ng-container>
+                        
+                    
+                  </h5>
+              </div>
+
+
+
+                <!-- <div style="padding-top: 10px;font-size: medium;" class="offer-heading">
+                  Fund Transfer Methods (FTM)
+                </div> -->
+
+                <div *ngFor="let k of objectKeys(accountsMethods)">
+                  {{ k }} ({{ accountsMethods[k].length }})
+                  <div style="border-bottom-width: 1px; border-bottom-style: solid;border-bottom-color: lightgray;">
+       
+
+
+                <div *ngFor="let item of accountsMethods[k];index as i">
+
+             
+
+                
+                  <div style="display: flex; flex-direction: row">
+                   
+                      <div *ngFor="let key of objectKeys(item.json_fields);index as j">
+                        <div style="width: 250px">
+                          <div style=" margin-top: 10px; font-size: large" *ngIf="i==0">
+      
+                            {{ key }}
+                          </div>
+                          <div style="flex-direction: row;display: flex;margin-top: 10px;margin-bottom: 10px;">
+                          <div style="font-size: large" *ngIf="j==0">
+                            <input type="checkbox" [(ngModel)]="item.current" 
+                            style="margin-right: 10px;"
+                           [disabled]="methodAssocietedAlready"  [attr.data-bs-target]="'#exampleModal'+i"  data-bs-toggle="modal">
                       
-                      <label style="padding-left: 10px;">{{item.type}}</label>
-                    </div>
-                    <div
-                      style="display: flex;flex-direction: row;border-bottom-width: 1px;border-bottom-style:solid;border-bottom-color: lightgray;">
-                      <div *ngFor="let key of objectKeys(item.json_fields)">
-                        <div style="margin: 10px;width:fit-content;" >
-                         
+                        </div>
+      
+                          <div style="font-size: medium">
+                            {{ item.json_fields[key] }}
+                          </div>
 
-                          <div  style="padding-left: 100px;font-size: medium;"> {{key}}</div>
-
-                          <div style="padding-left: 100px;font-size: small;">{{item.json_fields[key]}} </div>
+                        </div>
+                        
+                  
                         </div>
                       </div>
+                   
                     </div>
 
 
-
-                  </div>
+                 
                   <ng-container>
                     <div class="modal fade" id="exampleModal{{i}}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
@@ -147,17 +177,26 @@
                         </div>
                     </div>
                 </ng-container>
+              </div>
                 </div>
 
-           
+           </div>
+
 
               
               </div>
 
               <div *ngIf="transactionStatus !== 'Sell'">
-                <div style="padding-top: 10px;font-size: medium;">
-                  Transfer Method
-                </div>
+                <div class="mt-4">
+                  <h5 class="offer-heading" style="color: navy;">
+                    <ng-container>
+
+                      Fund Transfer Methods (FTM)
+                    </ng-container>
+                        
+                    
+                  </h5>
+              </div>
                 <!-- <div style="padding-top: 10px;font-size: medium;font-weight: bold;"
                   *ngIf="transaction.fund_transfer_method">
                   {{transaction.fund_transfer_method.type}}

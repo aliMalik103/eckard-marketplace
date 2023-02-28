@@ -108,13 +108,21 @@ export class TransactionsComponent implements OnInit {
 
 
   }
+
+  groupBy = function(xs:any, key:any) {
+    return xs.reduce(function(rv:any, x:any) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
+
   clickTransaction(transaction: any) {
     this.methodAssocietedAlready=false;
     const transferMethods: any = [];
 
     if (this.transactionStatus === 'Sell') {
       this.spinner.show()
-      this.loginService.getAccountMethods(parseInt(transaction.listing.account.id)).subscribe((response: any) => {
+      this.loginService.getAccountMethods(this.loginService.user.id).subscribe((response: any) => {
         response.map((res: any) => {
           res.transactionId = transaction.id;
           const hasMethodAssociated = transaction.fund_transfer_method.filter((account: any) => (parseInt(account.id) == parseInt(res.id)))
@@ -151,8 +159,9 @@ export class TransactionsComponent implements OnInit {
 
         })
         this.spinner.hide();
-        this.accountsMethods = transferMethods;
-
+        const groupByType=this.groupBy(transferMethods,"type");
+    
+        this.accountsMethods = groupByType;
       })
     }
     // alert(JSON.stringify(transaction.account))

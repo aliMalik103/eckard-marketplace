@@ -10,6 +10,7 @@ export interface Profile {
   id: any
   firstName: string
   lastName: any
+
   email: any
   notification: boolean
   mpStatus: any
@@ -26,8 +27,9 @@ export class ProfileComponent implements OnInit {
   isConfirmPassword: boolean = false
   imageChangedEvent: any = '';
   selectedType: any;
-
+  addAccount=false
   showCropper = false;
+  showExisting=true;
   accountsOptions!: Account[]
 
 
@@ -45,6 +47,34 @@ export class ProfileComponent implements OnInit {
   methods: any = {
 
   }
+
+  countryOptions=[
+    "BHS",
+"BRB",
+"BLZ",
+"CAN",
+"CHE",
+"CYM",
+"CUW",
+"DEU",
+"FRA",
+"HTI",
+"HKG",
+"ISL",
+"ISR",
+"JAM",
+"JPN",
+"KOR",
+"MAF",
+"MEX",
+"PAN",
+"PRI",
+"SGP",
+"TWN",
+"USA",
+
+
+  ];
   constructor(private loginService: LoginService, private spinner: NgxSpinnerService, private myListingsService: MyListingsService,
     private toastr: ToastrService, private router: Router) {
 
@@ -53,15 +83,42 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.profileDetails()
     this.handleGetUserAccounts()
+    this.getAccountMethods();
 
   }
-  getAccountMethods(id: any) {
+
+
+  clickShowExisting(){
+
+    this.showExisting=!this.showExisting
+  }
+
+  clickAddAccount(){
+
+    this.addAccount=!this.addAccount;
+  }
+  handleCountryChange(item:any){
+this.methods.country=item;
+
+  }
+
+   groupBy = function(xs:any, key:any) {
+    return xs.reduce(function(rv:any, x:any) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
+
+  getAccountMethods() {
     const transferMethods :any= [];
-    this.loginService.getAccountMethods(parseInt(id)).subscribe((response: any) => {
+    this.loginService.getAccountMethods(this.loginService.user.id).subscribe((response: any) => {
+     
       response.map((res: any) => {
         let methodsInfo :any= {};
         if (res.type == "Check") {
-          methodsInfo['Recipient']=res.json_fields['Recipient'];
+          methodsInfo['Account Holder']=res.json_fields['Recipient'];
+          methodsInfo['Mail To']=res.json_fields['mailto'];
+          methodsInfo['Country']=res.json_fields['country'];
           methodsInfo['Streat']=res.json_fields['Streat'];
           methodsInfo['City']=res.json_fields['City'];
           methodsInfo['State']=res.json_fields['State'];
@@ -69,7 +126,7 @@ export class ProfileComponent implements OnInit {
         }
         else {
          
-          methodsInfo['Recipient']=res.json_fields['Recipient'];
+          methodsInfo['Account Holder']=res.json_fields['Recipient'];
           methodsInfo['Bank Name']=res.json_fields['Bank_Name'];
           methodsInfo['Account Number']=res.json_fields['Account_Number'];
           methodsInfo['ABA Routing Number']=res.json_fields['Routing_Number'];
@@ -84,8 +141,9 @@ export class ProfileComponent implements OnInit {
         })
 
       })
-     
-      this.accountsMethods = transferMethods;
+      const groupByType=this.groupBy(transferMethods,"type");
+    
+      this.accountsMethods = groupByType;
 
     })
   }
@@ -114,7 +172,7 @@ export class ProfileComponent implements OnInit {
         // this.methods = {};
 
         this.spinner.hide();
-        this.getAccountMethods(this.selectAccount)
+        this.getAccountMethods()
         this.toastr.success('Account Method Added Successfully!');
 
       })
@@ -134,7 +192,7 @@ export class ProfileComponent implements OnInit {
           this.accountsOptions = response
           if (this.accountsOptions.length == 1) {
             this.selectAccount = this.accountsOptions[0].id;
-            this.getAccountMethods(this.accountsOptions[0].id)
+            this.getAccountMethods()
           }
         },
         (error: any) => {
@@ -149,7 +207,7 @@ export class ProfileComponent implements OnInit {
       case 'account':
         this.methods.account_id = this.selectAccount;
 
-        this.getAccountMethods(this.selectAccount)
+        // this.getAccountMethods()
 
         break;
       case 'type':

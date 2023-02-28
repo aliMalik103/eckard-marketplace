@@ -37,7 +37,7 @@ associateTransferMethod(body:any){
 }
 
 getAccountMethods(id:any){
-  const res = this.http.get(`${environment.API_BASE_URL}/fund_transfer_method/account/${id}`)
+  const res = this.http.get(`${environment.API_BASE_URL}/contact/${id}/accounts`)
   return res;
 }
 

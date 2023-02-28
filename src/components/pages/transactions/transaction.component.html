@@ -108,7 +108,37 @@
 
                 <div *ngFor="let k of objectKeys(accountsMethods)">
                   {{ k }} ({{ accountsMethods[k].length }})
+
+
                   <div style="border-bottom-width: 1px; border-bottom-style: solid;border-bottom-color: lightgray;">
+                    <table class="table table-borderless">
+                      <ng-container *ngFor="let list of accountsMethods[k]; let i = index">
+        
+                        <thead *ngIf="i==0">
+                          <tr>
+                            <th   class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">{{key}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td *ngFor="let key of objectKeys(list.json_fields);index as j">
+                              
+                            
+                                <input type="checkbox" [(ngModel)]="list.current" 
+                                style="margin-right: 10px;" *ngIf="j==0"
+                               [disabled]="methodAssocietedAlready"  [attr.data-bs-target]="'#exampleModal'+i"  data-bs-toggle="modal">
+                          
+                              
+                              
+                              {{ list.json_fields[key] }}</td>
+                          </tr>
+        
+                        </tbody>
+                      </ng-container>
+                    </table>
+                  </div>
+
+                  <!-- <div style="border-bottom-width: 1px; border-bottom-style: solid;border-bottom-color: lightgray;">
        
 
 
@@ -178,7 +208,10 @@
                     </div>
                 </ng-container>
               </div>
-                </div>
+              
+            
+           
+            </div> -->
 
            </div>
 
@@ -219,7 +252,7 @@
 </div>
 
 
-                <div *ngFor="let item of transaction.fund_transfer_method">
+                <div *ngFor="let item of transaction.fund_transfer_method; let i = index">
 
                
 
@@ -230,18 +263,25 @@
                     </div>
                     <div
                       style="display: flex;flex-direction: row;border-bottom-width: 1px;border-bottom-style:solid;border-bottom-color: lightgray;">
-                      <div *ngFor="let key of objectKeys(item.json_fields)">
-                        <div style="margin: 10px;width:fit-content;" >
-                         
-
-                          <div  style="padding-left: 100px;font-size: medium;"> {{key}}</div>
-
-                          <div style="padding-left: 100px;font-size: small;">{{item.json_fields[key]}} </div>
-                        </div>
-                      </div>
+                      <table class="table table-borderless">
+                        <ng-container >
+          
+                          <thead *ngIf="i==0">
+                            <tr>
+                              <th class="text-secondary" *ngFor="let key of objectKeys(item.json_fields)">{{key}}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td class="text-secondary" *ngFor="let key of objectKeys(item.json_fields)">{{ item.json_fields[key] }}</td>
+                            </tr>
+          
+                          </tbody>
+                        </ng-container>
+                      </table>
                     </div>
 
-
+                    
 
 
                 </div>

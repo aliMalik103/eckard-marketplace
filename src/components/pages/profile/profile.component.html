@@ -131,7 +131,7 @@
             </span>
           </div>
           <div class="col-md-6">
-            <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
+            <label for="type" class="form-label">Transfer Type <span class="text-danger">*</span></label>
             <select id="type" class="form-select" [(ngModel)]="selectedType" (ngModelChange)="handleChange('type')"
               #type="ngModel" [ngClass]="{
                 'border border-danger':
@@ -369,12 +369,12 @@
 
                 <thead *ngIf="i==0">
                   <tr>
-                    <th *ngFor="let key of objectKeys(list.json_fields)">{{key}}</th>
+                    <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">{{key}}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td *ngFor="let key of objectKeys(list.json_fields)">{{ list.json_fields[key] }}</td>
+                    <td class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">{{ list.json_fields[key] }}</td>
                   </tr>
 
                 </tbody>

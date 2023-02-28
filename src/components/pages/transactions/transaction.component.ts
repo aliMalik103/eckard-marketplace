@@ -17,10 +17,11 @@ export class TransactionsComponent implements OnInit {
   labels: any = {
     "Account_Number": "Account Number",
     "Bank_Name": "Bank Name",
-    "Recipient": "Recipient",
+    "Recipient": "Account Holder",
     "Routing_Number": "Routing Number",
     "City": "City",
-    "Country_Code": "Country Code",
+    "mailinto":"Mailing TO",
+    "country": "Country",
     "State": "State",
     "Streat": "Streat",
     "Zip": "Zip",
@@ -134,15 +135,18 @@ export class TransactionsComponent implements OnInit {
 
           let methodsInfo: any = {};
           if (res.type == "Check") {
-            methodsInfo['Recipient'] = res.json_fields['Recipient'];
+            methodsInfo['Eckard Account'] = res.account.accountName;
+            methodsInfo['Account Holder'] = res.json_fields['Recipient'];
+            methodsInfo['Mail To'] = res.json_fields['mailto'];
+            methodsInfo['Country'] = res.json_fields['country'];
             methodsInfo['Streat'] = res.json_fields['Streat'];
             methodsInfo['City'] = res.json_fields['City'];
             methodsInfo['State'] = res.json_fields['State'];
             methodsInfo['Zip'] = res.json_fields['Zip'];
           }
           else {
-
-            methodsInfo['Recipient'] = res.json_fields['Recipient'];
+            methodsInfo['Eckard Account'] = res.account.accountName;
+            methodsInfo['Account Holder'] = res.json_fields['Recipient'];
             methodsInfo['Bank Name'] = res.json_fields['Bank_Name'];
             methodsInfo['Account Number'] = res.json_fields['Account_Number'];
             methodsInfo['ABA Routing Number'] = res.json_fields['Routing_Number'];

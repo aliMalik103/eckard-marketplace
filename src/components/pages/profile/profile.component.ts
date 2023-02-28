@@ -116,6 +116,7 @@ this.methods.country=item;
       response.map((res: any) => {
         let methodsInfo :any= {};
         if (res.type == "Check") {
+          methodsInfo['Eckard Account'] = res.account.accountName;
           methodsInfo['Account Holder']=res.json_fields['Recipient'];
           methodsInfo['Mail To']=res.json_fields['mailto'];
           methodsInfo['Country']=res.json_fields['country'];
@@ -125,7 +126,7 @@ this.methods.country=item;
           methodsInfo['Zip']=res.json_fields['Zip'];
         }
         else {
-         
+          methodsInfo['Eckard Account'] = res.account.accountName;
           methodsInfo['Account Holder']=res.json_fields['Recipient'];
           methodsInfo['Bank Name']=res.json_fields['Bank_Name'];
           methodsInfo['Account Number']=res.json_fields['Account_Number'];
@@ -142,7 +143,7 @@ this.methods.country=item;
 
       })
       const groupByType=this.groupBy(transferMethods,"type");
-    
+    console.log(groupByType)
       this.accountsMethods = groupByType;
 
     })

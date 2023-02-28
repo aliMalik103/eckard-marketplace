@@ -331,6 +331,35 @@
           </button>
         </div>
       </div>
+      <ng-container>
+        <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false"
+          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                  Transaction Method
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure to add transfer method for this account?
+              </div>
+              <div class="modal-footer">
+                <div class="mr-auto">
+                  <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
+                    (click)="handleAccountSubmit()">
+                    YES
+                  </button>
+                  <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal">
+                    NO
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
       <div *ngIf="showExisting" style="margin-top: 10px;">
         <div *ngFor="let k of objectKeys(accountsMethods)">
           {{ k }} ({{ accountsMethods[k].length }})
@@ -360,35 +389,7 @@
                 </div>
               </div>
 
-              <ng-container>
-                <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false"
-                  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">
-                          Transaction Method
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        Are you sure to add transfer method for this account?
-                      </div>
-                      <div class="modal-footer">
-                        <div class="mr-auto">
-                          <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
-                            (click)="handleAccountSubmit()">
-                            YES
-                          </button>
-                          <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal">
-                            NO
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
+        
             </div>
           </div>
         </div>

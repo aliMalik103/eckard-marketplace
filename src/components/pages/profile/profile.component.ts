@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   selectedType: any;
   addAccount=false
   showCropper = false;
-  showExisting=true;
+  showExisting=false;
   accountsOptions!: Account[]
 
 

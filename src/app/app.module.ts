@@ -18,6 +18,8 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ProfileModule } from 'src/components/pages/profile/profile.module';
 import { TransactionsModule } from 'src/components/pages/transactions/transaction.module';
+import { EckardTransactionsModule } from 'src/components/pages/eckard-staff-place/eckard-transactions/eckard-transactions.module';
+import { EckardTransactionsMethodsModule } from 'src/components/pages/eckard-staff-place/eckard-transactions-methods/eckard-transactions-methods.module';
 
 
 
@@ -51,7 +53,9 @@ import { TransactionsModule } from 'src/components/pages/transactions/transactio
     CurrencyMaskModule,
     NgxSpinnerModule,
     ProfileModule,
-    TransactionsModule
+    TransactionsModule,
+    EckardTransactionsModule,
+    EckardTransactionsMethodsModule
 
   ],
   providers: [AddNewListingService],

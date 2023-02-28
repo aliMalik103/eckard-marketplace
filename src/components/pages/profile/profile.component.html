@@ -361,36 +361,25 @@
         </div>
       </ng-container>
       <div *ngIf="showExisting" style="margin-top: 10px;">
-        <div *ngFor="let k of objectKeys(accountsMethods)">
+        <div *ngFor="let k of objectKeys(accountsMethods)" class="mt-2">
           {{ k }} ({{ accountsMethods[k].length }})
           <div style="border-bottom-width: 1px; border-bottom-style: solid;border-bottom-color: lightgray;">
-            <div style="padding-top: 10px; font-size: medium" *ngFor="let list of accountsMethods[k]; let i = index">
+            <table class="table table-borderless">
+              <ng-container *ngFor="let list of accountsMethods[k]; let i = index">
 
-              <div style="display: flex; flex-direction: row" class="gap-5">
-                <div *ngFor="let key of objectKeys(list.json_fields)">
-                  <div >
-                    <div style=" margin-top: 10px; font-size: large">
+                <thead *ngIf="i==0">
+                  <tr>
+                    <th *ngFor="let key of objectKeys(list.json_fields)">{{key}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td *ngFor="let key of objectKeys(list.json_fields)">{{ list.json_fields[key] }}</td>
+                  </tr>
 
-                      <div *ngIf="i==0">
-                      {{ key }}
-                    </div>
-
-
-                      <div style="margin-top: 10px; font-size: medium">
-                        {{ list.json_fields[key] }}
-                      </div>
-
-
-                    </div>
-
-
-                  
-                  </div>
-                </div>
-              </div>
-
-        
-            </div>
+                </tbody>
+              </ng-container>
+            </table>
           </div>
         </div>
       </div>

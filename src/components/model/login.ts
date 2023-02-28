@@ -21,7 +21,8 @@ export interface UserDetails {
   message: string
   email: string
   status: string
-  valid: boolean,
-  id: number,
+  valid: boolean
+  id: number
   name?: string
+  role?: any
 }

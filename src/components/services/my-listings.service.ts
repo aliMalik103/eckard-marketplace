@@ -1,5 +1,5 @@
 import { Account, ContactListing, IncomListing, Project } from './../model/my-listings';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -200,7 +200,7 @@ export class MyListingsService {
     }
     this.handleCreateHistory(body).subscribe(
       (response) => {
-        console.log("Re-calculate history save",response)
+        console.log("Re-calculate history save", response)
       },
       (error: any) => {
         console.error("Error create history  : ", error);
@@ -231,14 +231,21 @@ export class MyListingsService {
     return res;
   }
 
-  handleGetSellerPendingTransactions(id: any):Observable<any>{
-  const res = this.http.get(`${environment.API_BASE_URL}/transaction/seller/${id}`)
-  return res;
+  handleGetSellerPendingTransactions(id: any): Observable<any> {
+    const res = this.http.get(`${environment.API_BASE_URL}/transaction/seller/${id}`)
+    return res;
   }
 
-  handleGetBuyerPendingTransactions(id: any):Observable<any>{
+  handleGetBuyerPendingTransactions(id: any): Observable<any> {
     const res = this.http.get(`${environment.API_BASE_URL}/transaction/buyer/${id}`)
     return res;
-    }
+  }
+
+  handleGetEckardTransactions(status: string) {
+    const params = new HttpParams().set('statusName', status);
+    const res = this.http.get(`${environment.API_BASE_URL}/transaction/status`, { params });
+    return res;
+  }
+
 
 }

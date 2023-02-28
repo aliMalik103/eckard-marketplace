@@ -16,6 +16,7 @@ export class MarketPlaceComponent implements OnInit {
   allActiveListings: number = 0
   totalPendingList: number = 0
   totalPendingOffer: number = 0
+  isEckard: Boolean = false
 
 
   constructor(private myListingsService: MyListingsService, private loginService: LoginService,
@@ -29,6 +30,7 @@ export class MarketPlaceComponent implements OnInit {
 
   ngOnInit(): void {
     this.isActiveUser = this.loginService?.user?.status == 'active' ? true : false;
+    this.isEckard = this.loginService?.user?.role?.name != 'Eckard' ? true : false;
   }
 
   getAllMyListings() {

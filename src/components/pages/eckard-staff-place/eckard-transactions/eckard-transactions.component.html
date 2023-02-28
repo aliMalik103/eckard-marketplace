@@ -1,0 +1,86 @@
+<div class="container card mt-4 pt-4 h-100">
+
+    <div class="breadcrumb-container  mb-3">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-link">
+                <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/market-place']">MarketPlace</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a>Transactions</a>
+                </li>
+            </ol>
+        </nav>
+
+    </div>
+
+    <div class="d-flex gap-5 mt-4 mb-3 align-items-center">
+        <div>
+            <input type="search" id="searchParam" name="searchParam" class="form-control" [(ngModel)]="searchParam"
+                (ngModelChange)="handleChange()" />
+        </div>
+        <div class="d-inline-block pe-auto list-type-heading mr-2" (click)="toggleTransactions('pending-transactions')">
+            <span [ngClass]="{'list-underline':transactionStatus =='pending-transactions'}">Pending PSA</span>
+        </div>
+        <div class="d-inline-block pe-auto list-type-heading ml-2"
+            (click)="toggleTransactions('completed-transactions')">
+            <span [ngClass]="{'list-underline': transactionStatus =='completed-transactions'}">Funds Transfer
+                Confirmed</span>
+        </div>
+        <div class="d-inline-block pe-auto  list-type-heading ml-2" (click)="toggleTransactions('pending-asset')">
+            <span [ngClass]="{'list-underline': transactionStatus =='pending-asset'}">Asset Transfer Initiated</span>
+        </div>
+
+
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th *ngFor="let item of transactionsColumns ; index as i " class="text-secondary ">{{item}}</th>
+            </tr>
+        </thead>
+        <tbody class="my-listing-table-body text-secondary" id="accordion">
+            <ng-container *ngFor=" let transaction of transactionsData | paginate
+            : {
+                itemsPerPage: tableSize,
+                currentPage: page,
+                totalItems: count
+              };
+        let i = index">
+
+                <tr>
+                    <td>C7RQ9</td>
+                    <td>SEL{{transaction?.listing?.account?.contact?.firstName | uppercase}}</td>
+                    <td>BUY{{transaction?.offer?.contact?.firstName | uppercase}}</td>
+                    <td>{{transaction?.listing?.project?.projectId}}</td>
+                    <td>{{transaction?.nma}}</td>
+                    <td>{{transaction?.status?.statusLabel}}</td>
+                    <td>
+                        <ng-container *ngIf="transaction?.status?.status == 'Pending PSA' ">
+                            <span class="transactions-actions pe-auto"> Confirm PSA Complete</span>
+                        </ng-container>
+                        <ng-container *ngIf="transaction?.status?.status == 'Pending Asset Transfer' ">
+                            <span class="transactions-actions pe-auto"> Complete Asset Transfer</span>
+                        </ng-container>
+                        <ng-container *ngIf="transaction?.status?.status == 'Fund Transfer Complete' ">
+                            <span class="transactions-actions pe-auto"> Initial Asset Transfer</span> | <span
+                                class="transactions-actions pe-auto">Complete
+                                Asset Transfer</span>
+                        </ng-container>
+                    </td>
+                </tr>
+            </ng-container>
+
+
+
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+        <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)"
+            *ngIf="handleLength(transactionsData)">
+        </pagination-controls>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.3)" size="medium" color="#fff" type="line-spin-fade" [fullScreen]="true">
+</ngx-spinner>

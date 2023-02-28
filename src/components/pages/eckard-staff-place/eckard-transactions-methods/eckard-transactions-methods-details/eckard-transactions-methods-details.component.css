@@ -1,0 +1,9 @@
+.method-heading {
+    color: navy;
+}
+
+.cancel-button:hover,
+.cancel-button:active {
+    background-color: transparent;
+    color: black;
+}

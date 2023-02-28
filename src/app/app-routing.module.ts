@@ -13,6 +13,8 @@ import { MyListingComponent } from 'src/components/pages/seller/my-listing/my-li
 import { AuthGuard } from 'src/components/auth/auth.guard';
 import { AllActiveListingComponent } from 'src/components/pages/buyer/my-bids/all-active-listing/all-active-listings.component';
 import { ProfileComponent } from 'src/components/pages/profile/profile.component';
+import { EckardTransactionsComponent } from 'src/components/pages/eckard-staff-place/eckard-transactions/eckard-transactions.component';
+import { EckardTransactionsMethodsComponent } from 'src/components/pages/eckard-staff-place/eckard-transactions-methods/eckard-transactions-methods.component';
 
 
 
@@ -31,6 +33,10 @@ const routes: Routes = [
   { path: "sec-disclosure", component: SECDisclosureComponent, canActivate: [AuthGuard] },
   { path: "user-agreement", component: UserAgreementComponent, canActivate: [AuthGuard] },
   { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'eckard-pending-transactions', component: EckardTransactionsComponent, canActivate: [AuthGuard] },
+  { path: 'eckard-completed-transactions', component: EckardTransactionsComponent, canActivate: [AuthGuard] },
+  { path: 'eckard-pending-asset', component: EckardTransactionsComponent, canActivate: [AuthGuard] },
+  { path: 'eckard-transactions-methods', component: EckardTransactionsMethodsComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "market-place", pathMatch: "full" }
 
 ];

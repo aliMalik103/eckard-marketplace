@@ -1,0 +1,21 @@
+.breadcrumb-link {
+    border-bottom: 2px solid #0a2b3c;
+    display: inline-flex;
+}
+
+.breadcrumb-container a {
+    text-decoration: none;
+    color: #0a2b3c;
+}
+
+.list-type-heading {
+    color: rgb(11, 11, 85);
+}
+
+.list-underline {
+    border-bottom: 2px solid rgb(11, 11, 85);
+}
+
+.transactions-actions {
+    border-bottom: 2px solid;
+}

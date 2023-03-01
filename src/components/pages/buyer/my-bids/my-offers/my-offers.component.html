@@ -9,7 +9,7 @@
 <div class="mt-4">
 
     <label for="constraints" class="form-label fw-bold">Constraints / Contingencies</label>
-    <div class="col-sm-10">
+    <div class="col-sm-12">
         <ng-container *ngIf="isTransaction; else elseBlockConstraints">
             <ul>
                 <ng-container *ngIf="newOffer?.constraints?.length > 0 ; else elseBlockOffer">
@@ -28,13 +28,13 @@
         </ng-container>
         <ng-template #elseBlockConstraints>
 
-            <div class="form-check" *ngFor="let item of constraintOptions">
-                <input class="form-check-input mt-1" type="checkbox" [(ngModel)]="item.isChecked"
-                    (change)="changeSelection()" [disabled]="(offer.offer_Status == 'Accepted')"
-                    [name]="item.constraint" [id]="'constraint'+item.id">
-                <label>
-                    {{item.buyLabel}}
-                </label>
+            <div class="checkbox-container ">
+                <div class="form-check" *ngFor="let item of constraintOptions">
+                    <input class="form-check-input mt-1" type="checkbox" [(ngModel)]="item.isChecked"
+                        (change)="changeSelection()" [disabled]="(offer.offer_Status == 'Accepted')"
+                        [name]="item.constraint" [id]="'constraint'+item.id">
+                    <label for="'constraint'+item.id">{{item.buyLabel}}</label>
+                </div>
             </div>
         </ng-template>
     </div>

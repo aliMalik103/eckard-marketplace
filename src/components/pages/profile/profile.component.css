@@ -19,3 +19,12 @@
     text-decoration: none;
     color: #0a2b3c;
 }
+
+.fa-eye,
+.fa-eye-slash {
+    position: relative;
+    cursor: pointer;
+}
+.w-20{
+    width: 23%;
+}

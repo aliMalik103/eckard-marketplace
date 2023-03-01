@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { MyOffersService } from 'src/components/services/my-offers.service';
 
 
 
@@ -22,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
         BrowserModule,
         NgxSpinnerModule
     ],
-    providers: [LoginService,ToastrService],
+    providers: [LoginService,ToastrService, MyOffersService],
     exports: []
 })
 export class ProfileModule { }

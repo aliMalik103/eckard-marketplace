@@ -6,6 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { EckardTransactionsMethodsDetailsComponent } from './eckard-transactions-methods-details/eckard-transactions-methods-details.component';
+import { LoginService } from 'src/components/services/login.service';
 
 
 
@@ -18,6 +19,7 @@ import { EckardTransactionsMethodsDetailsComponent } from './eckard-transactions
     NgxSpinnerModule,
     NgxPaginationModule,
   ],
-  exports:[EckardTransactionsMethodsComponent]
+  providers: [LoginService],
+  exports: [EckardTransactionsMethodsComponent]
 })
 export class EckardTransactionsMethodsModule { }

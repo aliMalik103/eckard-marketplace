@@ -33,14 +33,16 @@
 
     </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th *ngFor="let item of transactionsColumns ; index as i " class="text-secondary ">{{item}}</th>
-            </tr>
-        </thead>
-        <tbody class="my-listing-table-body text-secondary" id="accordion">
-            <ng-container *ngFor=" let transaction of transactionsData | paginate
+    <div class="table-responsive">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th *ngFor="let item of transactionsColumns ; index as i " class="text-secondary ">{{item}}</th>
+                </tr>
+            </thead>
+            <tbody class="my-listing-table-body text-secondary" id="accordion">
+                <ng-container *ngFor=" let transaction of transactionsData | paginate
             : {
                 itemsPerPage: tableSize,
                 currentPage: page,
@@ -48,33 +50,34 @@
               };
         let i = index">
 
-                <tr>
-                    <td>C7RQ9</td>
-                    <td>SEL{{transaction?.listing?.account?.contact?.firstName | uppercase}}</td>
-                    <td>BUY{{transaction?.offer?.contact?.firstName | uppercase}}</td>
-                    <td>{{transaction?.listing?.project?.projectId}}</td>
-                    <td>{{transaction?.nma}}</td>
-                    <td>{{transaction?.status?.statusLabel}}</td>
-                    <td>
-                        <ng-container *ngIf="transaction?.status?.status == 'Pending PSA' ">
-                            <span class="transactions-actions pe-auto"> Confirm PSA Complete</span>
-                        </ng-container>
-                        <ng-container *ngIf="transaction?.status?.status == 'Pending Asset Transfer' ">
-                            <span class="transactions-actions pe-auto"> Complete Asset Transfer</span>
-                        </ng-container>
-                        <ng-container *ngIf="transaction?.status?.status == 'Fund Transfer Complete' ">
-                            <span class="transactions-actions pe-auto"> Initial Asset Transfer</span> | <span
-                                class="transactions-actions pe-auto">Complete
-                                Asset Transfer</span>
-                        </ng-container>
-                    </td>
-                </tr>
-            </ng-container>
+                    <tr>
+                        <td>C7RQ9</td>
+                        <td>SEL{{transaction?.listing?.account?.contact?.firstName | uppercase}}</td>
+                        <td>BUY{{transaction?.offer?.contact?.firstName | uppercase}}</td>
+                        <td>{{transaction?.listing?.project?.projectId}}</td>
+                        <td>{{transaction?.nma}}</td>
+                        <td>{{transaction?.status?.statusLabel}}</td>
+                        <td>
+                            <ng-container *ngIf="transaction?.status?.status == 'Pending PSA' ">
+                                <span class="transactions-actions pe-auto"> Confirm PSA Complete</span>
+                            </ng-container>
+                            <ng-container *ngIf="transaction?.status?.status == 'Pending Asset Transfer' ">
+                                <span class="transactions-actions pe-auto"> Complete Asset Transfer</span>
+                            </ng-container>
+                            <ng-container *ngIf="transaction?.status?.status == 'Fund Transfer Complete' ">
+                                <span class="transactions-actions pe-auto"> Initial Asset Transfer</span> | <span
+                                    class="transactions-actions pe-auto">Complete
+                                    Asset Transfer</span>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-container>
 
 
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
     <div class="d-flex justify-content-center">
         <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)"
             *ngIf="handleLength(transactionsData)">

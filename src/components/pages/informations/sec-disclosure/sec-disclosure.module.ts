@@ -4,6 +4,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { SECDisclosureComponent } from './sec-disclosure.component';
+import { LoginService } from 'src/components/services/login.service';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,7 @@ import { SECDisclosureComponent } from './sec-disclosure.component';
         BrowserModule,
 
     ],
-    providers: [],
+    providers: [LoginService],
     exports: [SECDisclosureComponent]
 })
 export class SECDisclosureModule { }

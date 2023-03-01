@@ -88,7 +88,6 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.methods.country = 'USA'
     this.handleOfferDealMessages()
     this.profileDetails()
     this.handleGetUserAccounts()
@@ -105,6 +104,9 @@ export class ProfileComponent implements OnInit {
   clickAddAccount() {
 
     this.addAccount = !this.addAccount;
+    this.methods = {};
+    this.selectAccount = ''
+    this.selectedType = ''
   }
 
   handleCountryChange(item: any) {
@@ -121,15 +123,27 @@ export class ProfileComponent implements OnInit {
   getAccountMethods() {
     const transferMethods: any = [];
     this.loginService.getAccountMethods(this.loginService.user.id).subscribe((response: any) => {
-     
+
       response.map((res: any) => {
 
         let methodsInfo: any = {};
         if (res.type == "Check") {
           methodsInfo['Eckard Account'] = res.account.accountName;
           methodsInfo['Account Holder'] = res.json_fields['Recipient'];
-          methodsInfo['Mail To'] = res.json_fields['mailto'] + ',' + res.json_fields['Street'] + ',' + res.json_fields['City'] + ',' + res.json_fields['country'];
-
+          let mailTo = '';
+          if (res.json_fields['mailto']) {
+            mailTo += res.json_fields['mailto'] + ', ';
+          }
+          if (res.json_fields['Street']) {
+            mailTo += res.json_fields['Street'] + ', ';
+          }
+          if (res.json_fields['City']) {
+            mailTo += res.json_fields['City'] + ', ';
+          }
+          if (res.json_fields['country']) {
+            mailTo += res.json_fields['country'];
+          }
+          methodsInfo['Mail To'] = mailTo;
         }
         else {
           methodsInfo['Eckard Account'] = res.account.accountName;
@@ -213,20 +227,65 @@ export class ProfileComponent implements OnInit {
   }
 
   handleChange(value: string) {
+    this.methods = {};
     switch (value) {
       case 'account':
         this.methods.account_id = this.selectAccount;
+        this.methods.Recipient = ''
+        this.methods.Bank_Name = ''
+        this.methods.Account_Number = ''
+        this.methods.Routing_Number = ''
 
         // this.getAccountMethods()
 
         break;
       case 'type':
         this.methods.type = this.selectedType
+        this.methods.Recipient = ''
+        this.methods.mailto = ''
+        this.methods.Street = ''
+        this.methods.City = ''
+        this.methods.State = ''
+        this.methods.country = 'USA'
+        this.methods.Zip = ''
         break;
       default:
         return
     }
   }
+
+  handleFieldsAvailable() {
+    if (this.selectedType == 'Wire') {
+
+      if (this.methods.account_id &&
+        this.methods.Recipient &&
+        this.methods.Bank_Name &&
+        this.methods.Account_Number &&
+        this.methods.Routing_Number) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    else if (this.selectedType == 'Check') {
+      if (
+        this.methods.Recipient &&
+        this.methods.type &&
+        this.methods.mailto &&
+        this.methods.Street &&
+        this.methods.City &&
+        this.methods.State &&
+        this.methods.country &&
+        this.methods.Zip) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
+    return false
+  }
+
 
   profileDetails() {
     this.spinner.show()
@@ -305,13 +364,13 @@ export class ProfileComponent implements OnInit {
   handleAlertMessage(type: any) {
     console.log(this.offerConfirmMessages)
 
-    if(type === 'Add'){
+    if (type === 'Add') {
       let message = this.offerConfirmMessages?.filter(
         (item: any) => item.key == 'Add FTM'
       )
       this.offerDisclaimer = message[0]
     }
-    if(type === 'Delete'){
+    if (type === 'Delete') {
       let message = this.offerConfirmMessages?.filter(
         (item: any) => item.key == 'Delete FTM'
       )

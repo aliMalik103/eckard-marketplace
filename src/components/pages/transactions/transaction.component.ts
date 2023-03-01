@@ -145,8 +145,20 @@ export class TransactionsComponent implements OnInit {
           if (res.type == "Check") {
             methodsInfo['Eckard Account'] = res.account.accountName;
             methodsInfo['Account Holder'] = res.json_fields['Recipient'];
-            methodsInfo['Mail To'] = res.json_fields['mailto'] + ',' + res.json_fields['Street'] + ',' + res.json_fields['City'] + ',' + res.json_fields['country'];
-
+            let mailTo = '';
+            if (res.json_fields['mailto']) {
+              mailTo += res.json_fields['mailto'] + ', ';
+            }
+            if (res.json_fields['Street']) {
+              mailTo += res.json_fields['Street'] + ', ';
+            }
+            if (res.json_fields['City']) {
+              mailTo += res.json_fields['City'] + ', ';
+            }
+            if (res.json_fields['country']) {
+              mailTo += res.json_fields['country'];
+            }
+            methodsInfo['Mail To'] = mailTo;
           }
           else {
             methodsInfo['Eckard Account'] = res.account.accountName;

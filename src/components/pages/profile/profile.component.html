@@ -320,11 +320,17 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 mt-4" *ngIf="addAccount && selectAccount && selectedType">
-          <div class="form-check p-0">
+        <div class="col-md-12 mt-4 d-flex gap-4">
+          <div class="form-check p-0" *ngIf="addAccount && selectAccount && selectedType && handleFieldsAvailable()">
             <button class="btn btn-primary profile-button" type="button" [attr.data-bs-target]="'#exampleModal'"
               data-bs-toggle="modal" (click)="handleAlertMessage('Add')">
               Add Transfer Method
+            </button>
+          </div>
+          <div>
+
+            <button type="submit" class="btn btn-outline-dark cancel-button  mb-2 fw-bold" (click)="clickAddAccount()">
+              Close
             </button>
           </div>
         </div>

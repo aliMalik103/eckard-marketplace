@@ -122,8 +122,8 @@ export class AllActiveListingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.loginService.user.status != 'active') {
-      this.router.navigate(['/market-place'])
+    if (this.loginService?.user?.status != "active" || this.loginService?.user?.role?.name == 'Eckard') {
+      this.router.navigate(['/market-place']);
       return
     }
     if (this.activeRoute.snapshot?.routeConfig?.path == 'direct-sale/:id') {
@@ -229,10 +229,10 @@ export class AllActiveListingComponent implements OnInit {
       this.copymyOffers.filter((offer: any) => {
         var filtermapped: any = false;
         if (offer.auctionType !== 'Direct Sale' && !offer.isAuctionEnd && !offer.isListingStart) {
-          const project=this.selectedItems.length > 0 ? this.selectedItems.find((acFilter: any) => acFilter.item_id == offer.projectId) : true;
-          const auction=this.auctionFiltersSelected.length > 0 ? this.auctionFiltersSelected.find((acFilter: any) => acFilter.item_id == offer.auctionType) : true;
-          const min_ask=this.minAskFiltersSelected.length > 0 ? this.minAskFiltersSelected.find((acFilter: any) => acFilter.item_id == offer.minimumAsk) : true;
-          if (project && auction && min_ask){
+          const project = this.selectedItems.length > 0 ? this.selectedItems.find((acFilter: any) => acFilter.item_id == offer.projectId) : true;
+          const auction = this.auctionFiltersSelected.length > 0 ? this.auctionFiltersSelected.find((acFilter: any) => acFilter.item_id == offer.auctionType) : true;
+          const min_ask = this.minAskFiltersSelected.length > 0 ? this.minAskFiltersSelected.find((acFilter: any) => acFilter.item_id == offer.minimumAsk) : true;
+          if (project && auction && min_ask) {
             filtermapped = true;
           }
           else {

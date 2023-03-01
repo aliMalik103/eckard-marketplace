@@ -32,103 +32,103 @@ export class EckardTransactionsComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.show()
 
-    if (this.loginService.user.status != 'active') {
+    if (this.loginService?.user?.status != 'active' || this.loginService?.user?.role?.name != 'Eckard') {
       this.router.navigate(['/market-place'])
-      return
-    }
+    return
+  }
     let routePath = this.activeRoute.snapshot?.routeConfig?.path
-    switch (routePath) {
-      case 'eckard-pending-transactions':
-        this.transactionStatus = 'pending-transactions'
-        this.handleGetEckardTransactions('Pending PSA')
-        break
-      case 'eckard-completed-transactions':
-        this.transactionStatus = 'completed-transactions'
-        this.handleGetEckardTransactions('Fund Transfer Complete')
-        break
-      case 'eckard-pending-asset':
-        this.transactionStatus = 'pending-asset'
-        this.handleGetEckardTransactions('Pending Asset Transfer')
-        break
+switch (routePath) {
+  case 'eckard-pending-transactions':
+    this.transactionStatus = 'pending-transactions'
+    this.handleGetEckardTransactions('Pending PSA')
+    break
+  case 'eckard-completed-transactions':
+    this.transactionStatus = 'completed-transactions'
+    this.handleGetEckardTransactions('Fund Transfer Complete')
+    break
+  case 'eckard-pending-asset':
+    this.transactionStatus = 'pending-asset'
+    this.handleGetEckardTransactions('Pending Asset Transfer')
+    break
 
-      default:
-        return
-    }
+  default:
+    return
+}
   }
 
-  toggleTransactions(type: any) {
-    this.spinner.show()
-    this.transactionStatus = type
-    switch (this.transactionStatus) {
-      case 'pending-transactions':
-        this.handleGetEckardTransactions('Pending PSA')
-        break
-      case 'completed-transactions':
-        this.handleGetEckardTransactions('Fund Transfer Complete')
+toggleTransactions(type: any) {
+  this.spinner.show()
+  this.transactionStatus = type
+  switch (this.transactionStatus) {
+    case 'pending-transactions':
+      this.handleGetEckardTransactions('Pending PSA')
+      break
+    case 'completed-transactions':
+      this.handleGetEckardTransactions('Fund Transfer Complete')
 
-        break
-      case 'pending-asset':
-        this.handleGetEckardTransactions('Pending Asset Transfer')
+      break
+    case 'pending-asset':
+      this.handleGetEckardTransactions('Pending Asset Transfer')
 
-        break
+      break
 
-      default:
-        return
-    }
+    default:
+      return
   }
+}
 
-  handleGetEckardTransactions(status: string) {
+handleGetEckardTransactions(status: string) {
 
-    this.myListingsService.handleGetEckardTransactions(status).subscribe(
-      (response) => {
-        this.spinner.hide()
-        this.transactionsData = response
-        this.copyTransactionsData = response
-        this.handleChange()
+  this.myListingsService.handleGetEckardTransactions(status).subscribe(
+    (response) => {
+      this.spinner.hide()
+      this.transactionsData = response
+      this.copyTransactionsData = response
+      this.handleChange()
 
-      },
-      (error: any) => {
-        this.spinner.hide()
-        console.log("Error getting  status", error)
-      },
-      () => console.log("Done getting  status "));
-  }
+    },
+    (error: any) => {
+      this.spinner.hide()
+      console.log("Error getting  status", error)
+    },
+    () => console.log("Done getting  status "));
+}
 
-  onTableDataChange(event: any) {
-    this.page = event
-  }
+onTableDataChange(event: any) {
+  this.page = event
+}
 
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value
+onTableSizeChange(event: any): void {
+  this.tableSize = event.target.value
     this.page = 1
+}
+
+handleChange() {
+  if (!this.searchParam) {
+    this.transactionsData = this.copyTransactionsData
+    return;
   }
 
-  handleChange() {
-    if (!this.searchParam) {
-      this.transactionsData = this.copyTransactionsData
-      return;
-    }
+  const filteredData = this.copyTransactionsData?.filter((item: any) => {
+    const searchParamLower = this.searchParam.toLowerCase(); // convert searchParam to lowercase
 
-    const filteredData = this.copyTransactionsData?.filter((item: any) => {
-      const searchParamLower = this.searchParam.toLowerCase(); // convert searchParam to lowercase
+    const itemListingAccountContactFirstName = item?.listing?.account?.contact?.firstName?.toLowerCase();
+    const itemOfferContactFirstName = item?.offer?.contact?.firstName?.toLowerCase();
+    const itemListingProjectProjectId = item?.listing?.project?.projectId?.toLowerCase();
 
-      const itemListingAccountContactFirstName = item?.listing?.account?.contact?.firstName?.toLowerCase();
-      const itemOfferContactFirstName = item?.offer?.contact?.firstName?.toLowerCase();
-      const itemListingProjectProjectId = item?.listing?.project?.projectId?.toLowerCase();
+    return itemListingAccountContactFirstName.includes(searchParamLower)
+      || itemOfferContactFirstName.includes(searchParamLower)
+      || itemListingProjectProjectId.includes(searchParamLower);
+  });
 
-      return itemListingAccountContactFirstName.includes(searchParamLower)
-        || itemOfferContactFirstName.includes(searchParamLower)
-        || itemListingProjectProjectId.includes(searchParamLower);
-    });
+  this.transactionsData = filteredData
+}
 
-    this.transactionsData = filteredData
+handleLength(array: any) {
+  if (array && array.length > 0) {
+    return true
   }
-
-  handleLength(array: any) {
-    if (array && array.length > 0) {
-      return true
-    }
-    return false
-  }
+  return false
+}
 
 }

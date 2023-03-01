@@ -66,7 +66,7 @@ export class MyListingComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = this.loginService.user.id
-    if (this.loginService.user.status != "active") {
+    if (this.loginService?.user?.status != "active" || this.loginService?.user?.role?.name == 'Eckard') {
       this.router.navigate(['/market-place']);
       return
 

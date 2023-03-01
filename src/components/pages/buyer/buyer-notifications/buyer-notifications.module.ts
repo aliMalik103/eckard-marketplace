@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { LoginService } from 'src/components/services/login.service';
 import { BuyerNotificationsComponent } from './buyer-notifications.component';
 
 @NgModule({
@@ -11,7 +12,7 @@ import { BuyerNotificationsComponent } from './buyer-notifications.component';
         AppRoutingModule,
         FormsModule,
     ],
-    providers: [],
+    providers: [LoginService],
     exports: [BuyerNotificationsComponent]
 })
 export class BuyerNotificationsModule { }

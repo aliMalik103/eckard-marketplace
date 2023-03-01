@@ -55,7 +55,7 @@ export class MyBidsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.loginService.user.status != "active") {
+    if (this.loginService?.user?.status != "active" || this.loginService?.user?.role?.name == 'Eckard') {
       this.router.navigate(['/market-place']);
       return
 
@@ -102,13 +102,13 @@ export class MyBidsComponent implements OnInit {
 
     this.addNewListingService.handleConstraint().subscribe(
       (response) => {
-        const buyOptions:any=[];
+        const buyOptions: any = [];
         response?.map(item => {
-          if(item.buyLabel){
-          buyOptions.push( { ...item, isChecked: false });
+          if (item.buyLabel) {
+            buyOptions.push({ ...item, isChecked: false });
           }
         });
-        this.constraintOptions=buyOptions;
+        this.constraintOptions = buyOptions;
       },
       (error: any) => {
 

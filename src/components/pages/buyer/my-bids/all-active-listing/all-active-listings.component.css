@@ -43,3 +43,7 @@
 .list-underline {
     border-bottom: 2px solid rgb(11, 11, 85);
 }
+
+.shadow-lg {
+    box-shadow: 0rem 0rem 3rem rgba(0, 0, 0, 0.6) !important;
+}

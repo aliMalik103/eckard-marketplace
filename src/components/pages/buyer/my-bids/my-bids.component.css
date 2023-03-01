@@ -35,3 +35,7 @@
 .nav-link {
     color: black;
 }
+
+.shadow-lg {
+    box-shadow: 0rem 0rem 3rem rgba(0, 0, 0, 0.6) !important;
+}

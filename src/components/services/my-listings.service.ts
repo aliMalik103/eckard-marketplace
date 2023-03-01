@@ -243,7 +243,7 @@ export class MyListingsService {
 
   handleGetEckardTransactions(status: string) {
     const params = new HttpParams().set('statusName', status);
-    const res = this.http.get(`${environment.API_BASE_URL}/transaction/status`, { params });
+    const res = this.http.get(`${environment.API_BASE_URL}/transaction/status`, { params })
     return res;
   }
 

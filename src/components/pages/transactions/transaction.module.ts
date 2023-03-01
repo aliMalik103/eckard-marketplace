@@ -6,6 +6,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
+import { MyOffersService } from 'src/components/services/my-offers.service';
 import { ListingDetailsModule } from '../buyer/my-bids/listing-details/listing-details.module';
 import { MyOffersDetailsModule } from '../buyer/my-bids/my-offers/my-offers.module';
 import { AddNewListingService } from '../seller/my-listing/add-new-listing/add-new-listing.service';
@@ -22,7 +23,7 @@ import { TransactionsComponent } from './transaction.component';
         MyOffersDetailsModule,
         NgxSpinnerModule
     ],
-    providers: [MyListingsService, AddNewListingService, LoginService],
+    providers: [MyListingsService, AddNewListingService, LoginService,MyOffersService],
     exports: [TransactionsComponent]
 })
 export class TransactionsModule { }

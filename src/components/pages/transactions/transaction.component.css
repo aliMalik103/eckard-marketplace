@@ -15,14 +15,24 @@
 .list-underline {
     border-bottom: 2px solid rgb(11, 11, 85);
 }
+
 .completed {
     background-color: #4CAF50;
 }
-.progress-border{
-    border : 1px solid #82828263;
+
+.progress-border {
+    border: 1px solid #82828263;
 }
 
 .offer-td {
     border-bottom: 2px solid #0a2b3c;
     color: #0a2b3c;
+}
+
+.w-20 {
+    width: 23%;
+}
+
+.shadow-lg {
+    box-shadow: 0rem 0rem 3rem rgba(0, 0, 0, 0.6) !important;
 }

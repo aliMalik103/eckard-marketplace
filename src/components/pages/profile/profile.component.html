@@ -96,20 +96,18 @@
     </div>
 
     <div class="row">
-      <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
-        <div class="col-md-3 mt-2 text-start" style="font-size: medium; font-weight: bold">
-          Fund Transfer Methods (FTM)
+      <div class="row mt-2">
+        <div class="col-md-3  text-start fw-bold" style="font-size: medium;">
+          Fund Transfer Methods
         </div>
-        <div (click)="clickShowExisting()" class="col-md-3 mt-2 text-start" style="text-decoration: underline">
-          {{ showExisting ? 'Hide' : 'Show' }} Existing FTM
-        </div>
-        <div class="col-md-3 mt-2 text-start" (click)="clickAddAccount()" style="text-decoration: underline">
+
+        <div class="col-md-3  text-start p-0 pe-auto" (click)="clickAddAccount()" style="text-decoration: underline">
           Add New Transfer Method
         </div>
       </div>
 
       <div *ngIf="addAccount">
-        <div class="row">
+        <div class="row mt-2">
           <div class="col-md-6">
             <label for="account" class="form-label">Account <span class="text-danger">*</span></label>
             <select id="account" class="form-select" [(ngModel)]="selectAccount"
@@ -214,19 +212,21 @@
           </div>
         </div>
 
-        <div class="row" *ngIf="selectedType === 'Check'">
-          <div class="col-md-6 mt-2 text-start">
-            <label class="labels">Account Holder </label><input type="text" class="form-control" id="recipient"
-              name="recipient" [(ngModel)]="methods.Recipient" #recipient="ngModel" required [ngClass]="{
+        <div class="row " *ngIf="selectedType === 'Check'">
+          <div class="row">
+            <div class="col-md-6 mt-2 text-start">
+              <label class="labels">Account Holder </label><input type="text" class="form-control" id="recipient"
+                name="recipient" [(ngModel)]="methods.Recipient" #recipient="ngModel" required [ngClass]="{
                 'border border-danger':
                   recipient.invalid && (recipient.dirty || recipient.touched)
               }" />
-            <div *ngIf="
+              <div *ngIf="
                 recipient.invalid &&
                 (recipient.dirty || recipient.touched) &&
                 recipient.errors
               " class="text-danger rounded px-4 error-message">
-              Please enter Recipient
+                Please enter Recipient
+              </div>
             </div>
           </div>
           <div class="col-md-6 mt-2 text-start">
@@ -245,7 +245,7 @@
           </div>
           <div class="col-md-6 mt-2 text-start">
             <label class="labels">Street </label><input type="text" class="form-control" id="streat" name="streat"
-              [(ngModel)]="methods.Streat" #streat="ngModel" required [ngClass]="{
+              [(ngModel)]="methods.Street" #streat="ngModel" required [ngClass]="{
                 'border border-danger':
                   streat.invalid && (streat.dirty || streat.touched)
               }" />
@@ -297,9 +297,6 @@
               Please enter zip
             </div>
           </div>
-
-
-
           <div class="col-md-6 mt-2 text-start">
             <label class="labels">Country </label>
 
@@ -323,27 +320,26 @@
             </div>
           </div>
         </div>
-
-        <div class="col-md-3 mt-2 text-start" *ngIf="addAccount && selectAccount && selectedType">
-          <button class="btn btn-primary profile-button" type="button" [attr.data-bs-target]="'#exampleModal'"
-            data-bs-toggle="modal">
-            submit
-          </button>
+        <div class="col-md-12 mt-4" *ngIf="addAccount && selectAccount && selectedType">
+          <div class="form-check p-0">
+            <button class="btn btn-primary profile-button" type="button" [attr.data-bs-target]="'#exampleModal'"
+              data-bs-toggle="modal" (click)="handleAlertMessage('Add')">
+              Add Transfer Method
+            </button>
+          </div>
         </div>
       </div>
       <ng-container>
-        <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false"
-          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">
-                  Transaction Method
+                <h5 class="modal-title" id="staticBackdropLabel" [innerHTML]="offerDisclaimer?.value1">
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
-                Are you sure to add transfer method for this account?
+              <div class="modal-body" [innerHTML]="offerDisclaimer?.value2">
               </div>
               <div class="modal-footer">
                 <div class="mr-auto">
@@ -360,27 +356,48 @@
           </div>
         </div>
       </ng-container>
-      <div *ngIf="showExisting" style="margin-top: 10px;">
-        <div *ngFor="let k of objectKeys(accountsMethods)" class="mt-2">
-          {{ k }} ({{ accountsMethods[k].length }})
-          <div style="border-bottom-width: 1px; border-bottom-style: solid;border-bottom-color: lightgray;">
-            <table class="table table-borderless">
-              <ng-container *ngFor="let list of accountsMethods[k]; let i = index">
+      <div *ngFor="let k of objectKeys(accountsMethods)" class="mt-3">
+        {{ k }}
+        <!-- {{ k }} ({{ accountsMethods[k].length }}) -->
+        <div style="border-bottom-width: 1px; border-bottom-style: solid;border-bottom-color: lightgray;">
+          <table class="table table-borderless">
+            <ng-container *ngFor="let list of accountsMethods[k]; let i = index">
 
-                <thead *ngIf="i==0">
-                  <tr>
-                    <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">{{key}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">{{ list.json_fields[key] }}</td>
-                  </tr>
-
-                </tbody>
-              </ng-container>
-            </table>
-          </div>
+              <thead *ngIf="i==0">
+                <tr>
+                  <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)"
+                    [ngClass]="{'w-20':key=='Eckard Account' || key == 'Account Holder'}">{{key}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">
+                    <ng-container *ngIf="key === 'Account Number' || key === 'ABA Routing Number'">
+                      <ng-container
+                        *ngIf="showData[i] && key === 'Account Number' || showData1[i] && key === 'ABA Routing Number'">
+                        {{ list.json_fields[key] }}
+                      </ng-container>
+                      <ng-container
+                        *ngIf="!showData[i] && key === 'Account Number' || !showData1[i] && key === 'ABA Routing Number'">
+                        ..{{ list.json_fields[key].toString().slice(-4) }}
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'">
+                      {{ list.json_fields[key] }}
+                    </ng-container>
+                    <ng-container *ngIf="key === 'Account Number'">
+                      <i class="fa fa-email px-4" [ngClass]="showData[i] ? 'fa-eye-slash' : 'fa-eye'"
+                        (click)="toggleData(i)"></i>
+                    </ng-container>
+                    <ng-container *ngIf="key === 'ABA Routing Number'">
+                      <i class="fa fa-email px-4" [ngClass]="showData1[i] ? 'fa-eye-slash' : 'fa-eye'"
+                        (click)="toggleData1(i)"></i>
+                    </ng-container>
+                  </td>
+                </tr>
+              </tbody>
+            </ng-container>
+          </table>
         </div>
       </div>
     </div>

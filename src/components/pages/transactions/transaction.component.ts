@@ -3,6 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Status } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
+import { MyOffersService } from 'src/components/services/my-offers.service';
 import { AddNewListingService } from '../seller/my-listing/add-new-listing/add-new-listing.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class TransactionsComponent implements OnInit {
     "Recipient": "Account Holder",
     "Routing_Number": "Routing Number",
     "City": "City",
-    "mailinto":"Mailing TO",
+    "mailinto": "Mailing TO",
     "country": "Country",
     "State": "State",
     "Streat": "Streat",
@@ -42,22 +43,30 @@ export class TransactionsComponent implements OnInit {
     "Method Information",
 
   ]
-  methodAssocietedAlready=false
+  methodAssocietedAlready = false
   constraintOptions!: any[]
   statusOptions!: Status[]
   accountsMethods: any = []
   pendingsTransactions!: any
+  showData!: any
+  showData1!: any
+  offerConfirmMessages!: any
+  offerDisclaimer!: any
 
 
 
-  constructor(private addNewListingService: AddNewListingService,
+  constructor(private addNewListingService: AddNewListingService, private myOffersService: MyOffersService,
     private myListingsService: MyListingsService, private loginService: LoginService, private spinner: NgxSpinnerService
-  ) { }
+  ) {
+    this.showData = []
+    this.showData1 = []
+  }
 
   ngOnInit(): void {
     this.updateTransactionColumns();
     this.handleConstraint()
     this.handleGetStatus()
+    this.handleOfferDealMessages()
   }
 
   updateTransactionColumns() {
@@ -81,14 +90,14 @@ export class TransactionsComponent implements OnInit {
     this.spinner.show();
 
 
-//     this.pendingsTransactions.map((res: any) => {
-
-    
-// const hasId= res.fund_transfer_method.filter((re:any)=>parseInt(item.id)==parseInt(re.id));
-// alert(JSON.stringify(hasId))
+    //     this.pendingsTransactions.map((res: any) => {
 
 
-//     })
+    // const hasId= res.fund_transfer_method.filter((re:any)=>parseInt(item.id)==parseInt(re.id));
+    // alert(JSON.stringify(hasId))
+
+
+    //     })
 
     this.loginService.associateTransferMethod(
 
@@ -102,24 +111,29 @@ export class TransactionsComponent implements OnInit {
       this.pendingsTransactions.map((res: any) => {
         if (res.id == item.transactionId) {
           res.fund_transfer_method.push({ ...response, id: response.fund_transfer_method })
+          this.clickTransaction(res)
         }
       })
+
       this.spinner.hide()
     })
 
 
   }
 
-  groupBy = function(xs:any, key:any) {
-    return xs.reduce(function(rv:any, x:any) {
+  groupBy = function (xs: any, key: any) {
+    return xs.reduce(function (rv: any, x: any) {
       (rv[x[key]] = rv[x[key]] || []).push(x);
       return rv;
     }, {});
   };
 
   clickTransaction(transaction: any) {
-    this.methodAssocietedAlready=false;
+    this.methodAssocietedAlready = false;
     const transferMethods: any = [];
+    const transferMethodsCopy: any = [];
+
+
 
     if (this.transactionStatus === 'Sell') {
       this.spinner.show()
@@ -127,33 +141,31 @@ export class TransactionsComponent implements OnInit {
         response.map((res: any) => {
           res.transactionId = transaction.id;
           const hasMethodAssociated = transaction.fund_transfer_method.filter((account: any) => (parseInt(account.id) == parseInt(res.id)))
-
-          if (hasMethodAssociated.length > 0) {
-          this.methodAssocietedAlready=true
-            res.current = true
-          }
-
           let methodsInfo: any = {};
           if (res.type == "Check") {
             methodsInfo['Eckard Account'] = res.account.accountName;
             methodsInfo['Account Holder'] = res.json_fields['Recipient'];
-            methodsInfo['Mail To'] = res.json_fields['mailto'];
-            methodsInfo['Country'] = res.json_fields['country'];
-            methodsInfo['Streat'] = res.json_fields['Streat'];
-            methodsInfo['City'] = res.json_fields['City'];
-            methodsInfo['State'] = res.json_fields['State'];
-            methodsInfo['Zip'] = res.json_fields['Zip'];
+            methodsInfo['Mail To'] = res.json_fields['mailto'] + ',' + res.json_fields['Street'] + ',' + res.json_fields['City'] + ',' + res.json_fields['country'];
+
           }
           else {
             methodsInfo['Eckard Account'] = res.account.accountName;
             methodsInfo['Account Holder'] = res.json_fields['Recipient'];
-            methodsInfo['Bank Name'] = res.json_fields['Bank_Name'];
             methodsInfo['Account Number'] = res.json_fields['Account_Number'];
+            methodsInfo['Bank Name'] = res.json_fields['Bank_Name'];
             methodsInfo['ABA Routing Number'] = res.json_fields['Routing_Number'];
           }
 
+          if (hasMethodAssociated.length > 0) {
+            this.methodAssocietedAlready = true
+            res.current = true
+            transferMethodsCopy.push({
+              ...res,
+              json_fields: methodsInfo
 
+            })
 
+          }
           transferMethods.push({
             ...res,
             json_fields: methodsInfo
@@ -163,8 +175,8 @@ export class TransactionsComponent implements OnInit {
 
         })
         this.spinner.hide();
-        const groupByType=this.groupBy(transferMethods,"type");
-    
+        const groupByType = transferMethodsCopy?.length > 0 ? this.groupBy(transferMethodsCopy, "type") : this.groupBy(transferMethods, "type")
+
         this.accountsMethods = groupByType;
       })
     }
@@ -176,6 +188,8 @@ export class TransactionsComponent implements OnInit {
 
         this.spinner.hide()
         this.pendingsTransactions = response
+
+        console.log(this.pendingsTransactions)
 
       },
       (error: any) => {
@@ -287,4 +301,39 @@ export class TransactionsComponent implements OnInit {
 
   handleUpdateOffers() {
   }
+
+  toggleData(index: number) {
+    // Toggle the value of the showData[index] variable
+    this.showData[index] = !this.showData[index];
+  }
+
+
+  toggleData1(index: number) {
+    // Toggle the value of the showData[index] variable
+    this.showData1[index] = !this.showData1[index];
+  }
+
+  handleOfferDealMessages() {
+    this.myOffersService.handleOfferDealMessages().subscribe(
+      (response) => {
+        this.offerConfirmMessages = response
+
+      },
+      (error: any) => {
+        console.error("Error getting key vlaue  : ", error);
+      },
+      () => console.log("Done getting key vlaue .")
+    )
+  }
+
+  handleAlertMessage() {
+    console.log(this.offerConfirmMessages)
+
+    let message = this.offerConfirmMessages?.filter(
+      (item: any) => item.key == 'Select FTM'
+    )
+    this.offerDisclaimer = message[0]
+
+  }
+
 }

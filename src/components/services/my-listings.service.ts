@@ -247,6 +247,14 @@ export class MyListingsService {
     return res;
   }
 
+  handleUpdateEckardTransactions(transaction: any) {
+    const body = {
+      status: transaction.status.id
+    }
+    const res = this.http.patch(`${environment.API_BASE_URL}/transaction/${transaction.id}/`, body)
+    return res;
+  }
+
   handleDeleteFTM(id: any, flag: any) {
     const params = new HttpParams().set('forceDelete', flag);
     const res = this.http.delete(`${environment.API_BASE_URL}/fund_transfer_method/${id}/`, { params })

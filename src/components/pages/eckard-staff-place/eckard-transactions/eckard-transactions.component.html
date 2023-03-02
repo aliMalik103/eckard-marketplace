@@ -52,23 +52,23 @@
 
                     <tr>
                         <td>{{transaction.trnxId}}</td>
-                        <td>SEL{{transaction?.listing?.account?.contact?.firstName | uppercase}}</td>
-                        <td>BUY{{transaction?.offer?.contact?.firstName | uppercase}}</td>
+                        <td>{{transaction?.listing?.account?.contact?.mpName | uppercase}}</td>
+                        <td>{{transaction?.offer?.contact?.mpName | uppercase}}</td>
                         <td>{{transaction?.listing?.project?.projectId}}</td>
                         <td>{{transaction?.nma}}</td>
                         <td>{{transaction?.status?.statusLabel}}</td>
                         <td>
                             <ng-container *ngIf="transaction?.status?.status == 'Pending PSA' ">
-                                <span class="transactions-actions pe-auto"> Confirm PSA Complete</span>
+                                <span class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Pending PSA')"> Confirm PSA Complete</span>
                             </ng-container>
                             <ng-container *ngIf="transaction?.status?.status == 'Pending Asset Transfer' ">
-                                <span class="transactions-actions pe-auto"> Complete Asset Transfer</span>
+                                <span class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Pending Asset Transfer')"> Complete Asset Transfer</span>
                             </ng-container>
-                            <ng-container *ngIf="transaction?.status?.status == 'Fund Transfer Complete' ">
-                                <span class="transactions-actions pe-auto"> Initial Asset Transfer</span> | <span
-                                    class="transactions-actions pe-auto">Complete
+                            <ng-container *ngIf="transaction?.status?.status == 'Fund Transfer Confirmed' ">
+                                <span class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Fund Transfer Confirmed')"> Initial Asset Transfer</span> | <span
+                                    class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Pending Asset Transfer')">Complete
                                     Asset Transfer</span>
-                            </ng-container>
+                            </ng-container>	
                         </td>
                     </tr>
                 </ng-container>

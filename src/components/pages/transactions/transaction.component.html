@@ -74,7 +74,7 @@
               <ng-container *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' ; else elseBuyerActions">
                 <span class="pe-auto transactions-actions"
                   (click)="handleUpdateEckardTransactions(transaction,'PSA Fully Executed')">
-                  Initiate Funds Transfer</span>
+                  Confirm Funds Transferred</span>
               </ng-container>
 
               <ng-template #elseBuyerActions>
@@ -87,8 +87,8 @@
               <ng-container
                 *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' || transaction.status.statusLabel == 'Fund Transfer Initiated' ;else  elseSellerBlockAction">
                 <span span class="pe-auto  transactions-actions"
-                  (click)="handleUpdateEckardTransactions(transaction,'Fund Transfer Confirmed')">Confirm Fund
-                  Transfer</span>
+                  (click)="handleUpdateEckardTransactions(transaction,'Fund Transfer Confirmed')">Confirm Funds
+                  Received</span>
               </ng-container>
 
               <ng-template #elseSellerBlockAction>
@@ -100,17 +100,14 @@
           </td>
           <td>{{transaction.status.statusLabel}}</td>
           <td>
-            <span class="progress-border p-1 status-E" 
-            [ngClass]="{'completed': ['PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">E</span>
-            <span class="progress-border p-1 status-B"
-            [ngClass]="{'completed': ['Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }"
-            >B</span>
-            <span class="progress-border p-1 status-S"
-            [ngClass]="{'completed': ['Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }"
-            >S</span>
             <span class="progress-border p-1 status-E"
-            [ngClass]="{'completed': ['Asset Transfer Completed'].includes(transaction.status.statusLabel) }"
-            >E</span>
+              [ngClass]="{'completed': ['PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">E</span>
+            <span class="progress-border p-1 status-B"
+              [ngClass]="{'completed': ['Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">B</span>
+            <span class="progress-border p-1 status-S"
+              [ngClass]="{'completed': ['Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">S</span>
+            <span class="progress-border p-1 status-E"
+              [ngClass]="{'completed': ['Asset Transfer Completed'].includes(transaction.status.statusLabel) }">E</span>
           </td>
 
         </tr>

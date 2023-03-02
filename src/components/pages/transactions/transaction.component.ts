@@ -395,7 +395,7 @@ export class TransactionsComponent implements OnInit {
         else{
           this.spinner.hide()
           this.updateTransactionColumns()
-          this.toastr.info(`Seller Already Confirmed Fund Transfer`)
+          this.toastr.info(`Seller Already Confirm Funds Received`)
 
         }
 

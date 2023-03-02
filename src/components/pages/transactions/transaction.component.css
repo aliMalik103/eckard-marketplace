@@ -46,3 +46,7 @@
     border-bottom-style: solid;
     border-bottom-color: lightgray;
 }
+
+.transactions-actions {
+    border-bottom: 2px solid;
+}

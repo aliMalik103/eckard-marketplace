@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
@@ -23,7 +24,7 @@ import { TransactionsComponent } from './transaction.component';
         MyOffersDetailsModule,
         NgxSpinnerModule
     ],
-    providers: [MyListingsService, AddNewListingService, LoginService,MyOffersService],
+    providers: [MyListingsService, AddNewListingService, LoginService,MyOffersService,ToastrService],
     exports: [TransactionsComponent]
 })
 export class TransactionsModule { }

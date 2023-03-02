@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 import { Status } from 'src/components/model/my-listings';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
@@ -55,7 +56,7 @@ export class TransactionsComponent implements OnInit {
 
 
 
-  constructor(private addNewListingService: AddNewListingService, private myOffersService: MyOffersService,
+  constructor(private addNewListingService: AddNewListingService, private myOffersService: MyOffersService, private toastr: ToastrService,
     private myListingsService: MyListingsService, private loginService: LoginService, private spinner: NgxSpinnerService
   ) {
     this.showData = []
@@ -209,8 +210,6 @@ export class TransactionsComponent implements OnInit {
         this.spinner.hide()
         this.pendingsTransactions = response
 
-        console.log(this.pendingsTransactions)
-
       },
       (error: any) => {
         this.spinner.hide()
@@ -360,12 +359,35 @@ export class TransactionsComponent implements OnInit {
   }
 
   handleAlertMessage() {
-    console.log(this.offerConfirmMessages)
 
     let message = this.offerConfirmMessages?.filter(
       (item: any) => item.key == 'Select FTM'
     )
     this.offerDisclaimer = message[0]
+
+  }
+
+  handleUpdateEckardTransactions(transaction: any, type: any) {
+    this.spinner.show()
+
+    if (type == 'PSA Fully Executed') {
+      transaction.status = this.statusOptions?.find((item: any) => item.status === "Fund Transfer Initiated");
+    }
+    if (type == 'Fund Transfer Confirmed') {
+      transaction.status = this.statusOptions?.find((item: any) => item.status === "Fund Transfer Confirmed");
+    }
+
+    this.myListingsService.handleUpdateEckardTransactions(transaction).subscribe(
+      (response: any) => {
+        this.updateTransactionColumns()
+        this.toastr.success(`Transaction Status Update Successfully`)
+
+      },
+      (error: any) => {
+        this.spinner.hide()
+        console.log("Error getting Update Eckard Transactions", error)
+      },
+      () => console.log("Done getting Update Eckard Transactions "));
 
   }
 

@@ -11,7 +11,7 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 })
 export class EckardTransactionsMethodsComponent implements OnInit {
 
-  constructor( private spinner: NgxSpinnerService,
+  constructor(private spinner: NgxSpinnerService,
     private loginService: LoginService, private router: Router
   ) {
   }
@@ -25,7 +25,7 @@ export class EckardTransactionsMethodsComponent implements OnInit {
   }
 
 
-  transactionsMethodsColumns = ['Account', 'Type', 'Action(s)']
+  transactionsMethodsColumns = ['Account', 'Type']
   transactionsMethodData = []
   page: number = 1
   count: number = 0

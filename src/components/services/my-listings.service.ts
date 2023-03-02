@@ -254,6 +254,10 @@ export class MyListingsService {
     const res = this.http.patch(`${environment.API_BASE_URL}/transaction/${transaction.id}/`, body)
     return res;
   }
+  handleGetTransactions(transaction: any) {
+    const res = this.http.get(`${environment.API_BASE_URL}/transaction/${transaction.id}/`)
+    return res;
+  }
 
   handleDeleteFTM(id: any, flag: any) {
     const params = new HttpParams().set('forceDelete', flag);

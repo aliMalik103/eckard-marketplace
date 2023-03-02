@@ -376,11 +376,28 @@ export class TransactionsComponent implements OnInit {
     if (type == 'Fund Transfer Confirmed') {
       transaction.status = this.statusOptions?.find((item: any) => item.status === "Fund Transfer Confirmed");
     }
-
-    this.myListingsService.handleUpdateEckardTransactions(transaction).subscribe(
+    this.myListingsService.handleGetTransactions(transaction).subscribe(
       (response: any) => {
-        this.updateTransactionColumns()
-        this.toastr.success(`Transaction Status Update Successfully`)
+        
+        if(response.status.status != 'Fund Transfer Confirmed'){
+          this.myListingsService.handleUpdateEckardTransactions(transaction).subscribe(
+            (response: any) => {
+              this.updateTransactionColumns()
+              this.toastr.success(`Transaction Status Update Successfully`)
+      
+            },
+            (error: any) => {
+              this.spinner.hide()
+              console.log("Error getting Update Eckard Transactions", error)
+            },
+            () => console.log("Done getting Update Eckard Transactions "));
+        }
+        else{
+          this.spinner.hide()
+          this.updateTransactionColumns()
+          this.toastr.info(`Seller Already Confirmed Fund Transfer`)
+
+        }
 
       },
       (error: any) => {
@@ -388,6 +405,9 @@ export class TransactionsComponent implements OnInit {
         console.log("Error getting Update Eckard Transactions", error)
       },
       () => console.log("Done getting Update Eckard Transactions "));
+
+
+   
 
   }
 

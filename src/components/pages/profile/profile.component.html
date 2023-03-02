@@ -321,9 +321,11 @@
           </div>
         </div>
         <div class="col-md-12 mt-4 d-flex gap-4">
-          <div class="form-check p-0" *ngIf="addAccount && selectAccount && selectedType && handleFieldsAvailable()">
+          <div class="form-check p-0">
             <button class="btn btn-primary profile-button" type="button" [attr.data-bs-target]="'#exampleModal'"
-              data-bs-toggle="modal" (click)="handleAlertMessage('Add')">
+              data-bs-toggle="modal"
+              [disabled]="!(addAccount && selectAccount && selectedType && handleFieldsAvailable())"
+              (click)="handleAlertMessage('Add')">
               Add Transfer Method
             </button>
           </div>
@@ -350,7 +352,7 @@
               <div class="modal-footer">
                 <div class="mr-auto">
                   <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
-                    (click)="handleAccountSubmit()">
+                    (click)="deleteFTM ? handleDeleteFTM() : handleAccountSubmit()">
                     YES
                   </button>
                   <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal">
@@ -372,7 +374,9 @@
               <thead *ngIf="i==0">
                 <tr>
                   <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)"
-                    [ngClass]="{'w-20':key=='Eckard Account' || key == 'Account Holder'}">{{key}}</th>
+                    [ngClass]="{'w-20':key=='Eckard Account' || key == 'Account Holder', 'w-47':key == 'Mail To'}">
+                    {{key}}</th>
+                  <th class=" text-secondary text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -399,6 +403,11 @@
                       <i class="fa fa-email px-4" [ngClass]="showData1[i] ? 'fa-eye-slash' : 'fa-eye'"
                         (click)="toggleData1(i)"></i>
                     </ng-container>
+                  </td>
+                  <td class="text-center">
+                    <i [attr.data-bs-target]="'#exampleModal'" data-bs-toggle="modal"
+                      (click)="handleAlertMessage('Delete' , list)" class="fa fa-trash text-danger pe-auto" title="Delete FTM"
+                      aria-hidden="true"></i>
                   </td>
                 </tr>
               </tbody>

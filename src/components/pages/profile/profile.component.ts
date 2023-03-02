@@ -52,6 +52,8 @@ export class ProfileComponent implements OnInit {
 
   }
   offerDisclaimer!: any
+  deleteFTM = false
+  deleteFTMethod!: any
 
   countryOptions = [
     "BHS",
@@ -139,6 +141,14 @@ export class ProfileComponent implements OnInit {
           }
           if (res.json_fields['City']) {
             mailTo += res.json_fields['City'] + ', ';
+          }
+          if (res.json_fields['State']) {
+            mailTo += res.json_fields['State'] + ' ';
+
+          }
+          if (res.json_fields['Zip']) {
+            mailTo += res.json_fields['Zip'] + ' ,';
+
           }
           if (res.json_fields['country']) {
             mailTo += res.json_fields['country'];
@@ -257,7 +267,7 @@ export class ProfileComponent implements OnInit {
   handleFieldsAvailable() {
     if (this.selectedType == 'Wire') {
 
-      if (this.methods.account_id &&
+      if (
         this.methods.Recipient &&
         this.methods.Bank_Name &&
         this.methods.Account_Number &&
@@ -361,8 +371,7 @@ export class ProfileComponent implements OnInit {
     )
   }
 
-  handleAlertMessage(type: any) {
-    console.log(this.offerConfirmMessages)
+  handleAlertMessage(type: any, obj = null) {
 
     if (type === 'Add') {
       let message = this.offerConfirmMessages?.filter(
@@ -371,11 +380,17 @@ export class ProfileComponent implements OnInit {
       this.offerDisclaimer = message[0]
     }
     if (type === 'Delete') {
+      this.deleteFTM = !this.deleteFTM
+      this.deleteFTMethod = obj
       let message = this.offerConfirmMessages?.filter(
         (item: any) => item.key == 'Delete FTM'
       )
       this.offerDisclaimer = message[0]
     }
+  }
+  
+  handleDeleteFTM() {
+    console.log('delete', this.deleteFTMethod)
   }
 }
 

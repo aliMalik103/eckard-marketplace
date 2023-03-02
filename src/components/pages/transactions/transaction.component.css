@@ -36,3 +36,13 @@
 .shadow-lg {
     box-shadow: 0rem 0rem 3rem rgba(0, 0, 0, 0.6) !important;
 }
+
+.user-name {
+    padding-left: 3rem !important;
+}
+
+.transaction-methods {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: lightgray;
+}

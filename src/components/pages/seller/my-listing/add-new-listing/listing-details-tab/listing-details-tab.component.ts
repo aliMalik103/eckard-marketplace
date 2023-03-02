@@ -376,6 +376,10 @@ export class ListingDetailsTabComponent implements OnInit, OnChanges {
       this.nmaErrorMessage = 'Listed NMA below Minimum NMA'
 
     }
+    else if (nma > availableNma) {
+      this.nmaErrorMessage = 'Listed NMA greater than Available NMA'
+
+    }
     else if ((minimumNma > (availableNma - nma)) && (nma != availableNma)) {
       this.nmaErrorMessage = 'Remaining Position below Minimum NMA'
     }

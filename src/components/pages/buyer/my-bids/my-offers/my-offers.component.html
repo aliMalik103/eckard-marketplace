@@ -11,7 +11,7 @@
     <label for="constraints" class="form-label fw-bold">Constraints / Contingencies</label>
     <div class="col-sm-12">
         <ng-container *ngIf="isTransaction; else elseBlockConstraints">
-            <ul>
+            <ul class="checkbox-container">
                 <ng-container *ngIf="newOffer?.constraints?.length > 0 ; else elseBlockOffer">
 
                     <li *ngFor="let item of newOffer.constraints">
@@ -28,7 +28,7 @@
         </ng-container>
         <ng-template #elseBlockConstraints>
 
-            <div class="checkbox-container ">
+            <div class="checkbox-container">
                 <div class="form-check" *ngFor="let item of constraintOptions">
                     <input class="form-check-input mt-1" type="checkbox" [(ngModel)]="item.isChecked"
                         (change)="changeSelection()" [disabled]="(offer.offer_Status == 'Accepted')"

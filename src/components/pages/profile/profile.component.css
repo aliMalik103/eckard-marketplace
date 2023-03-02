@@ -30,6 +30,10 @@
     width: 23%;
 }
 
+.w-47 {
+    width: 47%;
+}
+
 .cancel-button:hover,
 .cancel-button:active {
     background-color: transparent;

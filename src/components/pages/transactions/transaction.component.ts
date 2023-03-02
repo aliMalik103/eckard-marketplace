@@ -155,6 +155,14 @@ export class TransactionsComponent implements OnInit {
             if (res.json_fields['City']) {
               mailTo += res.json_fields['City'] + ', ';
             }
+            if (res.json_fields['State']) {
+              mailTo += res.json_fields['State'] + ' ';
+
+            }
+            if (res.json_fields['Zip']) {
+              mailTo += res.json_fields['Zip'] + ' ,';
+
+            }
             if (res.json_fields['country']) {
               mailTo += res.json_fields['country'];
             }
@@ -224,27 +232,40 @@ export class TransactionsComponent implements OnInit {
 
             let methodsInfo: any = {};
             if (res.type == "Check") {
-              methodsInfo['Recipient'] = res.json_fields['Recipient'];
-              methodsInfo['Streat'] = res.json_fields['Streat'];
-              methodsInfo['City'] = res.json_fields['City'];
-              methodsInfo['State'] = res.json_fields['State'];
-              methodsInfo['Zip'] = res.json_fields['Zip'];
+              methodsInfo['Account Holder'] = res.json_fields['Recipient'];
+              let mailTo = '';
+              if (res.json_fields['mailto']) {
+                mailTo += res.json_fields['mailto'] + ', ';
+              }
+              if (res.json_fields['Street']) {
+                mailTo += res.json_fields['Street'] + ', ';
+              }
+              if (res.json_fields['City']) {
+                mailTo += res.json_fields['City'] + ', ';
+              }
+              if (res.json_fields['State']) {
+                mailTo += res.json_fields['State'] + ' ';
+
+              }
+              if (res.json_fields['Zip']) {
+                mailTo += res.json_fields['Zip'] + ' ,';
+
+              }
+              if (res.json_fields['country']) {
+                mailTo += res.json_fields['country'];
+              }
+              methodsInfo['Mail To'] = mailTo;
             }
             else {
-
-              methodsInfo['Recipient'] = res.json_fields['Recipient'];
-              methodsInfo['Bank Name'] = res.json_fields['Bank_Name'];
+              methodsInfo['Account Holder'] = res.json_fields['Recipient'];
               methodsInfo['Account Number'] = res.json_fields['Account_Number'];
+              methodsInfo['Bank Name'] = res.json_fields['Bank_Name'];
               methodsInfo['ABA Routing Number'] = res.json_fields['Routing_Number'];
             }
 
             res.json_fields = methodsInfo;
 
           })
-
-
-
-
 
         })
 

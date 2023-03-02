@@ -247,5 +247,10 @@ export class MyListingsService {
     return res;
   }
 
+  handleDeleteFTM(id: any, flag: any) {
+    const params = new HttpParams().set('forceDelete', flag);
+    const res = this.http.delete(`${environment.API_BASE_URL}/fund_transfer_method/${id}/`, { params })
+    return res;
+  }
 
 }

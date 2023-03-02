@@ -27,6 +27,7 @@ export interface Profile {
 
 export class ProfileComponent implements OnInit {
   isPassword: boolean = false
+  isShow: boolean = false
   isConfirmPassword: boolean = false
   imageChangedEvent: any = '';
   selectedType: any;
@@ -123,6 +124,7 @@ export class ProfileComponent implements OnInit {
   };
 
   getAccountMethods() {
+    this.spinner.show()
     const transferMethods: any = [];
     this.loginService.getAccountMethods(this.loginService.user.id).subscribe((response: any) => {
 
@@ -172,6 +174,7 @@ export class ProfileComponent implements OnInit {
         })
 
       })
+      this.spinner.hide()
       const groupByType = this.groupBy(transferMethods, "type");
       console.log(groupByType)
       this.accountsMethods = groupByType;
@@ -212,11 +215,6 @@ export class ProfileComponent implements OnInit {
       })
 
   }
-
-
-
-
-
 
   handleGetUserAccounts() {
     this.myListingsService
@@ -372,7 +370,7 @@ export class ProfileComponent implements OnInit {
   }
 
   handleAlertMessage(type: any, obj = null) {
-
+    this.deleteFTM = false
     if (type === 'Add') {
       let message = this.offerConfirmMessages?.filter(
         (item: any) => item.key == 'Add FTM'
@@ -380,7 +378,7 @@ export class ProfileComponent implements OnInit {
       this.offerDisclaimer = message[0]
     }
     if (type === 'Delete') {
-      this.deleteFTM = !this.deleteFTM
+      this.deleteFTM = true
       this.deleteFTMethod = obj
       let message = this.offerConfirmMessages?.filter(
         (item: any) => item.key == 'Delete FTM'
@@ -388,9 +386,37 @@ export class ProfileComponent implements OnInit {
       this.offerDisclaimer = message[0]
     }
   }
-  
-  handleDeleteFTM() {
-    console.log('delete', this.deleteFTMethod)
+
+  handleDeleteFTM(flag = false) {
+    this.spinner.show()
+    this.myListingsService
+      .handleDeleteFTM(this.deleteFTMethod.id, flag)
+      .subscribe(
+        (response: any) => {
+          this.spinner.hide()
+          if (response.error) {
+
+            let message = this.offerConfirmMessages?.filter(
+              (item: any) => item.key == 'Delete FTM ForceFully'
+            )
+            this.offerDisclaimer = message[0]
+            this.toastr.warning(response.error);
+            this.isShow = true
+          }
+          else {
+            this.getAccountMethods();
+            this.isShow = false
+            this.toastr.success('Fund Transfer Method Delete Successfully');
+
+          }
+
+        },
+        (error: any) => {
+          this.spinner.hide()
+          console.error('Error getting accounts: ', error)
+        },
+        () => console.log('Done getting accounts.')
+      )
   }
 }
 

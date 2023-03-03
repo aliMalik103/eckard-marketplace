@@ -184,6 +184,11 @@
                               </ng-container>
                               <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'">
                                 {{ list.json_fields[key] }}
+                                <ng-container *ngIf="key === 'Eckard Account'">
+                                  <ng-container *ngIf="handleFTMAccepted(list)">
+                                    <img src="assets/eckard-approve.svg" class="mx-1 w-25 py-2" alt="chevron-right" />
+                                  </ng-container>
+                                </ng-container>
                               </ng-container>
                               <ng-container *ngIf="key === 'Account Number'">
                                 <i class="fa fa-email pe-auto px-4"
@@ -255,6 +260,10 @@
                 <div *ngFor="let item of transaction.fund_transfer_method; let i = index" class="d-flex gap-5">
                   <div class="pt-2 fw-bold" *ngIf="item">
                     {{item.type}}
+                    <ng-container *ngIf="handleFTMAccepted(item)">
+                      <img src="assets/eckard-approve.svg" class="mx-1 w-50 py-2" alt="chevron-right" />
+                    </ng-container>
+
                   </div>
                   <div class="p-0 w-100">
                     <table class="table table-borderless">

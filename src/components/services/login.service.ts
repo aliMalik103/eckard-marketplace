@@ -30,6 +30,14 @@ export class LoginService {
     return res;
   }
 
+  updateTransactionMethod(body: any) {
+    let temp = {
+      status: body.status
+    }
+    const res = this.http.patch(`${environment.API_BASE_URL}/fund_transfer_method/${body.id}/`, temp)
+    return res;
+  }
+
 
   associateTransferMethod(body: any) {
     const res = this.http.post(`${environment.API_BASE_URL}/transaction_fund/`, body)
@@ -37,7 +45,7 @@ export class LoginService {
   }
 
   getAccountMethods(id: any) {
-    const res = this.http.get(`${environment.API_BASE_URL}/contact/${id}/accounts`)
+    const res = this.http.get(`${environment.API_BASE_URL}/contact/${id}/ftm`)
     return res;
   }
 
@@ -57,7 +65,7 @@ export class LoginService {
   }
 
   signUp(user: any): Observable<any> {
-    const res = this.http.post<any>(`${environment.API_BASE_URL}/contact`, user)
+    const res = this.http.post<any>(`${environment.API_BASE_URL}/contact/`, user)
     return res;
   }
 

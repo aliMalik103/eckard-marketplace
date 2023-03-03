@@ -110,7 +110,6 @@ export class EckardTransactionsComponent implements OnInit {
   handleAlertMessage(obj = null, type: any) {
     this.transactionCurrentStatus = type
     this.transactionCurrentList = obj
-    console.log(this.transactionCurrentList , this.transactionCurrentStatus)
     if (type == 'PSA To Be Created') {
       let message = this.offerConfirmMessages?.filter(
         (item: any) => item.key == 'PSA To Be Created'

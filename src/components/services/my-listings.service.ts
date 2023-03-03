@@ -265,4 +265,10 @@ export class MyListingsService {
     return res;
   }
 
+
+  handleGetEckardTransactionsMethods() {
+    const res = this.http.get(`${environment.API_BASE_URL}/fund_transfer_method/old_records/`)
+    return res;
+  }
+
 }

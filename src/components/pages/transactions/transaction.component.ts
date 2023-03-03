@@ -53,6 +53,8 @@ export class TransactionsComponent implements OnInit {
   showData1!: any
   offerConfirmMessages!: any
   offerDisclaimer!: any
+  transactionCurrentList!: any
+  transactionCurrentStatus!: any
 
 
 
@@ -161,7 +163,7 @@ export class TransactionsComponent implements OnInit {
 
             }
             if (res.json_fields['Zip']) {
-              mailTo += res.json_fields['Zip'] + ' ,';
+              mailTo += res.json_fields['Zip'] + ', ';
 
             }
             if (res.json_fields['country']) {
@@ -247,7 +249,7 @@ export class TransactionsComponent implements OnInit {
 
               }
               if (res.json_fields['Zip']) {
-                mailTo += res.json_fields['Zip'] + ' ,';
+                mailTo += res.json_fields['Zip'] + ', ';
 
               }
               if (res.json_fields['country']) {
@@ -367,6 +369,28 @@ export class TransactionsComponent implements OnInit {
 
   }
 
+
+  handleAlertTransactionsMessage(obj = null, type: any) {
+    this.transactionCurrentStatus = type
+    this.transactionCurrentList = obj
+    if (type == 'PSA Fully Executed') {
+      let message = this.offerConfirmMessages?.filter(
+        (item: any) => item.key == 'PSA Fully Executed'
+      )
+      this.offerDisclaimer = message[0]
+    }
+
+    else if (type == 'Fund Transfer Confirmed') {
+      let message = this.offerConfirmMessages?.filter(
+        (item: any) => item.key == 'Confirm Funds Received'
+      )
+      this.offerDisclaimer = message[0]
+    }
+
+  }
+
+
+
   handleUpdateEckardTransactions(transaction: any, type: any) {
     this.spinner.show()
 
@@ -378,13 +402,13 @@ export class TransactionsComponent implements OnInit {
     }
     this.myListingsService.handleGetTransactions(transaction).subscribe(
       (response: any) => {
-        
-        if(response.status.status != 'Fund Transfer Confirmed'){
+
+        if (response.status.status != 'Fund Transfer Confirmed') {
           this.myListingsService.handleUpdateEckardTransactions(transaction).subscribe(
             (response: any) => {
               this.updateTransactionColumns()
               this.toastr.success(`Transaction Status Update Successfully`)
-      
+
             },
             (error: any) => {
               this.spinner.hide()
@@ -392,7 +416,7 @@ export class TransactionsComponent implements OnInit {
             },
             () => console.log("Done getting Update Eckard Transactions "));
         }
-        else{
+        else {
           this.spinner.hide()
           this.updateTransactionColumns()
           this.toastr.info(`Seller Already Confirm Funds Received`)

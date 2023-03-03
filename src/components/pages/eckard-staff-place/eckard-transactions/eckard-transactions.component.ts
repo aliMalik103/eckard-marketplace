@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/components/services/login.service';
 import { MyListingsService } from 'src/components/services/my-listings.service';
+import { MyOffersService } from 'src/components/services/my-offers.service';
 import { AddNewListingService } from '../../seller/my-listing/add-new-listing/add-new-listing.service';
 
 @Component({
@@ -24,23 +25,28 @@ export class EckardTransactionsComponent implements OnInit {
   count: number = 0
   tableSize: number = 50
   tableSizes: any = [3, 6, 9, 12]
+  offerConfirmMessages!: any
+  offerDisclaimer!: any
+  transactionCurrentStatus!: any
+  transactionCurrentList!: any
 
   constructor(private activeRoute: ActivatedRoute, private spinner: NgxSpinnerService,
     private loginService: LoginService, private router: Router, private toastr: ToastrService,
     private myListingsService: MyListingsService, private addNewListingService: AddNewListingService,
-
+    private myOffersService: MyOffersService
 
   ) {
   }
 
   ngOnInit(): void {
-    this.spinner.show()
 
-    this.handleGetStatus()
     if (this.loginService?.user?.status != 'active' || this.loginService?.user?.role?.name != 'Eckard') {
       this.router.navigate(['/market-place'])
       return
     }
+    this.spinner.show()
+    this.handleGetStatus()
+    this.handleOfferDealMessages()
     let routePath = this.activeRoute.snapshot?.routeConfig?.path
     switch (routePath) {
       case 'eckard-pending-transactions':
@@ -100,10 +106,47 @@ export class EckardTransactionsComponent implements OnInit {
       () => console.log("Done getting  status "));
   }
 
+
+  handleAlertMessage(obj = null, type: any) {
+    this.transactionCurrentStatus = type
+    this.transactionCurrentList = obj
+    console.log(this.transactionCurrentList , this.transactionCurrentStatus)
+    if (type == 'PSA To Be Created') {
+      let message = this.offerConfirmMessages?.filter(
+        (item: any) => item.key == 'PSA To Be Created'
+      )
+      this.offerDisclaimer = message[0]
+    }
+
+    else if (type == 'Pending PSA') {
+      let message = this.offerConfirmMessages?.filter(
+        (item: any) => item.key == 'Pending PSA'
+      )
+      this.offerDisclaimer = message[0]
+    }
+    else if (type == 'Fund Transfer Confirmed') {
+      let message = this.offerConfirmMessages?.filter(
+        (item: any) => item.key == 'Fund Transfer Confirmed'
+      )
+      this.offerDisclaimer = message[0]
+    }
+    else if (type == 'Pending Asset Transfer') {
+      let message = this.offerConfirmMessages?.filter(
+        (item: any) => item.key == 'Pending Asset Transfer'
+      )
+      this.offerDisclaimer = message[0]
+    }
+
+  }
+
   handleUpdateEckardTransactions(transaction: any, type: any) {
     this.spinner.show()
 
-    if (type == 'Pending PSA') {
+    if (type == 'PSA To Be Created') {
+      transaction.status = this.statusOptions?.find((item: any) => item.status === "Pending PSA");
+    }
+
+    else if (type == 'Pending PSA') {
       transaction.status = this.statusOptions?.find((item: any) => item.status === "PSA Executed");
     }
     else if (type == 'Fund Transfer Confirmed') {
@@ -115,7 +158,8 @@ export class EckardTransactionsComponent implements OnInit {
 
     this.myListingsService.handleUpdateEckardTransactions(transaction).subscribe(
       (response: any) => {
-        this.handleGetEckardTransactions(type)
+        let listsType = type == 'PSA To Be Created' ? 'Pending PSA' : type
+        this.handleGetEckardTransactions(listsType)
         this.toastr.success(`Transaction Status Update Successfully`)
 
       },
@@ -174,6 +218,19 @@ export class EckardTransactionsComponent implements OnInit {
         console.log('Error getting status', error)
       },
       () => console.log('Done getting status ')
+    )
+  }
+
+  handleOfferDealMessages() {
+    this.myOffersService.handleOfferDealMessages().subscribe(
+      (response) => {
+        this.offerConfirmMessages = response
+
+      },
+      (error: any) => {
+        console.error("Error getting key vlaue  : ", error);
+      },
+      () => console.log("Done getting key vlaue .")
     )
   }
 }

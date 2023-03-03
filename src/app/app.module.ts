@@ -20,6 +20,7 @@ import { ProfileModule } from 'src/components/pages/profile/profile.module';
 import { TransactionsModule } from 'src/components/pages/transactions/transaction.module';
 import { EckardTransactionsModule } from 'src/components/pages/eckard-staff-place/eckard-transactions/eckard-transactions.module';
 import { EckardTransactionsMethodsModule } from 'src/components/pages/eckard-staff-place/eckard-transactions-methods/eckard-transactions-methods.module';
+import { SignUpModule } from 'src/components/auth/sign-up/sign-up.module';
 
 
 
@@ -55,7 +56,8 @@ import { EckardTransactionsMethodsModule } from 'src/components/pages/eckard-sta
     ProfileModule,
     TransactionsModule,
     EckardTransactionsModule,
-    EckardTransactionsMethodsModule
+    EckardTransactionsMethodsModule,
+    SignUpModule
 
   ],
   providers: [AddNewListingService],

@@ -7,7 +7,10 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { EckardTransactionsMethodsDetailsComponent } from './eckard-transactions-methods-details/eckard-transactions-methods-details.component';
 import { LoginService } from 'src/components/services/login.service';
-
+import { MyListingsService } from 'src/components/services/my-listings.service';
+import { MyOffersService } from 'src/components/services/my-offers.service';
+import { AddNewListingService } from 'src/components/pages/seller/my-listing/add-new-listing/add-new-listing.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @NgModule({
@@ -19,7 +22,7 @@ import { LoginService } from 'src/components/services/login.service';
     NgxSpinnerModule,
     NgxPaginationModule,
   ],
-  providers: [LoginService],
+  providers: [LoginService, MyListingsService, MyOffersService, AddNewListingService,ToastrService],
   exports: [EckardTransactionsMethodsComponent]
 })
 export class EckardTransactionsMethodsModule { }

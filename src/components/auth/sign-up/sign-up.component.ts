@@ -30,23 +30,26 @@ export class SignUpComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.toastr.info('Sign up flow inprogress')
-    this.router.navigate([''])
-    // this.spinner.show()
 
-    // this.loginService.signUp(this.signUPForm).subscribe(
-    //   (response) => {
-    //     console.log(response)
-    //     this.spinner.hide()
-    //     this.toastr.success('Congratulations! You have successfully signed up to our marketplace.')
-    //     this.router.navigate([''])
-    //   },
-    //   (error: any) => {
-    //     this.spinner.hide()
-    //     this.toastr.error('Something went wrong please Try again!')
-    //     console.log("error", error)
-    //   },
-    //   () => console.log("Sign-Up New User"));
+    this.spinner.show()
+
+    this.loginService.signUp(this.signUPForm).subscribe(
+      (response) => {
+        this.spinner.hide()
+        this.toastr.success('Congratulations! You have successfully signed up to our marketplace.')
+        this.router.navigate([''])
+      },
+      (error: any) => {
+        this.spinner.hide()
+        if (error.error.email[0] == 'contact with this email already exists.') {
+          this.toastr.info('Contact with this email already exists')
+        }
+        else {
+          this.toastr.error('Something went wrong please Try again!')
+        }
+        console.log("error", error)
+      },
+      () => console.log("Sign-Up New User"));
 
   }
 

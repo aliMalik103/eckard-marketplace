@@ -1,15 +1,103 @@
 <div>
-    <h5 class="method-heading">FTM Details</h5>
+    <h5 class="method-heading">Funds Transfer Method Details</h5>
 </div>
 
 
 
+<div class="d-flex flex-row mt-4 ">
+    <div class="col gap-2 p-0 ">
+        <div>
+            <label for="Seller" class="form-label fw-bold">Type</label>
+        </div>
+        <div>
+            <span class=" text-muted listing-details-content">
+                {{transaction.type}}
+            </span>
+        </div>
+    </div>
 
+
+    <div class="col gap-2 p-0 ">
+        <div>
+
+            <label for="Project" class="form-label fw-bold">Account Holder</label>
+        </div>
+        <div>
+            <span class="  text-muted listing-details-content">
+                {{transaction?.json_fields?.Recipient}}
+            </span>
+        </div>
+    </div>
+    <ng-container *ngIf=" transaction.type =='Check'">
+
+        <div class="col gap-2 p-0 ">
+            <div>
+
+                <label for="AuctionType" class="form-label fw-bold ">Mail To </label>
+            </div>
+            <div>
+
+                <span class="text-muted listing-details-content">
+                    {{transaction?.json_fields?.mailto}}, {{transaction?.json_fields?.Street}},
+                    {{transaction?.json_fields?.City}}, {{transaction?.json_fields?.State}}
+                    {{transaction?.json_fields?.Zip}},
+                    {{transaction?.json_fields?.country}}
+
+                </span>
+            </div>
+        </div>
+
+    </ng-container>
+    <ng-container *ngIf=" transaction.type =='Wire'">
+
+        <div class="col gap-2 p-0 ">
+            <div>
+
+                <label for="AuctionType" class="form-label fw-bold ">Account Number</label>
+            </div>
+            <div>
+
+                <span class="  text-muted listing-details-content">
+                    {{transaction?.json_fields?.Account_Number}}
+
+                </span>
+            </div>
+        </div>
+        <div class="col gap-2 p-0 ">
+            <div>
+
+                <label for="AuctionType" class="form-label fw-bold ">Bank Name</label>
+            </div>
+            <div>
+
+                <span class="text-muted listing-details-content">
+                    {{transaction?.json_fields?.Bank_Name}}
+
+                </span>
+            </div>
+        </div>
+        <div class="col gap-2 p-0 ">
+            <div>
+
+                <label for="AuctionType" class="form-label fw-bold ">ABA Routing Number</label>
+            </div>
+            <div>
+
+                <span class="text-muted listing-details-content">
+                    {{transaction?.json_fields?.Routing_Number}}
+
+                </span>
+            </div>
+        </div>
+
+    </ng-container>
+
+
+</div>
 <div class="d-flex gap-3 mt-5">
 
-
     <button type="submit" class="btn btn-success mb-2 fw-bold" data-bs-toggle="modal"
-        [attr.data-bs-target]="'#staticBackdrop'+index">Verify Method</button>
+        [attr.data-bs-target]="'#staticBackdrop'+index" (click)="handleAlertMessage(transaction)">Verify Method</button>
     <button type="submit" class="btn btn-outline-dark cancel-button  mb-2 fw-bold" data-toggle="collapse"
         [attr.data-target]="'#collapse'+index" aria-expanded="false" [attr.aria-controls]="'collapse'+index">
         Close Panel
@@ -23,21 +111,23 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">
-                    Approve Funds Transfer Methods
+                <h5 class="modal-title text-dark" id="staticBackdropLabel" [innerHTML]="offerDisclaimer?.value1">
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">Are you sureyou want to approved FTM ?
+            <div class="modal-body text-dark" [innerHTML]="offerDisclaimer?.value2">
             </div>
             <div class="modal-footer">
                 <div class="mr-auto ">
 
-                    <button type="button" class="btn btn-warning text-white mr-2 fw-bold"
-                        data-bs-dismiss="modal">YES</button>
+                    <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
+                        (click)="handleApproveFTM(currentFTM)">YES</button>
                     <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal">NO</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.3)" size="medium" color="#fff" type="line-spin-fade" [fullScreen]="true">
+</ngx-spinner>

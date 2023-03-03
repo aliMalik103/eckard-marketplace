@@ -23,9 +23,12 @@ export class EckardStaffPlaceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.spinner.show()
+
     this.handleGetPendingTransactions()
     this.handleGetCompeleteTransactions()
     this.handleGetPendingAssetTransactions()
+    this.handleGetEckardTransactionsMethods()
   }
 
   handleGetPendingTransactions() {
@@ -70,6 +73,21 @@ export class EckardStaffPlaceComponent implements OnInit {
         console.log("Error getting  Pending Asset Transfer", error)
       },
       () => console.log("Done getting  Pending Asset Transfer "));
+  }
+
+  handleGetEckardTransactionsMethods() {
+
+    this.myListingsService.handleGetEckardTransactionsMethods().subscribe(
+      (response: any) => {
+        this.spinner.hide()
+        this.totalFTM = response ? response.length : 0
+      },
+      (error: any) => {
+        this.spinner.hide()
+        console.log("Error getting  Pending Asset Transfer", error)
+      },
+      () => console.log("Done getting  Pending Asset Transfer "));
+
   }
 
 }

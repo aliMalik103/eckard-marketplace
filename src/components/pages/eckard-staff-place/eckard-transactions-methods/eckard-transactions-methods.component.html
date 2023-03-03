@@ -28,7 +28,7 @@
                 </tr>
             </thead>
             <tbody class="my-listing-table-body text-secondary" id="accordion">
-                <ng-container *ngFor=" let transaction of transactionsMethodsColumns | paginate
+                <ng-container *ngFor=" let transaction of transactionsMethodsData | paginate
             : {
                 itemsPerPage: tableSize,
                 currentPage: page,
@@ -36,14 +36,14 @@
               };
         let i = index">
                     <tr>
-                        <td>SELTON</td>
+                        <td>{{transaction?.account?.accountName}}</td>
 
                         <td id="heading{{i}}">
                             <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
                                 [attr.aria-controls]="'collapse'+i" class=" collapsed pe-auto transactions-methods"
                                 title="Methods details">
 
-                                Check</span>
+                                {{transaction?.json_fields?.type}}</span>
                         </td>
 
                     </tr>
@@ -53,7 +53,7 @@
 
                             <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
 
-                                <app-eckard-transactions-methods-details [index]="i" [transaction]="transaction">
+                                <app-eckard-transactions-methods-details (handleSubmit)="handleUpdate()" [index]="i" [transaction]="transaction">
                                 </app-eckard-transactions-methods-details>
 
 

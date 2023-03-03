@@ -11,7 +11,17 @@ import { MyListingsService } from 'src/components/services/my-listings.service';
 })
 export class EckardTransactionsMethodsComponent implements OnInit {
 
-  constructor(private spinner: NgxSpinnerService,
+  transactionsMethodsColumns = ['Account', 'Type']
+  transactionsMethodData = []
+  page: number = 1
+  count: number = 0
+  tableSize: number = 50
+  tableSizes: any = [3, 6, 9, 12]
+  searchParam = ''
+  transactionsMethodsData!: any
+  copyTransactionsData!: any
+
+  constructor(private spinner: NgxSpinnerService, private myListingsService: MyListingsService,
     private loginService: LoginService, private router: Router
   ) {
   }
@@ -22,20 +32,26 @@ export class EckardTransactionsMethodsComponent implements OnInit {
       this.router.navigate(['/market-place'])
       return
     }
+    this.handleGetEckardTransactionsMethods()
   }
 
+  handleGetEckardTransactionsMethods() {
+    this.spinner.show()
 
-  transactionsMethodsColumns = ['Account', 'Type']
-  transactionsMethodData = []
-  page: number = 1
-  count: number = 0
-  tableSize: number = 50
-  tableSizes: any = [3, 6, 9, 12]
-  searchParam = ''
+    this.myListingsService.handleGetEckardTransactionsMethods().subscribe(
 
+      (response: any) => {
+        this.spinner.hide()
+        this.transactionsMethodsData = response
+        this.copyTransactionsData = response
+      },
+      (error: any) => {
+        this.spinner.hide()
+        console.log("Error getting  Pending Asset Transfer", error)
+      },
+      () => console.log("Done getting  Pending Asset Transfer "));
 
-
-
+  }
   onTableDataChange(event: any) {
     this.page = event
   }
@@ -49,6 +65,10 @@ export class EckardTransactionsMethodsComponent implements OnInit {
     if (!this.searchParam) {
       return;
     }
+
+  }
+  handleUpdate() {
+    this.handleGetEckardTransactionsMethods()
 
   }
 

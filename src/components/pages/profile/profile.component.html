@@ -371,6 +371,7 @@
           <table class="table table-borderless">
             <ng-container *ngFor="let list of accountsMethods[k]; let i = index">
 
+
               <thead *ngIf="i==0">
                 <tr>
                   <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)"
@@ -381,11 +382,13 @@
               </thead>
               <tbody>
                 <tr>
+
                   <td class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">
                     <ng-container *ngIf="key === 'Account Number' || key === 'ABA Routing Number'">
                       <ng-container
                         *ngIf="showData[i] && key === 'Account Number' || showData1[i] && key === 'ABA Routing Number'">
                         {{ list.json_fields[key] }}
+
                       </ng-container>
                       <ng-container
                         *ngIf="!showData[i] && key === 'Account Number' || !showData1[i] && key === 'ABA Routing Number'">
@@ -394,6 +397,11 @@
                     </ng-container>
                     <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'">
                       {{ list.json_fields[key] }}
+                      <ng-container *ngIf="key === 'Eckard Account'">
+                        <ng-container *ngIf="handleFTMAccepted(list)">
+                          <img src="assets/eckard-approve.svg" class="mx-1 w-25 py-2" alt="chevron-right" />
+                        </ng-container>
+                      </ng-container>
                     </ng-container>
                     <ng-container *ngIf="key === 'Account Number'">
                       <i class="fa fa-email px-4" [ngClass]="showData[i] ? 'fa-eye-slash' : 'fa-eye'"

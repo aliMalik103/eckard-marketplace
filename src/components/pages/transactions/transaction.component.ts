@@ -389,8 +389,6 @@ export class TransactionsComponent implements OnInit {
 
   }
 
-
-
   handleUpdateEckardTransactions(transaction: any, type: any) {
     this.spinner.show()
 
@@ -431,7 +429,16 @@ export class TransactionsComponent implements OnInit {
       () => console.log("Done getting Update Eckard Transactions "));
 
 
-   
+
+
+  }
+
+  handleFTMAccepted(list: any) {
+    if (list?.status?.status == 'Accepted') {
+      return true
+    }
+
+    return false
 
   }
 

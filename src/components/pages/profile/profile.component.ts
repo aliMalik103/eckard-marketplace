@@ -165,8 +165,6 @@ export class ProfileComponent implements OnInit {
           methodsInfo['ABA Routing Number'] = res.json_fields['Routing_Number'];
         }
 
-
-
         transferMethods.push({
           ...res,
           json_fields: methodsInfo
@@ -417,6 +415,13 @@ export class ProfileComponent implements OnInit {
         },
         () => console.log('Done getting accounts.')
       )
+  }
+
+  handleFTMAccepted(list: any) {
+    if(list?.status?.status == 'Accepted'){
+      return true
+    }
+    return   false
   }
 }
 

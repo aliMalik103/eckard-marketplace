@@ -79,6 +79,40 @@
     </span>
 </div>
 
+<ng-container *ngIf="transactionStatus == 'Buy'">
+    <div class="row mt-3">
+
+        <div class="form-group d-flex d-flex gap-5 mb-2">
+            <div>
+
+                <label for="myoffer" class="col-form-label text-success fw-bold">
+                    Target Account
+                </label>
+            </div>
+            <div>
+
+                <ng-container *ngIf="offer.offer[0].account; else targetAccountBlock">
+                    <select id="account" name="account" class="form-select" [(ngModel)]="offer.offer[0].account"
+                        disabled [compareWith]="auctionTypeComparator">
+                        <option *ngFor="let item of accountsOptions" [ngValue]="item">{{item.accountName}}</option>
+                    </select>
+                </ng-container>
+                <ng-template #targetAccountBlock>
+                    <select id="account" name="account" class="form-select" [(ngModel)]="selectedAccount"
+                        (change)="handleAccountTargetMessage(offer)">
+                        <option *ngFor="let item of accountsOptions" [ngValue]="item">{{item.accountName}}</option>
+                    </select>
+
+                </ng-template>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</ng-container>
+
 <div class="my-3 row p-0" *ngIf="!isTransaction">
     <div class="accordion accordion-flush col-12" id="myOfferAccordion">
         <div class="accordion-item">
@@ -270,3 +304,33 @@
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.3)" size="medium" color="#fff" type="line-spin-fade" [fullScreen]="true">
 </ngx-spinner>
+
+
+<div class="modal fade" id="exampleModal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" [ngClass]="{ 'show': isShow == true }"
+    [style.display]="isShow == true ? 'block' : 'none'">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg text-dark">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel" [innerHTML]="offerDisclaimer?.value1">
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="clearSelectedAccount()"></button>
+            </div>
+            <div class="modal-body" [innerHTML]="offerDisclaimer?.value2">
+            </div>
+            <div class="modal-footer">
+                <div class="mr-auto">
+                    <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
+                        (click)="handleAssociateAccount()">
+                        YES
+                    </button>
+                    <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal"
+                        (click)="clearSelectedAccount()">
+                        NO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

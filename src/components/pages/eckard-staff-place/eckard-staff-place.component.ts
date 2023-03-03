@@ -47,7 +47,7 @@ export class EckardStaffPlaceComponent implements OnInit {
 
   handleGetCompeleteTransactions() {
 
-    this.myListingsService.handleGetEckardTransactions('Fund Transfer Complete').subscribe(
+    this.myListingsService.handleGetEckardTransactions('Fund Transfer Confirmed').subscribe(
       (response: any) => {
         this.spinner.hide()
         this.completedFT = response ? response.length : 0
@@ -55,9 +55,9 @@ export class EckardStaffPlaceComponent implements OnInit {
       },
       (error: any) => {
         this.spinner.hide()
-        console.log("Error getting  Fund Transfer Complete", error)
+        console.log("Error getting  Fund Transfer Confirmed", error)
       },
-      () => console.log("Done getting  Fund Transfer Complete "));
+      () => console.log("Done getting  Fund Transfer Confirmed "));
   }
 
   handleGetPendingAssetTransactions() {

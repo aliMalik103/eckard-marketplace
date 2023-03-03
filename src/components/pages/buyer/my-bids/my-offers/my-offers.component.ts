@@ -21,8 +21,12 @@ export class MyOffersComponent implements OnInit {
   @Input() statusOptions!: Status[]
   @Input() index!: any
   @Input() isTransaction = false
+  @Input() transactionStatus = ''
+  isShow: boolean = false
+  accountsOptions!: any
   cashFlowStatus: string = ''
   isDefaults: boolean = false
+  selectedAccount!: any
 
   cashFlow!: any
   blockOffer = false
@@ -34,6 +38,8 @@ export class MyOffersComponent implements OnInit {
   offerConfirmMessages: any
   offerDisclaimer!: any
 
+  currentTargetList!: any
+
   constructor(private myListingsService: MyListingsService,
     private myOffersService: MyOffersService,
     private loginService: LoginService, private toastr: ToastrService,
@@ -43,6 +49,7 @@ export class MyOffersComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleOfferDealMessages()
+    this.handleGetUserAccounts()
     if (!this.isTransaction) {
 
       this.handleGetCashFlow()
@@ -51,6 +58,7 @@ export class MyOffersComponent implements OnInit {
     if (this.isTransaction) {
       this.handleConstrainsOptions()
     }
+
   }
 
   basicCashFlow: any = {
@@ -481,6 +489,72 @@ export class MyOffersComponent implements OnInit {
         isChecked: this.newOffer.constraints?.some((item: any) => item.id === obj.id)
       }
     });
+  }
+
+
+  handleGetUserAccounts() {
+    this.myListingsService
+      .handleGetUserAccounts(this.loginService.user.id)
+      .subscribe(
+        response => {
+          this.accountsOptions = response
+
+        },
+        (error: any) => {
+          console.error('Error getting accounts: ', error)
+        },
+        () => console.log('Done getting accounts.')
+      )
+  }
+
+  auctionTypeComparator(a: any, b: any) {
+    return (a && b) ? a.id === b.id : false;
+  }
+
+  handleAccountTargetMessage(obj: any) {
+    this.isShow = true
+    this.currentTargetList = obj
+    let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Target Account")
+    this.offerDisclaimer = message[0]
+
+    console.log(this.selectedAccount, this.currentTargetList)
+  }
+
+  clearSelectedAccount() {
+    this.isShow = false
+    this.selectedAccount = null;
+    // close pop modal
+  }
+
+  handleAssociateAccount() {
+    this.spinner.show()
+    this.isShow = false
+    let id = this.currentTargetList?.offer[0]?.id
+    let body = {
+      offer: {
+        account: this.selectedAccount.id
+      },
+      listing_id: this.currentTargetList.id,
+      acceptedOffer: false
+    }
+
+    this.myOffersService.handleUpdateOffer(id, body).subscribe(
+      (response) => {
+        this.spinner.hide()
+        this.updateOffers.emit()
+        if (response) {
+          this.offer.offer[0].account = this.selectedAccount
+          this.toastr.success('Account Associate Successfully');
+        }
+      },
+      (error: any) => {
+        this.spinner.hide()
+
+        this.toastr.error('Offer Not Found!');
+        console.error("Error getting update Offer : ", error);
+      },
+      () => console.log("Done getting update Offer .")
+    )
   }
 
 }

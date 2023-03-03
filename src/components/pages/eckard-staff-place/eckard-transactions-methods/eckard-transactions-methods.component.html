@@ -53,7 +53,8 @@
 
                             <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
 
-                                <app-eckard-transactions-methods-details (handleSubmit)="handleUpdate()" [index]="i" [transaction]="transaction">
+                                <app-eckard-transactions-methods-details (handleSubmit)="handleUpdate()" [index]="i"
+                                    [transaction]="transaction">
                                 </app-eckard-transactions-methods-details>
 
 
@@ -66,7 +67,7 @@
             </tbody>
         </table>
     </div>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center" *ngIf="transactionsMethodsData?.length > 0">
         <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
         </pagination-controls>
     </div>

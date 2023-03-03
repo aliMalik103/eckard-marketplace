@@ -334,6 +334,8 @@ export class TransactionsComponent implements OnInit {
   }
 
   handleUpdateOffers() {
+    this.updateTransactionColumns();
+
   }
 
   toggleData(index: number) {
@@ -391,6 +393,11 @@ export class TransactionsComponent implements OnInit {
 
   handleUpdateEckardTransactions(transaction: any, type: any) {
     this.spinner.show()
+    if (transaction.offer.account == null) {
+      this.spinner.hide()
+      this.toastr.info(`${type == 'Fund Transfer Confirmed' ? 'The buyer has not associated their account with the offer. Please wait for them to complete this step before proceeding with the transaction.' : 'Please associate your account with the offer.'}`)
+      return
+    }
 
     if (type == 'PSA Fully Executed') {
       transaction.status = this.statusOptions?.find((item: any) => item.status === "Fund Transfer Initiated");
@@ -404,6 +411,7 @@ export class TransactionsComponent implements OnInit {
         if (response.status.status != 'Fund Transfer Confirmed') {
           this.myListingsService.handleUpdateEckardTransactions(transaction).subscribe(
             (response: any) => {
+              this.spinner.hide()
               this.updateTransactionColumns()
               this.toastr.success(`Transaction Status Update Successfully`)
 
@@ -427,9 +435,6 @@ export class TransactionsComponent implements OnInit {
         console.log("Error getting Update Eckard Transactions", error)
       },
       () => console.log("Done getting Update Eckard Transactions "));
-
-
-
 
   }
 

@@ -54,6 +54,7 @@
                         NMA)
                     </small> <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" [(ngModel)]="createNewListing.nma" min="0"
+                step="any"
                     oninput="validity.valid||(value='');" (ngModelChange)="handleChange('nma')" id="nma" name="nma"
                     #nma="ngModel"
                     [ngClass]="{'border border-danger': nma.invalid && (nma.dirty || nma.touched) ||  handleIsValidNma() && !(isListEdit && !isListDraft) }"

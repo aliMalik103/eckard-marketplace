@@ -19,11 +19,16 @@
                     <div class="dropdown">
                         <a class="nav-item nav-link dropdown-toggle text-black" href="#" id="user-dropdown"
                             data-toggle="dropdown" *ngIf="user">
-                            {{user.name}}
+                            <ng-container *ngIf="user.name ; else userElseBlock">
+                                {{user.name}}
+                            </ng-container>
+                            <ng-template #userElseBlock>
+                                {{user.email}}
+                            </ng-template>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="nav-link text-black pe-auto mx-2" [routerLink]="['/profile']" title="View Profile"><i
-                                    class="fa fa-user" aria-hidden="true"></i>
+                            <a class="nav-link text-black pe-auto mx-2" [routerLink]="['/profile']"
+                                title="View Profile"><i class="fa fa-user" aria-hidden="true"></i>
                                 Profile</a>
                             <a class="nav-link text-black pe-auto mx-2" (click)="handleLogOut()" title="Log Out"><i
                                     class="fa fa-sign-out" aria-hidden="true"></i>

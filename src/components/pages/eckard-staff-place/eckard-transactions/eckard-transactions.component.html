@@ -58,17 +58,43 @@
                         <td>{{transaction?.nma}}</td>
                         <td>{{transaction?.status?.statusLabel}}</td>
                         <td>
+                            <ng-container *ngIf="transaction?.status?.status == 'PSA To Be Created' ">
+                                <span class="transactions-actions pe-auto" [attr.data-bs-target]="'#exampleModal'"
+                                    data-bs-toggle="modal"
+                                    (click)="handleAlertMessage(transaction , 'PSA To Be Created')"> PSA
+                                    Sent</span>
+                                |
+                                <span class="transactions-actions pe-auto" [attr.data-bs-target]="'#exampleModal'"
+                                    data-bs-toggle="modal" (click)="handleAlertMessage(transaction , 'Pending PSA')">
+                                    Confirm PSA
+                                    Complete</span>
+                            </ng-container>
+
                             <ng-container *ngIf="transaction?.status?.status == 'Pending PSA' ">
-                                <span class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Pending PSA')"> Confirm PSA Complete</span>
+                                <span class="transactions-actions pe-auto" [attr.data-bs-target]="'#exampleModal'"
+                                    data-bs-toggle="modal" (click)="handleAlertMessage(transaction , 'Pending PSA')">
+                                    Confirm PSA
+                                    Complete</span>
                             </ng-container>
+
                             <ng-container *ngIf="transaction?.status?.status == 'Pending Asset Transfer' ">
-                                <span class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Pending Asset Transfer')"> Complete Asset Transfer</span>
+                                <span class="transactions-actions pe-auto" [attr.data-bs-target]="'#exampleModal'"
+                                    data-bs-toggle="modal"
+                                    (click)="handleAlertMessage(transaction , 'Pending Asset Transfer')">
+                                    Complete Asset Transfer</span>
                             </ng-container>
+
                             <ng-container *ngIf="transaction?.status?.status == 'Fund Transfer Confirmed' ">
-                                <span class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Fund Transfer Confirmed')"> Initial Asset Transfer</span> | <span
-                                    class="transactions-actions pe-auto" (click)="handleUpdateEckardTransactions(transaction , 'Pending Asset Transfer')">Complete
+                                <span class="transactions-actions pe-auto" [attr.data-bs-target]="'#exampleModal'"
+                                    data-bs-toggle="modal"
+                                    (click)="handleAlertMessage(transaction , 'Fund Transfer Confirmed')">
+                                    Initial Asset Transfer</span>
+                                |
+                                <span class="transactions-actions pe-auto" [attr.data-bs-target]="'#exampleModal'"
+                                    data-bs-toggle="modal"
+                                    (click)="handleAlertMessage(transaction , 'Pending Asset Transfer')">Complete
                                     Asset Transfer</span>
-                            </ng-container>	
+                            </ng-container>
                         </td>
                     </tr>
                 </ng-container>
@@ -87,3 +113,33 @@
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.3)" size="medium" color="#fff" type="line-spin-fade" [fullScreen]="true">
 </ngx-spinner>
+
+
+
+<ng-container>
+    <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel" [innerHTML]="offerDisclaimer?.value1">
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" [innerHTML]="offerDisclaimer?.value2">
+                </div>
+                <div class="modal-footer">
+                    <div class="mr-auto">
+                        <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
+                            (click)="handleUpdateEckardTransactions(transactionCurrentList, transactionCurrentStatus)">
+                            YES
+                        </button>
+                        <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal">
+                            NO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

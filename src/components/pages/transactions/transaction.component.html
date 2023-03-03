@@ -72,8 +72,8 @@
             <ng-container *ngIf="transactionStatus =='Buy'">
 
               <ng-container *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' ; else elseBuyerActions">
-                <span class="pe-auto transactions-actions"
-                  (click)="handleUpdateEckardTransactions(transaction,'PSA Fully Executed')">
+                <span class="pe-auto transactions-actions" [attr.data-bs-target]="'#exampleModal'"
+                  data-bs-toggle="modal" (click)=" handleAlertTransactionsMessage(transaction,'PSA Fully Executed')">
                   Confirm Funds Transferred</span>
               </ng-container>
 
@@ -86,8 +86,9 @@
             <ng-container *ngIf="transactionStatus =='Sell'">
               <ng-container
                 *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' || transaction.status.statusLabel == 'Fund Transfer Initiated' ;else  elseSellerBlockAction">
-                <span span class="pe-auto  transactions-actions"
-                  (click)="handleUpdateEckardTransactions(transaction,'Fund Transfer Confirmed')">Confirm Funds
+                <span span class="pe-auto  transactions-actions" [attr.data-bs-target]="'#exampleModal'"
+                  data-bs-toggle="modal"
+                  (click)="handleAlertTransactionsMessage(transaction,'Fund Transfer Confirmed')">Confirm Funds
                   Received</span>
               </ng-container>
 
@@ -100,6 +101,9 @@
           </td>
           <td>{{transaction.status.statusLabel}}</td>
           <td>
+            <span class="progress-border p-1 status-E"
+              [ngClass]="{'completed': ['Pending PSA Signatures','PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">
+              E</span>
             <span class="progress-border p-1 status-E"
               [ngClass]="{'completed': ['PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">E</span>
             <span class="progress-border p-1 status-B"
@@ -304,3 +308,33 @@
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.3)" size="medium" color="#fff" type="line-spin-fade" [fullScreen]="true">
 </ngx-spinner>
+
+
+
+<ng-container>
+  <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel" [innerHTML]="offerDisclaimer?.value1">
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" [innerHTML]="offerDisclaimer?.value2">
+        </div>
+        <div class="modal-footer">
+          <div class="mr-auto">
+            <button type="button" class="btn btn-warning text-white mr-2 fw-bold" data-bs-dismiss="modal"
+              (click)="handleUpdateEckardTransactions(transactionCurrentList, transactionCurrentStatus)">
+              YES
+            </button>
+            <button type="button" class="btn btn-danger ml-2 fw-bold" data-bs-dismiss="modal">
+              NO
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

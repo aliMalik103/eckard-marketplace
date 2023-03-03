@@ -1,4 +1,4 @@
-.login-container {
+.sign-up-container {
     position: relative;
     background-color: white;
     box-shadow: 0 0 2px #00000024;
@@ -10,19 +10,21 @@
 
 }
 
-.login-field-container {
+.sign-up-field-container {
     position: relative;
 }
 
-.login-form {
+.sign-up-form {
     height: 100%;
     width: 100%;
     max-width: 420px;
     background: #ffffff;
-    padding: 60px  0px 20px 0px;
+    padding: 60px 0px 20px 0px;
     position: relative;
     margin-left: auto;
     margin-right: auto;
+    color: #0a2b3c;
+
 }
 
 .fa-eye,
@@ -49,12 +51,12 @@
 
 .title {
     color: #0a2b3c;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     text-align: center;
     font-size: 36px;
 }
 
-.forgot-password {
+.login-path {
     text-decoration: underline;
     display: inline-flex;
     align-items: center;
@@ -65,15 +67,16 @@
 
 }
 
-.login-button {
+.sign-up-button {
     color: #0a2b3c;
     border-radius: 8px;
-    min-width: 100px;
+    min-width: 120px;
     font-weight: 600;
     line-height: 24px;
     font-size: 16px;
 
 }
-.error-message{
-font-family: 'Times New Roman', Times, serif;
+
+.error-message {
+    font-family: 'Times New Roman', Times, serif;
 }

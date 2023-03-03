@@ -149,7 +149,7 @@ export class ProfileComponent implements OnInit {
 
           }
           if (res.json_fields['Zip']) {
-            mailTo += res.json_fields['Zip'] + ' ,';
+            mailTo += res.json_fields['Zip'] + ', ';
 
           }
           if (res.json_fields['country']) {

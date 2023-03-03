@@ -25,21 +25,21 @@ export class LoginService {
     }
   }
 
-addTransactionMethod(body:any){
-  const res = this.http.post(`${environment.API_BASE_URL}/fund_transfer_method/`, body)
-  return res;
-}
+  addTransactionMethod(body: any) {
+    const res = this.http.post(`${environment.API_BASE_URL}/fund_transfer_method/`, body)
+    return res;
+  }
 
 
-associateTransferMethod(body:any){
-  const res = this.http.post(`${environment.API_BASE_URL}/transaction_fund/`, body)
-  return res;
-}
+  associateTransferMethod(body: any) {
+    const res = this.http.post(`${environment.API_BASE_URL}/transaction_fund/`, body)
+    return res;
+  }
 
-getAccountMethods(id:any){
-  const res = this.http.get(`${environment.API_BASE_URL}/contact/${id}/accounts`)
-  return res;
-}
+  getAccountMethods(id: any) {
+    const res = this.http.get(`${environment.API_BASE_URL}/contact/${id}/accounts`)
+    return res;
+  }
 
   login(user: LoginForm): Observable<User> {
     const res = this.http.post<User>(`${environment.API_BASE_URL}/auth/login/`, user).pipe(
@@ -53,6 +53,11 @@ getAccountMethods(id:any){
         }
       })
     )
+    return res;
+  }
+
+  signUp(user: any): Observable<any> {
+    const res = this.http.post<any>(`${environment.API_BASE_URL}/contact`, user)
     return res;
   }
 

@@ -15,12 +15,14 @@ import { AllActiveListingComponent } from 'src/components/pages/buyer/my-bids/al
 import { ProfileComponent } from 'src/components/pages/profile/profile.component';
 import { EckardTransactionsComponent } from 'src/components/pages/eckard-staff-place/eckard-transactions/eckard-transactions.component';
 import { EckardTransactionsMethodsComponent } from 'src/components/pages/eckard-staff-place/eckard-transactions-methods/eckard-transactions-methods.component';
+import { SignUpComponent } from 'src/components/auth/sign-up/sign-up.component';
 
 
 
 const routes: Routes = [
 
   { path: "", component: LoginComponent },
+  { path: "sign-up", component: SignUpComponent },
   { path: "market-place", component: MarketPlaceComponent, canActivate: [AuthGuard] },
   { path: "my-offers", component: MyBidsComponent, canActivate: [AuthGuard] },
   { path: "all-listing", component: AllActiveListingComponent, canActivate: [AuthGuard] },

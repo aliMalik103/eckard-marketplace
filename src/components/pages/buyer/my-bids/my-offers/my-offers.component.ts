@@ -204,7 +204,7 @@ export class MyOffersComponent implements OnInit {
     this.activeItem = null;
     this.isacceptedOffer = false;
     this.blockOffer = false;
-    this.activeItem = this.statusOptions?.find((item) => item.status === "Active");
+
 
 
 
@@ -224,10 +224,12 @@ export class MyOffersComponent implements OnInit {
     if (this.isacceptedOffer) {
 
       this.checkOfferBlocked()
+      this.activeItem = this.statusOptions?.find((item) => item.status === "Accepted");
       let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Buying Disclaimer")
       this.offerDisclaimer = message[0]
     }
     else {
+      this.activeItem = this.statusOptions?.find((item) => item.status === "Active");
       let message = this.offerConfirmMessages?.filter((item: any) => item.key == "Buying Offer Disclaimer")
       this.offerDisclaimer = message && message[0]
 
@@ -254,7 +256,7 @@ export class MyOffersComponent implements OnInit {
                 let request = {
                   offer: {
                     offerAmount: obj.offerAmount,
-                    status: obj.id ? obj.status.id : this.offerId,
+                    status: this.offerId,
                     constraints: obj.constraints?.map((item: any) => item.id),
                     comments: obj.comments,
                     contact: obj.id ? obj.contact.id : this.loginService.user.id

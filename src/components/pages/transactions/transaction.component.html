@@ -182,13 +182,20 @@
                                   ..{{ list.json_fields[key].toString().slice(-4) }}
                                 </ng-container>
                               </ng-container>
-                              <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'">
-                                {{ list.json_fields[key] }}
-                                <ng-container *ngIf="key === 'Eckard Account'">
-                                  <ng-container *ngIf="handleFTMAccepted(list)">
-                                    <img src="assets/eckard-approve.svg" class="mx-1 w-25 py-2" alt="chevron-right" />
+                              <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'" >
+                                <div style="display: flex;flex-direction: row;">
+                                
+                                
+                                  {{ list.json_fields[key] }}
+                                  <ng-container *ngIf="key === 'Eckard Account'">
+                                    <ng-container *ngIf="handleFTMAccepted(list)">
+                                      <img src="assets/eckard-approve.svg" class="mx-1 w-25 py-2" alt="chevron-right" style="margin: -4px;" />
+                                    </ng-container>
                                   </ng-container>
-                                </ng-container>
+                                
+                                
+                                </div>
+                            
                               </ng-container>
                               <ng-container *ngIf="key === 'Account Number'">
                                 <i class="fa fa-email pe-auto px-4"

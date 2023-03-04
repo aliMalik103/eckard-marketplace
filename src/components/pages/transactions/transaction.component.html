@@ -61,7 +61,7 @@
           <td class="text-end">{{transaction.trans_amount | currency:'':'':'.2-2'}}</td>
           <td class="pl-5">
             <ng-container *ngIf="transactionStatus =='Buy' ; else statusElseBlock">
-              {{transaction.listing.account.contact.mpName}}
+              {{transaction.listing.account.mpName}}
             </ng-container>
             <ng-template #statusElseBlock>
               {{transaction.offer.contact.mpName}}

@@ -50,3 +50,7 @@
 .transactions-actions {
     border-bottom: 2px solid;
 }
+
+.eckard-ftm-approve {
+    width: 1rem;
+}

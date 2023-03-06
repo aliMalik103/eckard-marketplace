@@ -44,6 +44,7 @@ export class EckardTransactionsMethodsComponent implements OnInit {
         this.spinner.hide()
         this.transactionsMethodsData = response
         this.copyTransactionsData = response
+        this.handleChange()
       },
       (error: any) => {
         this.spinner.hide()
@@ -63,10 +64,20 @@ export class EckardTransactionsMethodsComponent implements OnInit {
 
   handleChange() {
     if (!this.searchParam) {
+      this.transactionsMethodsData = this.copyTransactionsData
       return;
     }
 
+    const filteredData = this.copyTransactionsData?.filter((item: any) => {
+      const searchParamLower = this.searchParam.toLowerCase(); // convert searchParam to lowercase
+      const itemFTMAccountName = item?.account?.accountName?.toLowerCase();
+      return itemFTMAccountName.includes(searchParamLower)
+        ;
+    });
+
+    this.transactionsMethodsData = filteredData
   }
+
   handleUpdate() {
     this.handleGetEckardTransactionsMethods()
 

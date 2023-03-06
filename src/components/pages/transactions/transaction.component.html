@@ -182,20 +182,18 @@
                                   ..{{ list.json_fields[key].toString().slice(-4) }}
                                 </ng-container>
                               </ng-container>
-                              <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'" >
-                                <div style="display: flex;flex-direction: row;">
-                                
-                                
-                                  {{ list.json_fields[key] }}
+                              <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'">
+                                <span>
                                   <ng-container *ngIf="key === 'Eckard Account'">
                                     <ng-container *ngIf="handleFTMAccepted(list)">
-                                      <img src="assets/eckard-approve.svg" class="mx-1 w-25 py-2" alt="chevron-right" style="margin: -4px;" />
+                                      <img src="assets/eckard-approve.svg" class="mx-1 eckard-ftm-approve"
+                                        alt="ftm-approve" />
                                     </ng-container>
                                   </ng-container>
-                                
-                                
-                                </div>
-                            
+
+                                  {{ list.json_fields[key] }}
+                                </span>
+
                               </ng-container>
                               <ng-container *ngIf="key === 'Account Number'">
                                 <i class="fa fa-email pe-auto px-4"
@@ -265,12 +263,11 @@
 
 
                 <div *ngFor="let item of transaction.fund_transfer_method; let i = index" class="d-flex gap-5">
-                  <div class="pt-2 fw-bold" *ngIf="item">
-                    {{item.type}}
-                    <ng-container *ngIf="handleFTMAccepted(item)">
-                      <img src="assets/eckard-approve.svg" class="mx-1 w-50 py-2" alt="chevron-right" />
-                    </ng-container>
-
+                  <div class="pt-2 fw-bold d-flex gap-2" *ngIf="item">
+                    <div>{{item.type}}</div>
+                    <div *ngIf="handleFTMAccepted(item)">
+                      <img src="assets/eckard-approve.svg" class="mx-1 pb-1 eckard-ftm-approve" alt="ftm-approve" />
+                    </div>
                   </div>
                   <div class="p-0 w-100">
                     <table class="table table-borderless">
@@ -283,8 +280,8 @@
                         </thead>
                         <tbody>
                           <tr>
-                            <td class="text-secondary" *ngFor="let key of objectKeys(item.json_fields)">{{
-                              item.json_fields[key] }}</td>
+                            <td class="text-secondary" *ngFor="let key of objectKeys(item.json_fields)">
+                              {{item.json_fields[key] }}</td>
                           </tr>
 
                         </tbody>
@@ -303,7 +300,8 @@
 
               <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="transaction.offer"
                 [offer]="transaction.listing" [listDetails]="transaction.listing" [statusOptions]="statusOptions"
-                (updateOffers)="handleUpdateOffers()" [index]="i" [isTransaction]="true" [transactionStatus]="transactionStatus">
+                (updateOffers)="handleUpdateOffers()" [index]="i" [isTransaction]="true"
+                [transactionStatus]="transactionStatus">
               </app-my-offers>
 
             </div>

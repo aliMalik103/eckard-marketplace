@@ -100,6 +100,7 @@
                 <ng-template #targetAccountBlock>
                     <select id="account" name="account" class="form-select" [(ngModel)]="selectedAccount"
                         (change)="handleAccountTargetMessage(offer)">
+                        <option [value]="selectedAccount" [disabled]="true" [selected]="true">select an account</option>
                         <option *ngFor="let item of accountsOptions" [ngValue]="item">{{item.accountName}}</option>
                     </select>
 

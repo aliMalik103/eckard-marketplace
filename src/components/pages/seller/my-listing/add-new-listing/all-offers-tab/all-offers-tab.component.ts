@@ -37,20 +37,20 @@ export class AllOffersTabComponent implements OnInit {
     'Comments'
   ]
 
-  constructor (
+  constructor(
     private myOffersService: MyOffersService,
     private toastr: ToastrService,
     private router: Router,
     private spinner: NgxSpinnerService
-  ) {}
+  ) { }
 
-  ngOnInit (): void {
-    this.handleGetAllOffers()
+  ngOnInit(): void {
     this.handleOfferDealMessages()
+    this.handleGetAllOffers()
   }
 
-  handleGetAllOffers () {
-  //  const missing=[];
+  handleGetAllOffers() {
+    //  const missing=[];
     this.offers = this.ListingDetails?.offer?.filter((item: any) => {
       if (item.status.status != 'Cancelled') {
         this.ListingDetails.listConstraints.map((list: any) => {
@@ -66,7 +66,7 @@ export class AllOffersTabComponent implements OnInit {
               (offerContraint: any) => offerContraint.id == list.id
             )
             if (!offerContraint) {
-              item.constraints.push({...list,missing:true})
+              item.constraints.push({ ...list, missing: true })
               // missing.push()
             }
           }
@@ -76,31 +76,34 @@ export class AllOffersTabComponent implements OnInit {
         return item;
       }
     })
-    console.log("OFERRRRRRR",this.offers)
   }
 
-  onTableDataChange (event: any) {
+  onTableDataChange(event: any) {
     this.page = event
   }
 
-  onTableSizeChange (event: any): void {
+  onTableSizeChange(event: any): void {
     this.tableSize = event.target.value
     this.page = 1
   }
 
-  handleOfferDealMessages () {
+  handleOfferDealMessages() {
+    this.spinner.show()
+
     this.myOffersService.handleOfferDealMessages().subscribe(
       response => {
+        this.spinner.hide()
         this.offerConfirmMessages = response
       },
       (error: any) => {
+        this.spinner.hide()
         console.error('Error getting Offer : ', error)
       },
       () => console.log('Done getting Offer .')
     )
   }
 
-  handleSellMessage (offer: any) {
+  handleSellMessage(offer: any) {
     this.selectedOffer = offer
     let message = this.offerConfirmMessages?.filter(
       (item: any) => item.key == 'Selling Disclaimer'
@@ -108,7 +111,7 @@ export class AllOffersTabComponent implements OnInit {
     this.offerDisclaimer = message[0]
   }
 
-  handleSubmitOffer () {
+  handleSubmitOffer() {
     this.spinner.show()
     let activeItem = this.statusOptions?.find(
       (item: any) => item.status == 'Accepted'
@@ -147,7 +150,7 @@ export class AllOffersTabComponent implements OnInit {
       )
   }
 
-  handleUpdateOffer (id: any, body: any) {
+  handleUpdateOffer(id: any, body: any) {
     this.myOffersService.handleUpdateOffer(id, body).subscribe(
       response => {
         this.spinner.hide()

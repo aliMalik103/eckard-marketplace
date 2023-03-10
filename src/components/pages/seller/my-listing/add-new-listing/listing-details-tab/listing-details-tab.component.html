@@ -65,7 +65,7 @@
                     {{nmaErrorMessage}}
                 </span>
             </div>
-            <div class="col-6 d-flex flex-column pt-4" *ngIf="listingCost && createNewListing.nma">
+            <div class="col-md-6 d-flex flex-column pt-4" *ngIf="listingCost && createNewListing.nma">
                 <div class="align-items-center text-secondary">
                     <small>Listing Cost:
                         {{(listingCost.costPerNma*createNewListing.nma) |
@@ -160,7 +160,7 @@
                         'Please enter Minimum Asking Price')}}
                     </span>
                 </div>
-                <div class="col-6 d-flex flex-column pt-4"
+                <div class="col-md-6 d-flex flex-column pt-4"
                     *ngIf="listingCost && createNewListing.nma && createNewListing.minimumAsk">
                     <div class="align-items-center text-secondary">
                         <small>
@@ -220,7 +220,7 @@
                             Please enter Buy Immediately Price
                         </span>
                     </div>
-                    <div class="col-6 d-flex flex-column pt-5 m-auto"
+                    <div class="col-md-6 d-flex flex-column pt-5 m-auto"
                         *ngIf="listingCost && createNewListing.nma && createNewListing.buyNowPrice">
                         <div class="align-items-center text-secondary">
                             <small>

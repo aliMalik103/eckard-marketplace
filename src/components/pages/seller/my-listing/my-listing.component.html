@@ -28,46 +28,48 @@
             <button class="btn btn-warning text-white" (click)="handleNewList()"> NEW LISTING</button>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th *ngFor="let item of listingsColumns;index as i" class="text-secondary"
-                        [ngClass]="{'text-end': i > 2 }">{{item}}</th>
-                </tr>
-            </thead>
-            <tbody class="my-listing-table-body">
-                <ng-container *ngIf="myListings">
-
-                    <tr *ngFor="let list of myListings | paginate
-                    : {
-                        itemsPerPage: tableSize,
-                        currentPage: page,
-                        totalItems: count
-                      };
-                let i = index">
-                        <td> <span class="listing-td pe-auto" (click)="handleEdit(list)"
-                                title="Edit List">{{list.listingName}}</span>
-                        </td>
-                        <td>{{ list.auctionEnd | date:'MMM d, y'}}</td>
-                        <td>
-                            <span class="listing-td pe-auto">{{list['Account/Project']}}</span>
-                        </td>
-                        <td> <span class=" float-end">{{list.listedNMA}}</span></td>
-                        <td> <span class=" float-end">{{list.minimumAsk |
-                                currency:'CAD':'symbol-narrow':'.2-2'}}</span></td>
-                        <td><span class=" float-end">{{list.highestBid |
-                                currency:'CAD':'symbol-narrow':'.2-2'}}</span></td>
-                        <td> <span class="listing-td pe-auto float-end" (click)="handleOffers(list)">
-                                {{list['# Bids']}}</span></td>
-
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th *ngFor="let item of listingsColumns;index as i" class="text-secondary"
+                            [ngClass]="{'text-end': i > 2 }">{{item}}</th>
                     </tr>
+                </thead>
+                <tbody class="my-listing-table-body">
+                    <ng-container *ngIf="myListings">
 
-                </ng-container>
+                        <tr *ngFor="let list of myListings | paginate
+                        : {
+                            itemsPerPage: tableSize,
+                            currentPage: page,
+                            totalItems: count
+                        };
+                    let i = index">
+                            <td> <span class="listing-td pe-auto" (click)="handleEdit(list)"
+                                    title="Edit List">{{list.listingName}}</span>
+                            </td>
+                            <td>{{ list.auctionEnd | date:'MMM d, y'}}</td>
+                            <td>
+                                <span class="listing-td pe-auto">{{list['Account/Project']}}</span>
+                            </td>
+                            <td> <span class=" float-end">{{list.listedNMA}}</span></td>
+                            <td> <span class=" float-end">{{list.minimumAsk |
+                                    currency:'CAD':'symbol-narrow':'.2-2'}}</span></td>
+                            <td><span class=" float-end">{{list.highestBid |
+                                    currency:'CAD':'symbol-narrow':'.2-2'}}</span></td>
+                            <td> <span class="listing-td pe-auto float-end" (click)="handleOffers(list)">
+                                    {{list['# Bids']}}</span></td>
+
+                        </tr>
+
+                    </ng-container>
 
 
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
         <div class="d-flex justify-content-center" *ngIf="handleListingLength() > 0 ">
             <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
             </pagination-controls>

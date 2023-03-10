@@ -23,16 +23,18 @@ export class ResetPasswordComponent {
   }
 
   handleResetPassword() {
+    this.spinner.show()
     if (this.resetPassword.newPassword === this.resetPassword.confirmNewPassword) {
       // Call password reset service with new password
       let body = {
-        id: this.resetPassword.id,
-        password: this.resetPassword.newPassword
+        email: this.resetPassword.email,
+        password: this.resetPassword.newPassword,
+        regular_user: this.resetPassword.regular_user
       }
-      this.loginService.updateProfileDetails(body).subscribe(
+      this.loginService.signUp(body).subscribe(
         (response) => {
           this.spinner.hide()
-          this.toastr.success('Password Reset Successfully');
+          this.toastr.success('Congratulations! You have successfully signed up to our marketplace.')
           this.router.navigate(['']);
 
         },
@@ -44,6 +46,7 @@ export class ResetPasswordComponent {
         () => console.log("Done getting user"))
       console.log(this.resetPassword)
     } else {
+      this.spinner.hide()
       this.toastr.error('Confirm password does not match with new password.');
       // Show error message that passwords don't match
     }

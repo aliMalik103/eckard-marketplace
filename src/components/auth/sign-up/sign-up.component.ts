@@ -16,6 +16,7 @@ export class SignUpComponent implements OnInit {
     email: ""
   }
   resetPassword: any = {
+    id: null,
     regular_user: null,
     email: '',
     newPassword: '',
@@ -43,14 +44,15 @@ export class SignUpComponent implements OnInit {
     this.loginService.handleVerifySignUp(this.signUPForm.email).subscribe(
       (response: any) => {
         this.spinner.hide()
-        if (response.user.length > 0 ) {
+        if (response.contact.length > 0) {
 
-          if(response.contact.length > 0 && response.contact[0].mp_name != null){
-          this.toastr.warning('Account with this email already exist.')
-          this.router.navigate([''])
+          if (response.contact[0].mp_name != null) {
+            this.toastr.warning('Account with this email already exist.')
+            this.router.navigate([''])
           }
-          else{
+          else {
             this.toastr.info('Please set your password.')
+            this.resetPassword.id = response.contact[0].id
             this.resetPassword.regular_user = response.reg_user[0].id
             this.resetPassword.email = response.user[0].email
             this.isResetPasswordFlag = true

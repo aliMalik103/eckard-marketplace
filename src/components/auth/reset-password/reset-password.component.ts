@@ -27,11 +27,14 @@ export class ResetPasswordComponent {
     if (this.resetPassword.newPassword === this.resetPassword.confirmNewPassword) {
       // Call password reset service with new password
       let body = {
+        id: this.resetPassword.id,
+        mpStatus:'active',
         email: this.resetPassword.email,
         password: this.resetPassword.newPassword,
         regular_user: this.resetPassword.regular_user
       }
-      this.loginService.signUp(body).subscribe(
+
+      this.loginService.updateProfileDetails(body).subscribe(
         (response) => {
           this.spinner.hide()
           this.toastr.success('Congratulations! You have successfully signed up to our marketplace.')

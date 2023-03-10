@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Login, LoginForm, User, UserDetails } from 'src/components/model/login';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -83,6 +83,12 @@ export class LoginService {
 
   updateProfileDetails(body: any): Observable<any> {
     const res = this.http.patch(`${environment.API_BASE_URL}/contact/${body.id}/`, body)
+    return res;
+  }
+
+  handleVerifySignUp(email: any) {
+    const params = new HttpParams().set('email', email);
+    const res = this.http.get(`${environment.API_BASE_URL}/users/findByEmail`, { params })
     return res;
   }
 

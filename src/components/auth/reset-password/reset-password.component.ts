@@ -31,7 +31,8 @@ export class ResetPasswordComponent {
         mpStatus:'active',
         email: this.resetPassword.email,
         password: this.resetPassword.newPassword,
-        regular_user: this.resetPassword.regular_user
+        regular_user: this.resetPassword.regular_user,
+        signup_journy: true
       }
 
       this.loginService.updateProfileDetails(body).subscribe(

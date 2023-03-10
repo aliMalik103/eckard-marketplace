@@ -318,7 +318,7 @@ export class ProfileComponent implements OnInit {
 
   updateProfileDetails(body: any) {
     this.spinner.show()
-
+    body.signup_journy = false
     this.loginService.updateProfileDetails(body).subscribe(
       (response) => {
         this.spinner.hide()

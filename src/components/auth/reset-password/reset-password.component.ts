@@ -32,7 +32,7 @@ export class ResetPasswordComponent {
         email: this.resetPassword.email,
         password: this.resetPassword.newPassword,
         regular_user: this.resetPassword.regular_user,
-        signup_journy: true
+        signup_journey: true
       }
 
       this.loginService.updateProfileDetails(body).subscribe(

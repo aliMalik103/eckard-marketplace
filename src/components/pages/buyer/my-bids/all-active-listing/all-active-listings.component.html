@@ -24,124 +24,121 @@
 
     </div>
 
-    <div class="d-flex gap-5 mt-4 mb-3 align-items-center" *ngIf="!isDirectSaleOffer">
+    <div class="d-flex flex-wrap gap-5 mt-4 mb-3 align-items-center" *ngIf="!isDirectSaleOffer">
 
-        <div>
-            <ng-multiselect-dropdown [ngStyle]="{width:'200px',display: 'block'}" enableCheckAll="false"
+        <div class=" flex-grow-1">
+            <ng-multiselect-dropdown [ngStyle]="{width:'100%',display: 'block'}" enableCheckAll="false"
                 [placeholder]="'Filter By Projects'" [settings]="dropdownSettings" [data]="allActiveProjects"
                 [(ngModel)]="selectedItems" (onDeSelect)="handleChange()" (onSelect)="handleChange()">
             </ng-multiselect-dropdown>
         </div>
 
-        <div>
-            <ng-multiselect-dropdown [ngStyle]="{width:'200px',display: 'block'}" enableCheckAll="false"
+        <div class=" flex-grow-1">
+            <ng-multiselect-dropdown [ngStyle]="{width:'100%',display: 'block'}" enableCheckAll="false"
                 [placeholder]="'Auction Type'" [settings]="dropdownSettings" [data]="auctionTypeFilters"
                 [(ngModel)]="auctionFiltersSelected" (onDeSelect)="handleChange()" (onSelect)="handleChange()">
             </ng-multiselect-dropdown>
         </div>
 
-        <!-- <div > 
-      <ng-multiselect-dropdown [ngStyle]="{width:'200px',display: 'block'}" enableCheckAll="false" [placeholder]="'Maximum Total Price'" [settings]="dropdownSettings" [data]="minAskFilters" [(ngModel)]="minAskFiltersSelected" (onDeSelect)="handleChange()" (onSelect)="handleChange()" > 
-    </ng-multiselect-dropdown>
-  </div> -->
-
-        <div class="d-inline-block pe-auto list-type-heading mr-2" (click)="toggleListing('Active')">
-            <span [ngClass]="{'list-underline':offerStatus =='Active'}">Active Listings</span>
+        <div class=" pe-auto  d-flex flex-grow-1 justify-content-around">
+            <div class="list-type-heading mb-1" (click)="toggleListing('Active')">
+                <span [ngClass]="{'list-underline':offerStatus =='Active'}">Active Listings</span>
+            </div>
+            <div class="list-type-heading mb-1" (click)="toggleListing('Accepted')">
+                <span [ngClass]="{'list-underline': offerStatus =='Accepted'}">Closed Listings</span>
+            </div>
+            <div class="list-type-heading" (click)="toggleListing('Cancelled')">
+                <span [ngClass]="{'list-underline': offerStatus =='Cancelled'}">Cancelled Listings</span>
+            </div>
         </div>
-        <div class="d-inline-block pe-auto list-type-heading ml-2" (click)="toggleListing('Accepted')">
-            <span [ngClass]="{'list-underline': offerStatus =='Accepted'}">Closed Listings</span>
-        </div>
-        <div class="d-inline-block pe-auto  list-type-heading ml-2" (click)="toggleListing('Cancelled')">
-            <span [ngClass]="{'list-underline': offerStatus =='Cancelled'}">Cancelled Listings</span>
-        </div>
-
 
     </div>
-    <div class="d-flex gap-5 mt-4 mb-3 align-items-center" *ngIf="!isDirectSaleOffer">
 
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th *ngFor="let item of offersColumns ; index as i " class="text-secondary "
-                    [ngClass]="{'text-end': (i > 0 && i !=2), 'text-center': i == 2 }">{{item}}</th>
-            </tr>
-        </thead>
-        <tbody class="my-listing-table-body" id="accordion">
-            <ng-container *ngFor=" let offer of myOffers | paginate
-            : {
-                itemsPerPage: tableSize,
-                currentPage: page,
-                totalItems: count
-              };
-        let i = index">
-                <tr class="text-end text-secondary">
-                    <td class="text-start">{{offer.accountMpName}} / <span
-                            class="pe-auto offer-td">{{offer.projectId}}</span></td>
-                    <td class=""> {{offer.auctionEnd | date:'d MMM, y'}}</td>
-                    <td class=""> {{offer.auctionType}}</td>
-                    <td>
-                        {{offer.listedNMA}}
-                    </td>
-                    <td>{{offer.minimumAsk | currency:'':'':'.2-2'}}</td>
-                    <td>{{offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer') ?
-                        "N/A" : offer.buyNowPrice | currency:'':'':'.2-2'}}
-                    </td>
-                    <td>{{offer.auctionType.startsWith('Silent -') ? '' : offer.noOfBids}}</td>
-                    <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
-                        currency:'':'':'.2-2'}}
-                    </td>
-                    <ng-container *ngIf="offerStatus == 'Active'">
 
-                        <td id="heading{{i}}">
-                            <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
-                                [attr.aria-controls]="'collapse'+i" class="offer-td collapsed pe-auto"
-                                title="Offer details"
-                                [ngClass]="{'highest-offer':(offer.isHighestOffer  &&
-                                    !offer.auctionType.startsWith('Silent -') && offer.offerAmount) , 'not-highest-offer' :
-                                    (!offer.isHighestOffer  && !offer.auctionType.startsWith('Silent -') && offer.offerAmount)  }"
-                                (click)="handleListDetails(offer.listingId , offer.offer_id)">
-
-                                {{!offer.offerAmount ? 'make offer':offer.offerAmount |
-                                currency:'':'':'.2-2'}}
-                            </span>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th *ngFor="let item of offersColumns ; index as i " class="text-secondary "
+                        [ngClass]="{'text-end': (i > 0 && i !=2), 'text-center': i == 2 }">{{item}}</th>
+                </tr>
+            </thead>
+            <tbody class="my-listing-table-body" id="accordion">
+                <ng-container *ngFor=" let offer of myOffers | paginate
+                : {
+                    itemsPerPage: tableSize,
+                    currentPage: page,
+                    totalItems: count
+                };
+            let i = index">
+                    <tr class="text-end text-secondary">
+                        <td class="text-start">{{offer.accountMpName}} / <span
+                                class="pe-auto offer-td">{{offer.projectId}}</span></td>
+                        <td class=""> {{offer.auctionEnd | date:'d MMM, y'}}</td>
+                        <td class=""> {{offer.auctionType}}</td>
+                        <td>
+                            {{offer.listedNMA}}
                         </td>
-                    </ng-container>
-                    <ng-container *ngIf="offerStatus == 'Accepted'">
+                        <td>{{offer.minimumAsk | currency:'':'':'.2-2'}}</td>
+                        <td>{{offer.auctionType != 'Fix Price' && !offer.auctionType.endsWith('Buy Now or Make an Offer') ?
+                            "N/A" : offer.buyNowPrice | currency:'':'':'.2-2'}}
+                        </td>
+                        <td>{{offer.auctionType.startsWith('Silent -') ? '' : offer.noOfBids}}</td>
+                        <td>{{offer.auctionType.startsWith('Silent -') ? 'silent' : offer.highestBid |
+                            currency:'':'':'.2-2'}}
+                        </td>
+                        <ng-container *ngIf="offerStatus == 'Active'">
 
-                        <td> {{offer.SalePrice | currency:'':'':'.2-2'}}</td>
-                        <td> {{offer.SaleDate | date:'d MMM, y'}}</td>
+                            <td id="heading{{i}}">
+                                <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
+                                    [attr.aria-controls]="'collapse'+i" class="offer-td collapsed pe-auto"
+                                    title="Offer details"
+                                    [ngClass]="{'highest-offer':(offer.isHighestOffer  &&
+                                        !offer.auctionType.startsWith('Silent -') && offer.offerAmount) , 'not-highest-offer' :
+                                        (!offer.isHighestOffer  && !offer.auctionType.startsWith('Silent -') && offer.offerAmount)  }"
+                                    (click)="handleListDetails(offer.listingId , offer.offer_id)">
 
-                    </ng-container>
-                    <ng-container *ngIf="offerStatus == 'Cancelled'">
-                        <td> {{offer.Cancel_Date | date:'d MMM, y'}}</td>
-                    </ng-container>
+                                    {{!offer.offerAmount ? 'make offer':offer.offerAmount |
+                                    currency:'':'':'.2-2'}}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngIf="offerStatus == 'Accepted'">
 
-                </tr>
-                <tr id="collapse{{i}}" class=" collapse fade" [ngClass]="{'show':isDirectSaleOffer }"
-                    [attr.aria-labelledby]="'heading'+i" data-parent="#accordion">
-                    <td [attr.colspan]="offerStatus == 'Accepted' ? '10' : '9'">
+                            <td> {{offer.SalePrice | currency:'':'':'.2-2'}}</td>
+                            <td> {{offer.SaleDate | date:'d MMM, y'}}</td>
 
-                        <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
+                        </ng-container>
+                        <ng-container *ngIf="offerStatus == 'Cancelled'">
+                            <td> {{offer.Cancel_Date | date:'d MMM, y'}}</td>
+                        </ng-container>
 
-                            <app-listing-details [listDetails]="listDetails" [offer]="offer">
-                            </app-listing-details>
-                            <hr>
-                            <span *ngIf="listDetails">
-                                <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="newOffer"
-                                    [offer]="offer" [listDetails]="listDetails" [statusOptions]="statusOptions"
-                                    (updateOffers)="handleUpdateOffers()" [index]="i">
-                                </app-my-offers>
-                            </span>
+                    </tr>
+                    <tr id="collapse{{i}}" class=" collapse fade" [ngClass]="{'show':isDirectSaleOffer }"
+                        [attr.aria-labelledby]="'heading'+i" data-parent="#accordion">
+                        <td [attr.colspan]="offerStatus == 'Accepted' ? '10' : '9'">
+
+                            <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
+
+                                <app-listing-details [listDetails]="listDetails" [offer]="offer">
+                                </app-listing-details>
+                                <hr>
+                                <span *ngIf="listDetails">
+                                    <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="newOffer"
+                                        [offer]="offer" [listDetails]="listDetails" [statusOptions]="statusOptions"
+                                        (updateOffers)="handleUpdateOffers()" [index]="i">
+                                    </app-my-offers>
+                                </span>
 
 
-                        </div>
-                    </td>
-                </tr>
-            </ng-container>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
     <div class="d-flex justify-content-center">
         <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)"
             *ngIf="handleLength(myOffers)">

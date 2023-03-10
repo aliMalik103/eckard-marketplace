@@ -28,16 +28,16 @@
 
 
   </div>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th *ngFor="let item of transactionColumns;index as i" class="text-secondary"
-          [ngClass]="{'text-end':i >= 2 && i <= 3 , 'user-name': i ==4} ">{{item}}</th>
-      </tr>
-    </thead>
-    <tbody class="my-listing-table-body text-secondary" id="accordion">
-      <ng-container *ngFor="let transaction of pendingsTransactions | paginate
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let item of transactionColumns;index as i" class="text-secondary"
+            [ngClass]="{'text-end':i >= 2 && i <= 3 , 'user-name': i ==4} ">{{item}}</th>
+        </tr>
+      </thead>
+      <tbody class="my-listing-table-body text-secondary" id="accordion">
+        <ng-container *ngFor="let transaction of pendingsTransactions | paginate
                 : {
                     itemsPerPage: tableSize,
                     currentPage: page,
@@ -45,274 +45,276 @@
                   };
             let i = index">
 
-        <tr>
-          <td id="heading{{i}}">
-            <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
-              (click)="clickTransaction(transaction)" [attr.aria-controls]="'collapse'+i"
-              class="offer-td collapsed pe-auto" title="Transactions details">
+          <tr>
+            <td id="heading{{i}}">
+              <span data-toggle="collapse" [attr.data-target]="'#collapse'+i" aria-expanded="false"
+                (click)="clickTransaction(transaction)" [attr.aria-controls]="'collapse'+i"
+                class="offer-td collapsed pe-auto" title="Transactions details">
 
-              {{transaction.trnxId | uppercase}}
-            </span>
-          </td>
-          <td>
-            {{transaction?.listing?.project?.projectId}}
-          </td>
-          <td class="text-end"> {{transaction.nma}}</td>
-          <td class="text-end">{{transaction.trans_amount | currency:'':'':'.2-2'}}</td>
-          <td class="pl-5">
-            <ng-container *ngIf="transactionStatus =='Buy' ; else statusElseBlock">
-              {{transaction.listing.account.mpName}}
-            </ng-container>
-            <ng-template #statusElseBlock>
-              {{transaction.offer.contact.mpName}}
-            </ng-template>
-
-          </td>
-          <td>
-            <ng-container *ngIf="transactionStatus =='Buy'">
-
-              <ng-container *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' ; else elseBuyerActions">
-                <span class="pe-auto transactions-actions" [attr.data-bs-target]="'#exampleModal'"
-                  data-bs-toggle="modal" (click)=" handleAlertTransactionsMessage(transaction,'PSA Fully Executed')">
-                  Confirm Funds Transferred</span>
+                {{transaction.trnxId | uppercase}}
+              </span>
+            </td>
+            <td>
+              {{transaction?.listing?.project?.projectId}}
+            </td>
+            <td class="text-end"> {{transaction.nma}}</td>
+            <td class="text-end">{{transaction.trans_amount | currency:'':'':'.2-2'}}</td>
+            <td class="pl-5">
+              <ng-container *ngIf="transactionStatus =='Buy' ; else statusElseBlock">
+                {{transaction.listing.account.mpName}}
               </ng-container>
-
-              <ng-template #elseBuyerActions>
-                n/a
+              <ng-template #statusElseBlock>
+                {{transaction.offer.contact.mpName}}
               </ng-template>
 
-            </ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="transactionStatus =='Buy'">
 
-            <ng-container *ngIf="transactionStatus =='Sell'">
-              <ng-container
-                *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' || transaction.status.statusLabel == 'Fund Transfer Initiated' ;else  elseSellerBlockAction">
-                <span span class="pe-auto  transactions-actions" [attr.data-bs-target]="'#exampleModal'"
-                  data-bs-toggle="modal"
-                  (click)="handleAlertTransactionsMessage(transaction,'Fund Transfer Confirmed')">Confirm Funds
-                  Received</span>
+                <ng-container *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' ; else elseBuyerActions">
+                  <span class="pe-auto transactions-actions" [attr.data-bs-target]="'#exampleModal'"
+                    data-bs-toggle="modal" (click)=" handleAlertTransactionsMessage(transaction,'PSA Fully Executed')">
+                    Confirm Funds Transferred</span>
+                </ng-container>
+
+                <ng-template #elseBuyerActions>
+                  n/a
+                </ng-template>
+
               </ng-container>
 
-              <ng-template #elseSellerBlockAction>
-                n/a
-              </ng-template>
+              <ng-container *ngIf="transactionStatus =='Sell'">
+                <ng-container
+                  *ngIf="transaction.status.statusLabel == 'PSA Fully Executed' || transaction.status.statusLabel == 'Fund Transfer Initiated' ;else  elseSellerBlockAction">
+                  <span span class="pe-auto  transactions-actions" [attr.data-bs-target]="'#exampleModal'"
+                    data-bs-toggle="modal"
+                    (click)="handleAlertTransactionsMessage(transaction,'Fund Transfer Confirmed')">Confirm Funds
+                    Received</span>
+                </ng-container>
 
-            </ng-container>
+                <ng-template #elseSellerBlockAction>
+                  n/a
+                </ng-template>
 
-          </td>
-          <td>{{transaction.status.statusLabel}}</td>
-          <td>
-            <span class="progress-border p-1 status-E"
-              [ngClass]="{'completed': ['Pending PSA Signatures','PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">
-              E</span>
-            <span class="progress-border p-1 status-E"
-              [ngClass]="{'completed': ['PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">E</span>
-            <span class="progress-border p-1 status-B"
-              [ngClass]="{'completed': ['Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">B</span>
-            <span class="progress-border p-1 status-S"
-              [ngClass]="{'completed': ['Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">S</span>
-            <span class="progress-border p-1 status-E"
-              [ngClass]="{'completed': ['Asset Transfer Completed'].includes(transaction.status.statusLabel) }">E</span>
-          </td>
+              </ng-container>
 
-        </tr>
-        <tr id="collapse{{i}}" class=" collapse fade" [attr.aria-labelledby]="'heading'+i" data-parent="#accordion">
-          <td colspan="8">
+            </td>
+            <td>{{transaction.status.statusLabel}}</td>
+            <td>
+              <span class="progress-border p-1 status-E"
+                [ngClass]="{'completed': ['Pending PSA Signatures','PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">
+                E</span>
+              <span class="progress-border p-1 status-E"
+                [ngClass]="{'completed': ['PSA Fully Executed','Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">E</span>
+              <span class="progress-border p-1 status-B"
+                [ngClass]="{'completed': ['Fund Transfer Initiated','Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">B</span>
+              <span class="progress-border p-1 status-S"
+                [ngClass]="{'completed': ['Fund Transfer Confirmed','Asset Transfer Completed','Pending Asset Transfer'].includes(transaction.status.statusLabel) }">S</span>
+              <span class="progress-border p-1 status-E"
+                [ngClass]="{'completed': ['Asset Transfer Completed'].includes(transaction.status.statusLabel) }">E</span>
+            </td>
 
-            <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
+          </tr>
+          <tr id="collapse{{i}}" class=" collapse fade" [attr.aria-labelledby]="'heading'+i" data-parent="#accordion">
+            <td colspan="8">
 
-              <app-listing-details [listDetails]="transaction.listing" [offer]="transaction.listing"
-                [isTransaction]="true">
-              </app-listing-details>
-              <hr>
+              <div class="card-body border shadow-lg p-4 mb-5 bg-white rounded">
+
+                <app-listing-details [listDetails]="transaction.listing" [offer]="transaction.listing"
+                  [isTransaction]="true">
+                </app-listing-details>
+                <hr>
 
 
-              <div *ngIf="transactionStatus === 'Sell'">
+                <div *ngIf="transactionStatus === 'Sell'">
 
-                <div class="mt-4">
-                  <h5 class="offer-heading" style="color: navy;">
-                    Transfer Method Details
-                  </h5>
-                </div>
-
-                <div *ngFor="let k of objectKeys(accountsMethods)" class="mt-4"
-                  [ngClass]="{' d-flex gap-5': methodAssocietedAlready}">
-
-                  <div [ngClass]="{' pt-2 fw-bold':methodAssocietedAlready}">
-                    <ng-container *ngIf="methodAssocietedAlready">
-
-                      <input type="checkbox" checked="true" style="margin-right: 10px;"
-                        [disabled]="methodAssocietedAlready">
-                    </ng-container>
-                    {{ k }}
+                  <div class="mt-4">
+                    <h5 class="offer-heading" style="color: navy;">
+                      Transfer Method Details
+                    </h5>
                   </div>
-                  <div [ngClass]="{'p-0 ':methodAssocietedAlready , 'transaction-methods': !methodAssocietedAlready}">
-                    <table class="table table-borderless">
-                      <ng-container *ngFor="let list of accountsMethods[k]; let z = index">
 
-                        <thead *ngIf="z==0">
-                          <!-- <tr>
+                  <div *ngFor="let k of objectKeys(accountsMethods)" class="mt-4"
+                    [ngClass]="{' d-flex gap-5': methodAssocietedAlready}">
+
+                    <div [ngClass]="{' pt-2 fw-bold':methodAssocietedAlready}">
+                      <ng-container *ngIf="methodAssocietedAlready">
+
+                        <input type="checkbox" checked="true" style="margin-right: 10px;"
+                          [disabled]="methodAssocietedAlready">
+                      </ng-container>
+                      {{ k }}
+                    </div>
+                    <div [ngClass]="{'p-0 ':methodAssocietedAlready , 'transaction-methods': !methodAssocietedAlready}">
+                      <table class="table table-borderless">
+                        <ng-container *ngFor="let list of accountsMethods[k]; let z = index">
+
+                          <thead *ngIf="z==0">
+                            <!-- <tr>
                             <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)">{{key}}</th>
                           </tr> -->
-                          <tr>
-                            <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)"
-                              [ngClass]="{'w-20':(key=='Eckard Account' || key == 'Account Holder') && !methodAssocietedAlready}">
-                              {{key}}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td *ngFor="let key of objectKeys(list.json_fields);index as j">
+                            <tr>
+                              <th class="text-secondary" *ngFor="let key of objectKeys(list.json_fields)"
+                                [ngClass]="{'w-20':(key=='Eckard Account' || key == 'Account Holder') && !methodAssocietedAlready}">
+                                {{key}}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td *ngFor="let key of objectKeys(list.json_fields);index as j">
 
-                              <ng-container *ngIf="!methodAssocietedAlready">
+                                <ng-container *ngIf="!methodAssocietedAlready">
 
-                                <input type="checkbox" [(ngModel)]="list.current" style="margin-right: 10px;"
-                                  *ngIf="j==0" [disabled]="methodAssocietedAlready"
-                                  [attr.data-bs-target]="'#exampleModal'+i+list.id" data-bs-toggle="modal"
-                                  (click)="handleAlertMessage()">
-                              </ng-container>
-
-
-                              <ng-container *ngIf="key === 'Account Number' || key === 'ABA Routing Number'">
-                                <ng-container
-                                  *ngIf="showData[i+z] && key === 'Account Number' || showData1[i+z] && key === 'ABA Routing Number'">
-                                  {{ list.json_fields[key] }}
+                                  <input type="checkbox" [(ngModel)]="list.current" style="margin-right: 10px;"
+                                    *ngIf="j==0" [disabled]="methodAssocietedAlready"
+                                    [attr.data-bs-target]="'#exampleModal'+i+list.id" data-bs-toggle="modal"
+                                    (click)="handleAlertMessage()">
                                 </ng-container>
-                                <ng-container
-                                  *ngIf="!showData[i+z] && key === 'Account Number' || !showData1[i+z] && key === 'ABA Routing Number'">
-                                  ..{{ list.json_fields[key].toString().slice(-4) }}
-                                </ng-container>
-                              </ng-container>
-                              <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'">
-                                <span>
-                                  <ng-container *ngIf="key === 'Eckard Account'">
-                                    <ng-container *ngIf="handleFTMAccepted(list)">
-                                      <img src="assets/eckard-approve.svg" class="mx-1 eckard-ftm-approve"
-                                        alt="ftm-approve" />
-                                    </ng-container>
+
+
+                                <ng-container *ngIf="key === 'Account Number' || key === 'ABA Routing Number'">
+                                  <ng-container
+                                    *ngIf="showData[i+z] && key === 'Account Number' || showData1[i+z] && key === 'ABA Routing Number'">
+                                    {{ list.json_fields[key] }}
                                   </ng-container>
+                                  <ng-container
+                                    *ngIf="!showData[i+z] && key === 'Account Number' || !showData1[i+z] && key === 'ABA Routing Number'">
+                                    ..{{ list.json_fields[key].toString().slice(-4) }}
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="key !== 'Account Number' && key !== 'ABA Routing Number'">
+                                  <span>
+                                    <ng-container *ngIf="key === 'Eckard Account'">
+                                      <ng-container *ngIf="handleFTMAccepted(list)">
+                                        <img src="assets/eckard-approve.svg" class="mx-1 eckard-ftm-approve"
+                                          alt="ftm-approve" />
+                                      </ng-container>
+                                    </ng-container>
 
-                                  {{ list.json_fields[key] }}
-                                </span>
+                                    {{ list.json_fields[key] }}
+                                  </span>
 
-                              </ng-container>
-                              <ng-container *ngIf="key === 'Account Number'">
-                                <i class="fa fa-email pe-auto px-4"
-                                  [ngClass]="showData[i+z] ? 'fa-eye-slash' : 'fa-eye'" (click)="toggleData(i+z)"></i>
-                              </ng-container>
-                              <ng-container *ngIf="key === 'ABA Routing Number'">
-                                <i class="fa fa-email pe-auto px-4"
-                                  [ngClass]="showData1[i+z] ? 'fa-eye-slash' : 'fa-eye'" (click)="toggleData1(i+z)"></i>
-                              </ng-container>
-                              <div class="modal fade" id="exampleModal{{i}}{{list.id}}" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-                                  <div class="modal-content bg-white">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="staticBackdropLabel"
-                                        [innerHTML]="offerDisclaimer?.value1">
-                                      </h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                        (click)="list.current = false"></button>
-                                    </div>
-                                    <div class="modal-body" [innerHTML]="offerDisclaimer?.value2">
-                                    </div>
-                                    <div class="modal-footer">
-                                      <div class="mr-auto ">
+                                </ng-container>
+                                <ng-container *ngIf="key === 'Account Number'">
+                                  <i class="fa fa-email pe-auto px-4"
+                                    [ngClass]="showData[i+z] ? 'fa-eye-slash' : 'fa-eye'" (click)="toggleData(i+z)"></i>
+                                </ng-container>
+                                <ng-container *ngIf="key === 'ABA Routing Number'">
+                                  <i class="fa fa-email pe-auto px-4"
+                                    [ngClass]="showData1[i+z] ? 'fa-eye-slash' : 'fa-eye'"
+                                    (click)="toggleData1(i+z)"></i>
+                                </ng-container>
+                                <div class="modal fade" id="exampleModal{{i}}{{list.id}}" data-bs-backdrop="static"
+                                  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                  aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                                    <div class="modal-content bg-white">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel"
+                                          [innerHTML]="offerDisclaimer?.value1">
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                          aria-label="Close" (click)="list.current = false"></button>
+                                      </div>
+                                      <div class="modal-body" [innerHTML]="offerDisclaimer?.value2">
+                                      </div>
+                                      <div class="modal-footer">
+                                        <div class="mr-auto ">
 
-                                        <button type="button" class="btn btn-warning text-white mr-2 fw-bold"
-                                          data-bs-dismiss="modal" (click)="associateMethod(list)">YES</button>
-                                        <button type="button" class="btn btn-danger ml-2 fw-bold"
-                                          data-bs-dismiss="modal" (click)="list.current = false">NO</button>
+                                          <button type="button" class="btn btn-warning text-white mr-2 fw-bold"
+                                            data-bs-dismiss="modal" (click)="associateMethod(list)">YES</button>
+                                          <button type="button" class="btn btn-danger ml-2 fw-bold"
+                                            data-bs-dismiss="modal" (click)="list.current = false">NO</button>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
 
-                            </td>
-                          </tr>
+                              </td>
+                            </tr>
 
-                        </tbody>
+                          </tbody>
 
-                      </ng-container>
-                    </table>
-                  </div>
-                </div>
-
-
-              </div>
-
-              <div *ngIf="transactionStatus !== 'Sell'">
-                <div class="mt-4">
-                  <h5 class="offer-heading" style="color: navy;">
-                    <ng-container>
-
-                      Transfer Method Details
-                    </ng-container>
-
-                  </h5>
-                </div>
-
-                <div *ngIf="transaction.fund_transfer_method?.length==0">
-
-                  <div style="padding-top: 10px;font-size: medium;">
-                    N/A
-                  </div>
-                </div>
-
-
-                <div *ngFor="let item of transaction.fund_transfer_method; let i = index" class="d-flex gap-5">
-                  <div class="pt-2 fw-bold d-flex gap-2" *ngIf="item">
-                    <div>{{item.type}}</div>
-                    <div *ngIf="handleFTMAccepted(item)">
-                      <img src="assets/eckard-approve.svg" class="mx-1 pb-1 eckard-ftm-approve" alt="ftm-approve" />
+                        </ng-container>
+                      </table>
                     </div>
                   </div>
-                  <div class="p-0 w-100">
-                    <table class="table table-borderless">
-                      <ng-container>
 
-                        <thead *ngIf="i==0">
-                          <tr>
-                            <th class="text-secondary " *ngFor="let key of objectKeys(item.json_fields)">{{key}}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td class="text-secondary" *ngFor="let key of objectKeys(item.json_fields)">
-                              {{item.json_fields[key] }}</td>
-                          </tr>
 
-                        </tbody>
-                      </ng-container>
-                    </table>
-                  </div>
                 </div>
 
-                <hr>
+                <div *ngIf="transactionStatus !== 'Sell'">
+                  <div class="mt-4">
+                    <h5 class="offer-heading" style="color: navy;">
+                      <ng-container>
+
+                        Transfer Method Details
+                      </ng-container>
+
+                    </h5>
+                  </div>
+
+                  <div *ngIf="transaction.fund_transfer_method?.length==0">
+
+                    <div style="padding-top: 10px;font-size: medium;">
+                      N/A
+                    </div>
+                  </div>
+
+
+                  <div *ngFor="let item of transaction.fund_transfer_method; let i = index" class="d-flex gap-5">
+                    <div class="pt-2 fw-bold d-flex gap-2" *ngIf="item">
+                      <div>{{item.type}}</div>
+                      <div *ngIf="handleFTMAccepted(item)">
+                        <img src="assets/eckard-approve.svg" class="mx-1 pb-1 eckard-ftm-approve" alt="ftm-approve" />
+                      </div>
+                    </div>
+                    <div class="p-0 w-100">
+                      <table class="table table-borderless">
+                        <ng-container>
+
+                          <thead *ngIf="i==0">
+                            <tr>
+                              <th class="text-secondary " *ngFor="let key of objectKeys(item.json_fields)">{{key}}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td class="text-secondary" *ngFor="let key of objectKeys(item.json_fields)">
+                                {{item.json_fields[key] }}</td>
+                            </tr>
+
+                          </tbody>
+                        </ng-container>
+                      </table>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                </div>
+                <ng-container *ngIf="methodAssocietedAlready">
+
+                  <hr>
+                </ng-container>
+
+                <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="transaction.offer"
+                  [offer]="transaction.listing" [listDetails]="transaction.listing" [statusOptions]="statusOptions"
+                  (updateOffers)="handleUpdateOffers()" [index]="i" [isTransaction]="true"
+                  [transactionStatus]="transactionStatus">
+                </app-my-offers>
 
               </div>
-              <ng-container *ngIf="methodAssocietedAlready">
-
-                <hr>
-              </ng-container>
-
-              <app-my-offers [constraintOptions]="constraintOptions" [newOffer]="transaction.offer"
-                [offer]="transaction.listing" [listDetails]="transaction.listing" [statusOptions]="statusOptions"
-                (updateOffers)="handleUpdateOffers()" [index]="i" [isTransaction]="true"
-                [transactionStatus]="transactionStatus">
-              </app-my-offers>
-
-            </div>
-          </td>
-        </tr>
-      </ng-container>
+            </td>
+          </tr>
+        </ng-container>
 
 
 
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
   <div class="d-flex justify-content-center" *ngIf="handleMyTransactionsLength() > 0">
     <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
     </pagination-controls>

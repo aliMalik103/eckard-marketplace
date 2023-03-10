@@ -6,18 +6,24 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { LoginService } from 'src/components/services/login.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ResetPasswordComponent } from '../reset-password/reset-password.component';
+import { MyOffersService } from 'src/components/services/my-offers.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
 @NgModule({
-  declarations: [SignUpComponent],
+  declarations: [SignUpComponent, ResetPasswordComponent],
   imports: [
     AppRoutingModule,
     FormsModule,
     CommonModule,
-    NgxSpinnerModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    NgxSpinnerModule
   ],
-  providers: [LoginService,ToastrService,],
-  exports:[SignUpComponent]
+  providers: [LoginService, ToastrService, MyOffersService],
+  exports: [SignUpComponent]
 })
 export class SignUpModule { }

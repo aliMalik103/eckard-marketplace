@@ -1,6 +1,6 @@
 <div class="container card mt-4 pt-4 h-100">
 
-    <div class="breadcrumb-container  mb-3">
+    <div class="breadcrumb-container">
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-link">
@@ -29,8 +29,6 @@
         <div class="d-inline-block pe-auto  list-type-heading ml-2" (click)="toggleTransactions('pending-asset')">
             <span [ngClass]="{'list-underline': transactionStatus =='pending-asset'}">Asset Transfer Initiated</span>
         </div>
-
-
     </div>
 
     <div class="table-responsive">

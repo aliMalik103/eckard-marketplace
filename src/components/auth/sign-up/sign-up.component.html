@@ -1,58 +1,48 @@
 <div class="d-flex m-auto  mt-5 card w-50 border-0 sign-up-container">
+    <ng-container *ngIf="!isResetPasswordFlag ; else elseBlockResetPassword">
 
-    <form (ngSubmit)="handleSubmit()" #signUp="ngForm" class="sign-up-form">
-        <h3 class="title">P2P Marketplace Sign Up
-        </h3>
-        <div class=" px-4 sign-up-field-container">
-            <p>
-                The Eckard Pier-to-Pier Marketplace allows Eckard Partners to trade their Mineral Rights with other
-                Eckard
-                Partners
-            </p>
-            <p>Use your existing Eckard Login to Sign Up.
-            </p>
-        </div>
-
-        <div class=" px-4 sign-up-field-container">
-            <input type="email" id="email" name="email" class="form-control p-2 input" placeholder="Email"
-                [(ngModel)]="signUPForm.email" required #email="ngModel"
-                [ngClass]="{'border border-danger':email.invalid && (email.dirty || email.touched)}" email>
-            <i class="fa fa-envelope px-4" aria-hidden="true"></i>
-        </div>
-        <div *ngIf="email.invalid && (email.dirty || email.touched ) &&  email.errors"
-            class="text-danger rounded px-4 error-message">
-            Please enter valid email
-        </div>
-
-        <div class="mt-3 px-4 sign-up-field-container">
-            <input [type]="isPassword ? 'text' : 'password' " class="form-control p-2 input"
-                [ngClass]="{'border border-danger':password.invalid && (password.dirty || password.touched)}"
-                name="password " id="password" placeholder="Password" [(ngModel)]="signUPForm.password" required
-                #password="ngModel">
-            <i class="fa fa-lock px-4" aria-hidden="true"> </i>
-
-            <i class="fa fa-email px-4 " [ngClass]="{'fa-eye': !isPassword , 'fa-eye-slash': isPassword}"
-                (click)="togglePassword()"> </i>
-
-        </div>
-        <div *ngIf="password.invalid && (password.dirty || password.touched)"
-            class="text-danger rounded px-4 error-message ">
-            Please enter password
-        </div>
-
-        <div class="mt-3  d-flex justify-content-end d px-4">
-
-            <div>
-
-                <span for="login" class="login-path" [routerLink]="['/']">
-                    Marketplace Login</span>
+        <form (ngSubmit)="handleSubmit()" #signUp="ngForm" class="sign-up-form">
+            <h3 class="title">P2P Marketplace Sign Up
+            </h3>
+            <div class=" px-4 sign-up-field-container">
+                <p>
+                    The Eckard Pier-to-Pier Marketplace allows Eckard Partners to trade their Mineral Rights with other
+                    Eckard
+                    Partners
+                </p>
+                <p>Use your existing Eckard Login to Sign Up.
+                </p>
             </div>
-        </div>
-        <div class="px-4 mt-3">
-            <input type="submit" class="btn btn-warning btn-lg form-control sign-up-button" [value]="'Sign Up'"
-                [disabled]="signUp.form.invalid" />
-        </div>
-    </form>
+
+            <div class=" px-4 sign-up-field-container">
+                <input type="email" id="email" name="email" class="form-control p-2 input" placeholder="Email"
+                    [(ngModel)]="signUPForm.email" required #email="ngModel"
+                    [ngClass]="{'border border-danger':email.invalid && (email.dirty || email.touched)}" email>
+                <i class="fa fa-envelope px-4" aria-hidden="true"></i>
+            </div>
+            <div *ngIf="email.invalid && (email.dirty || email.touched ) &&  email.errors"
+                class="text-danger rounded px-4 error-message">
+                Please enter valid email
+            </div>
+
+            <div class="mt-3  d-flex justify-content-end d px-4">
+
+                <div>
+
+                    <span for="login" class="login-path" [routerLink]="['/']">
+                        Marketplace Login</span>
+                </div>
+            </div>
+            <div class="px-4 mt-3">
+                <input type="submit" class="btn btn-warning btn-lg form-control sign-up-button" [value]="'Sign Up'"
+                    [disabled]="signUp.form.invalid" />
+            </div>
+
+        </form>
+    </ng-container>
+    <ng-template #elseBlockResetPassword>
+        <app-reset-password [resetPassword]="resetPassword"></app-reset-password>
+    </ng-template>
 </div>
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.3)" size="medium" color="#fff" type="line-spin-fade" [fullScreen]="true">
